@@ -7,11 +7,13 @@ var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 
+var port = process.env.PORT || 80;
+
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
 // listen for requests :)
-listener = http.listen(process.env.PORT, function () {
+listener = http.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
