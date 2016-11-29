@@ -7,6 +7,8 @@ module.exports = function(app, io) {
   var sockets = [];
   
   io.on('connection', function (socket) {
+    console.log('connection ###############################', sockets.length+1);
+
     messages.forEach(function (data) {
       socket.emit('message', data);
     });
@@ -104,14 +106,15 @@ module.exports = function(app, io) {
   
     socket.on('respawn', function (data) {
       socket.playerinfo.health = 100;
-      console.log(data);
       socket.playerinfo.x = data.x;
       socket.playerinfo.y = data.y;
-      broadcast('respawn', {id: socket.id, playerinfo:socket.playerinfo});
+      broadcast('respawn', {
+        id: socket.id,
+        playerinfo: socket.playerinfo});
     });
   
     socket.on('disconnect', function () {
-      broadcast('disconnect', socket.id);
+      broadcast('player-dc', socket.id);
       sockets.splice(sockets.indexOf(socket), 1);
       updateRoster();
     });
@@ -121,30 +124,26 @@ module.exports = function(app, io) {
   
       if (!text)
         return;
-  
-      socket.get('name', function (err, name) {
-        var data = {
-          name: name,
-          text: text
-        };
-  
-        broadcast('message', data);
-        messages.push(data);
-      });
+      var name = socket.name;
+      var data = {
+        name: name,
+        text: text
+      };
+      broadcast('message', data);
+      messages.push(data);
     });
   
     socket.on('identify', function (name) {
-      socket.set('name', String(name || 'Anonymous'), function (err) {
-        updateRoster();
-      });
+      socket.name = String(name || 'Anonymous');
+      updateRoster();
     });
   });
   
   function updateRoster() {
-    async.map(
-      sockets,
-      function (socket, callback) {
-        socket.get('name', callback);
+    async.map(sockets, function (socket, callback) {
+        if (socket){
+          callback(null,socket.name)
+        }
       },
       function (err, names) {
         broadcast('roster', names);

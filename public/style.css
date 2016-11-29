@@ -1,56 +1,187 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldSET,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0;text-decoration:none}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}*,*:before,*:after{box-sizing:border-box;position:relative;}
 * {margin:0;padding:0;box-sizing:border-box;}
-body, html {width:100%;height:100%;}
+body, html {width:100%;height:100%; font-size: 14px;}
+
+#stretchWrapper {
+  overflow: hidden;
+}
 
 #spetsad-canvas {
   width: 100%;
-  height: calc(100% - 200px);
+  height: 100%;
 }
 
-.chat {
+#ui {
   position: absolute;
   bottom: 0px;
   left: 0px;
   right: 0px;
-  height:200px;
+  top: 0px;
   overflow:hidden;
-  border-top: 1px solid #eee;
+  pointer-events: none;
 }
-.chat:after{display:block;content:'';clear:both;}
+#ui:after{}
 
 .users {
-  height: 200px;
-  width: 30%;
-  border-right: 1px solid black;
+  font: 0.8rem Arial;
+  letter-spacing: 4px;
+  position: absolute
+  top:0px;
+  left: 0px;
+  right: 0px;
+  height: 30%;
   overflow:hidden;
-  overflow-y: scroll;
-  float: left;
+  padding: 5px;
 }
 
 .coms {
-  width: 70%;
-  height:100%;
+  width: 100%;
+  height:30%;
   overflow:hidden;
-  float: left;
-  position: relative;
-}
-
-#messages {
-  height: calc( 100% - 25px );
-  overflow-y: scroll;
-}
-#messages .name {
-  background: #efefef;
-  color: #333;
-}
-#messages .message {
-    
-}
-
-.input {
-  height: 25px;
   position: absolute;
-  border: 1px solid black;
-  bottom: 0;
+  left: 0px;
+  bottom: 0px;
+  -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, color-stop(0.00,  rgba(0,0,0,0)),color-stop(0.35,  rgba(0,0,0,1)));
+}
+.coms form {
+  position:absolute;
+  bottom: 0px;
   left: 0;
   right: 0;
+
+}
+#messages {
+  position: absolute;
+  bottom:50px;
+  left:0;
+  right:0;
+  height:auto;
+}
+#messages #outsidediv {
+  padding: 6px 15px;
+  width: calc(100% - 30px);
+  margin: 5px auto;
+  border-radius: 7px;
+  background: rgba(0,0,0,0.2);
+  font: 1.2rem Arial;
+}
+#messages .name {
+  color: #111;
+  font-weight: bold;
+}
+#messages .message {
+  color: #efefef;
+}
+
+#name-entry {
+  padding: 10px 40px;
+  padding-top: 30%;
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(255,255,255,0.95);
+  transition: opacity 0.3s 0.15s ease-in-out;
+}#name-entry.animate-disperse {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#name-entry .question {
+  font-size: 2rem;
+  color: 222;
+  margin-bottom: 10px;
+  text-align: center;
+}
+#name-entry label {
+  margin-top: 0px;
+  transition: margin-top 0.3s ease;
+}
+#name-entry.animate-disperse label {
+  margin-top: -300px;
+}
+
+#name-entry input {
+  width: 100%;
+  padding-left: 15px;
+  background: rgba(0,0,0,.05);
+  color: #222;
+  border-bottom: 5px solid #333;
+}
+
+#name-entry-button {
+  background: #333;
+  color: #efefef;
+  padding: 20px 20px;
+  font: 2rem Arial;
+  text-align: center;
+  display:block;
+  transition: all 0.3s ease;
+  letter-spacing: 3px;
+  cursor: pointer;
+  margin: 60% auto 0 auto;
+}
+#name-entry.animate-disperse #name-entry-button {
+  margin-top: 250%;
+}
+#name-entry-button:hover {
+  background: #777;
+  color: #333;
+}
+
+label {
+  display: block;
+  width: 100%;
+  line-height: 50px;
+  font: 13.3333px Arial;
+  margin-bottom: 30px;
+}
+
+input {
+  pointer-events: auto;
+  border: 0px;
+  outline: 0;
+  box-shadow: none;
+  color: black;
+  width: 100%;
+  background: rgba(0,0,0,.05);
+  color: #222;
+  border-bottom: 5px solid #333;
+  height:50px;
+  line-height:50px;
+  padding: 0 15px;
+  font-size: 2rem;
+}
+input[type="submit"] {
+  position:absolute;
+  right:0px;
+  top:0px;
+  max-width:30%;
+  cursor:pointer;
+}input[type="submit"]:hover {
+  background: rgba(0,0,0,.2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 800px) {
+  #stretchWrapper {
+    width: 100% !important;
+    height: 100% !important;
+    position:absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+  }
 }

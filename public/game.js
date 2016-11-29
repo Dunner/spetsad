@@ -1,7 +1,9 @@
 
+var socket = window.socket = io.connect();
 
-var socket = io.connect();
-var players = [],
+setTimeout(function(){
+  
+  var players = [],
     me,
     mouse,
     upKey,
@@ -12,19 +14,15 @@ var players = [],
     mySocket,
     healthStyle,
     textureRegistry = {};
-    
-$(function() {
-    
 
   var spears,
       fireRate = 1000,
       nextFire = 0,
-      canvasElement = $('#spetsad-canvas');
+      canvasElement = document.getElementById('spetsad-canvas');
 
   function preload() {
     game.stage.disableVisibilityChange = true;
     game.load.crossOrigin = 'anonymous';
-    //game.load.image('background','images/waterSeamlessLoop.gif');
     game.load.image('background','https://cdn.hyperdev.com/us-east-1%3A64100b6e-2389-4701-a46c-baf94d554863%2Fladda%20ned.png');
   }
 
@@ -239,7 +237,7 @@ $(function() {
     }, this);
   });
   
-  socket.on('disconnect', function (socket) {
+  socket.on('player-dc', function (socket) {
     var tempplayer = findPlayer(socket);
     for (var key in tempplayer.texts) {
       var text = tempplayer.texts[key];
@@ -335,7 +333,6 @@ $(function() {
 
   /*jshint validthis:true */
   var game;
-  game = new Phaser.Game(canvasElement[0].offsetWidth, canvasElement[0].offsetHeight, Phaser.AUTO, 'spetsad-canvas', {preload: preload, create: create, update: update});
+  game = new Phaser.Game(canvasElement.offsetWidth, canvasElement.offsetHeight, Phaser.AUTO, 'spetsad-canvas', {preload: preload, create: create, update: update});
   
-  
-});
+},500);

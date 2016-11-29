@@ -5,24 +5,26 @@
   "main": "server.js",
   "author": "Jonathan Hägglund <jonathanhagglund@live.com>",
   "dependencies": {
-    "async": "~0.2.8",
-    "express": "^4.12.4",
-    "socket.io": "~0.9.14"
+    "async": "~2.1.4",
+    "express": "^4.14.0",
+    "phaser": "^2.6.2",
+    "socket.io": "~1.7.1"
   },
-	"scripts": {
-		"start": "node server.js"
-	},
-	"engines": {
-		"node": "4.4.5"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Dunner/spetsad"
-	},
-	"keywords": [
-		"node",
-		"hyperdev",
-		"express"
-	],
-	"license": "MIT"
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "4.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dunner/spetsad"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "socket.io",
+    "phaser"
+  ],
+  "license": "MIT"
 }
