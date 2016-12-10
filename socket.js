@@ -142,7 +142,7 @@ module.exports = function(app, io) {
   function updateRoster() {
     async.map(sockets, function (socket, callback) {
         if (socket){
-          callback(null,socket.name)
+          callback(null,socket.name);
         }
       },
       function (err, names) {
