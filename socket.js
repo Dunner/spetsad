@@ -84,12 +84,13 @@ module.exports = function(app, io) {
       broadcast('fire', {
         id: socket.id,
         toPos: data,
-        spearId: data.spearId
+        spearId: data.spearId,
+        distance: data.distance
       });
     });
     
     socket.on('spearhit', function (data) {
-      socket.playerinfo.health -= data.flytime;
+      socket.playerinfo.health -= data.distanceTraveled;
       
       broadcast('spearhit', {
         id: socket.id,
