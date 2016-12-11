@@ -49,47 +49,9 @@ var socket = window.socket = io.connect();
 
     controls.create();
 
-    obj_pinetree.create({
-      x: 800,
-      y: 870,
-      diameter: 40,
-      height: 5,
-    })
-    
-    obj_pinetree.create({
-      x: 950,
-      y: 720,
-      diameter: 40,
-      height: 4,
-    })
+    forrest.init();
 
-    obj_pinetree.create({
-      x: 1200,
-      y: 870,
-      diameter: 40,
-      height: 5,
-    })
-    
-    obj_pinetree.create({
-      x: 600,
-      y: 100,
-      diameter: 40,
-      height: 4,
-    })
 
-    obj_pinetree.create({
-      x: 500,
-      y: 1200,
-      diameter: 40,
-      height: 3,
-    })
-    
-    obj_pinetree.create({
-      x: 1100,
-      y: 800,
-      diameter: 40,
-      height: 2,
-    })
     // obj_obstacle.create({
     //   x: 1200,
     //   y: 850,

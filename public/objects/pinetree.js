@@ -40,20 +40,23 @@ obj_pinetree.create = function(data) {
 
 obj_pinetree.update = function(pinetree) {
   // ###### pinetrees 
-  var pointDir = pointDirection(screenCenter(), pinetree.shadow.object.position);
-  if  (pointDir < 0) {pointDir += 360};
+  if (pointDistance(screenCenter(),pinetree.shadow.object.position) < 600) {
 
-  for (var i = 0; i < pinetree.children.length; i++) {
-    var child = pinetree.children[i];
+    var pointDir = pointDirection(screenCenter(), pinetree.shadow.object.position);
+    if  (pointDir < 0) {pointDir += 360};
 
-    var offCenter = child.z * (Math.abs(pointDistance(screenCenter(), pinetree.shadow.object.position))/100);
-    var ldirCenter = lengthDir(offCenter, pointDir / 57);
+    for (var i = 0; i < pinetree.children.length; i++) {
+      var child = pinetree.children[i];
 
-    child.object.x = pinetree.shadow.object.x + ldirCenter.x;
-    child.object.y = pinetree.shadow.object.y + ldirCenter.y;
+      var offCenter = child.z * (Math.abs(pointDistance(screenCenter(), pinetree.shadow.object.position))/100);
+      var ldirCenter = lengthDir(offCenter, pointDir / 57);
+
+      child.object.x = pinetree.shadow.object.x + ldirCenter.x;
+      child.object.y = pinetree.shadow.object.y + ldirCenter.y;
+
+    }
 
   }
-
 
 }
 
