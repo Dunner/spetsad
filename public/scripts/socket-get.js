@@ -93,6 +93,15 @@
 
   });
   
+  socket.on('roster', function (players) {
+    for (var i = 0; i < players.length; i++) {
+      var tp = findPlayer(players[i].socket);
+      if (tp) {
+        tp.name = players[i].name;
+      }
+    }
+  });
+
   socket.on('player-dc', function (socket) {
     var tempplayer = findPlayer(socket);
     for (var key in tempplayer.texts) {

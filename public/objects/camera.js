@@ -8,7 +8,7 @@ obj_camera.create = function() {
   cameraObject.object = game.add.image(0,0, createBlock(0, 0,'#000'));
   cameraObject.object.anchor.setTo(0.5, 0.5);
 
-  mouse = game.add.image(game.input.mousePointer.x,game.input.mousePointer.y, createBlock(1, 1,'red'));
+  mouse = game.add.image(game.input.mousePointer.x,game.input.mousePointer.y, createBlock(5, 5,'red'));
   mouse.anchor.setTo(0.5, 0.5);
 
   //Edgetint overlay

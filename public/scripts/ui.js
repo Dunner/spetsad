@@ -39,17 +39,17 @@
     messagesEl.appendChild(messageWrapper);
   });
   
-  socket.on('roster', function (names) {
+  socket.on('roster', function (players) {
     while(usersEl.firstChild){
       usersEl.removeChild(usersEl.firstChild);
     }
-    for(i=0; i<names.length; i++) {
+    for(i=0; i<players.length; i++) {
       var rosterName = document.createElement('li');
       rosterName.className = 'user';
-      rosterName.appendChild( document.createTextNode( names[i]) );
+      rosterName.appendChild( document.createTextNode( players[i].name) );
       usersEl.appendChild(rosterName);
     }
-    players = names;
+    players = players;
   });
   
 

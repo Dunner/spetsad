@@ -43,6 +43,8 @@ obj_player.create = function(data) {
     }
   };
 
+  console.log(data.playerinfo)
+
   tempplayer.texts.nameplate = game.add.text(0, 0, tempplayer.name, healthStyle);
   tempplayer.texts.nameplate.anchor.set(0.5, -1);
 
@@ -84,13 +86,13 @@ obj_player.update = function(player) {
     player.lastTickData.reqLeanAngle = pointDirection(player.shadow.object.position, player.lastTickData);
     if  (player.lastTickData.reqLeanAngle < 0) {player.lastTickData.reqLeanAngle += 360};
     
-    player.shadow.object.animations.play('walk', 5, true);
-    player.feet.object.animations.play('walk', 5, true);
-    player.legs.object.animations.play('walk', 5, true);
+    player.shadow.object.animations.play('walk', 7, true);
+    player.feet.object.animations.play('walk', 7, true);
+    player.legs.object.animations.play('walk', 7, true);
     if (player.torso.object.key == 'torso-test-ss') {
-      player.torso.object.animations.play('walk', 5, true);
+      player.torso.object.animations.play('walk', 7, true);
     }
-    player.head.object.animations.play('walk', 5, true);
+    player.head.object.animations.play('walk', 7, true);
   
     var currentLeanAngle = player.lastTickData.leanAngle;
     if  (currentLeanAngle < 0) {currentLeanAngle += 360};
@@ -159,7 +161,7 @@ obj_player.update = function(player) {
       player.torso.object.loadTexture('torso-throw-ss', 0, true);
       var throwAnim = player.torso.object.animations.add('throw');
       throwAnim.enableUpdate = true;
-      player.torso.object.animations.play('throw', 10, false);
+      player.torso.object.animations.play('throw', 12, false);
     }
     var pointDir = pointDirection(aiming.target, player.torso.object.position);
     if  (pointDir < 0) {pointDir += 360};

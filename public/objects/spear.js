@@ -6,7 +6,7 @@ var obj_spear = {},
 obj_spear.create = function(owner, fromPos, toPos, id, distance) {
   var spear = {};
 
-  spear.shadow = game.add.image(fromPos.x,fromPos.y, createBlock(25, 2,'black'));
+  spear.shadow = game.add.image(fromPos.x,fromPos.y, createBlock(45, 3,'black'));
   spear.shadow.anchor.setTo(0.5, 1);
   spear.shadow.angle = pointDirection(fromPos, toPos);
   spear.shadow.alpha = 0.3

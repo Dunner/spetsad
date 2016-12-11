@@ -26,7 +26,7 @@ module.exports = function(app, io) {
     
     socket.on('getplayers', function () {
       sockets.forEach(function (data) {
-        socket.emit('players', {socket: data.id, playerinfo: data.playerinfo});
+        socket.emit('players', {socket: data.id, playerinfo: data.playerinfo, name:socket.name});
       });
     });
   
@@ -151,11 +151,11 @@ module.exports = function(app, io) {
   function updateRoster() {
     async.map(sockets, function (socket, callback) {
         if (socket){
-          callback(null,socket.name);
+          callback(null,{socket: socket.id, name: socket.name});
         }
       },
-      function (err, names) {
-        broadcast('roster', names);
+      function (err, players) {
+        broadcast('roster', players);
       }
     );
   }
