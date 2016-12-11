@@ -14,7 +14,7 @@ obj_pinetree.create = function(data) {
 
   //add children
   tempPinetree.children = [];
-  for (var i = 1; i < data.height+1 ; i++) {
+  for (var i = 1; i < data.sections+1 ; i++) {
     var child = {
       z: i*5,
       object: game.add.image(data.x,data.y, 'pinetree5')
@@ -27,11 +27,14 @@ obj_pinetree.create = function(data) {
   var treeScale = 0.2;
   for (var i = tempPinetree.children.length-1; i >= 0 ; i--) {
     treeScale = Math.round(treeScale * 10) / 10;
-    tempPinetree.children[i].object.scale.setTo(treeScale, treeScale);  // i/data.height
+    tempPinetree.children[i].object.scale.setTo(treeScale, treeScale);  // i/data.sections
     tempPinetree.children[i].object.angle = Math.floor(Math.random()*(360-0+1)+0);
     treeScale += 0.2;
+    if (i == 0 && data.angle) {
+      tempPinetree.children[i].object.angle = data.angle;
+    }
   }
-  tempPinetree.shadow.object.scale = tempPinetree.children[0].object.scale;  // i/data.height
+  tempPinetree.shadow.object.scale = tempPinetree.children[0].object.scale;  // i/data.sections
   tempPinetree.shadow.object.angle = tempPinetree.children[0].object.angle;
   pinetrees.push(tempPinetree);
 
