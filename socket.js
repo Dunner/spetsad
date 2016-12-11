@@ -20,7 +20,7 @@ module.exports = function(app, io) {
       socket.playerinfo.down = false;
       socket.playerinfo.left = false;
       socket.playerinfo.health = 100;
-      broadcast('spawn', {socket: socket.id, playerinfo: socket.playerinfo});
+      broadcast('spawn', {socket: socket.id, playerinfo: socket.playerinfo, name: socket.name});
       socket.emit('mysocket', socket.id);
     });
     
@@ -33,51 +33,59 @@ module.exports = function(app, io) {
     sockets.push(socket);
     
     socket.on('keydown', function (msg) {
-      switch(msg) {
-        case 0: // up
-          socket.playerinfo.up = true;
-          break;
-        case 1: // right
-          socket.playerinfo.right = true;
-          break;
-        case 2: // down
-          socket.playerinfo.down = true;
-          break;
-        case 3: // left
-          socket.playerinfo.left = true;
-          break;
-        default:
-          return;
+      if(socket.playerinfo) {
+        switch(msg) {
+          case 0: // up
+            socket.playerinfo.up = true;
+            break;
+          case 1: // right
+            socket.playerinfo.right = true;
+            break;
+          case 2: // down
+            socket.playerinfo.down = true;
+            break;
+          case 3: // left
+            socket.playerinfo.left = true;
+            break;
+          default:
+            return;
+        }
+        broadcast('keydown', {socket: socket.id, playerinfo: socket.playerinfo});
+      } else {
+        broadcast('connection-lost', {socket: socket.id});
       }
-      broadcast('keydown', {socket: socket.id, playerinfo: socket.playerinfo});
     });
     
     socket.on('keyup', function (data) {
-      switch(data.msg) {
-        case 0: // up
-          socket.playerinfo.up = false;
-          setLocation(data.location);
-          break;
-        case 1: // right
-          socket.playerinfo.right = false;
-          setLocation(data.location);
-          break;
-        case 2: // down
-          socket.playerinfo.down = false;
-          setLocation(data.location);
-          break;
-        case 3: // left
-          socket.playerinfo.left = false;
-          setLocation(data.location);
-          break;
-        default:
-          return;
+      if(socket.playerinfo) {
+        switch(data.msg) {
+          case 0: // up
+            socket.playerinfo.up = false;
+            setLocation(data.location);
+            break;
+          case 1: // right
+            socket.playerinfo.right = false;
+            setLocation(data.location);
+            break;
+          case 2: // down
+            socket.playerinfo.down = false;
+            setLocation(data.location);
+            break;
+          case 3: // left
+            socket.playerinfo.left = false;
+            setLocation(data.location);
+            break;
+          default:
+            return;
+        }
+        function setLocation(location) {
+          socket.playerinfo.x = location.x;
+          socket.playerinfo.y = location.y;
+        }
+        broadcast('keyup', {socket: socket.id, playerinfo: socket.playerinfo});
+      } else {
+        broadcast('connection-lost', {socket: socket.id});
       }
-      function setLocation(location) {
-        socket.playerinfo.x = location.x;
-        socket.playerinfo.y = location.y;
-      }
-      broadcast('keyup', {socket: socket.id, playerinfo: socket.playerinfo});
     });
   
     socket.on('fire', function (data) {

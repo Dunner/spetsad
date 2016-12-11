@@ -38,20 +38,20 @@ obj_camera.update = function() {
   mouse.y = game.input.mousePointer.worldY;
 
   // ###### Camera 
-  if (me && me.legs) {
+  if (me && me.shadow) {
     
-    if (cameraObject.object.x < me.legs.object.x) {
-      cameraObject.object.x += ( Math.abs(cameraObject.object.x - me.legs.object.x)/10 ) * delta
+    if (cameraObject.object.x < me.shadow.object.x) {
+      cameraObject.object.x += ( Math.abs(cameraObject.object.x - me.shadow.object.x)/10 ) * delta
     }
-    if (cameraObject.object.x > me.legs.object.x) {
-      cameraObject.object.x -= ( Math.abs(cameraObject.object.x - me.legs.object.x)/10 ) * delta
+    if (cameraObject.object.x > me.shadow.object.x) {
+      cameraObject.object.x -= ( Math.abs(cameraObject.object.x - me.shadow.object.x)/10 ) * delta
     }
     
-    if (cameraObject.object.y < me.legs.object.y) {
-      cameraObject.object.y += ( Math.abs(cameraObject.object.y - me.legs.object.y)/10 ) * delta
+    if (cameraObject.object.y < me.shadow.object.y) {
+      cameraObject.object.y += ( Math.abs(cameraObject.object.y - me.shadow.object.y)/10 ) * delta
     }
-    if (cameraObject.object.y > me.legs.object.y) {
-      cameraObject.object.y -= ( Math.abs(cameraObject.object.y - me.legs.object.y)/10 ) * delta
+    if (cameraObject.object.y > me.shadow.object.y) {
+      cameraObject.object.y -= ( Math.abs(cameraObject.object.y - me.shadow.object.y)/10 ) * delta
     }
 
     game.camera.follow(cameraObject.object);

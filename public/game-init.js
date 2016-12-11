@@ -13,11 +13,14 @@ var socket = window.socket = io.connect();
     game.stage.disableVisibilityChange = true;
     game.load.crossOrigin = 'anonymous';
     game.load.image('background','sprites/bg-playground.png');
+    game.load.spritesheet('feet-test-ss', 'sprites/feet-test-ss.png', 32, 32, 4);
     game.load.spritesheet('legs-test-ss', 'sprites/legs-test-ss.png', 32, 32, 4);
     game.load.spritesheet('torso-test-ss', 'sprites/torso-test-ss.png', 32, 32, 4);
+    game.load.spritesheet('torso-throw-ss', 'sprites/torso-throw-ss.png', 32, 32, 4);
     game.load.spritesheet('head-test-ss', 'sprites/head-test-ss.png', 32, 32, 1);
     game.load.image('pinetree5','sprites/spr_pine_5.png');
     game.load.image('reticle','sprites/reticle.png');
+    game.load.image('spear-ash','sprites/spear.png');
     game.load.image('edgeTint','sprites/edge-tint-overlay.png');
   }
 
@@ -29,7 +32,7 @@ var socket = window.socket = io.connect();
     game.stage.backgroundColor = '#787878';
     game.world.setBounds(0, 0, 1920, 1920);
     
-    healthStyle = { font: "18px Arial", fill: "#fff", align: "left" };
+    healthStyle = { font: "12px Arial", fill: "#fff", align: "left" };
 
     ['players', 'spears', 'obstacles'].forEach(function(group) {
       groups[group] = game.add.group();

@@ -20,28 +20,28 @@ controls.create = function() {
     socket.emit('keydown', 0);
   });
   upKey.onUp.add(function() {
-    socket.emit('keyup', {msg:0, location:{x:me.legs.object.x,y:me.legs.object.y}});
+    socket.emit('keyup', {msg:0, location:{x:me.shadow.object.x,y:me.shadow.object.y}});
   });
   //right
   rightKey.onDown.add(function() {
     socket.emit('keydown', 1);
   });
   rightKey.onUp.add(function() {
-    socket.emit('keyup', {msg:1, location:{x:me.legs.object.x,y:me.legs.object.y}});
+    socket.emit('keyup', {msg:1, location:{x:me.shadow.object.x,y:me.shadow.object.y}});
   });
   //down
   downKey.onDown.add(function() {
     socket.emit('keydown', 2);
   });
   downKey.onUp.add(function() {
-    socket.emit('keyup', {msg:2, location:{x:me.legs.object.x,y:me.legs.object.y}});
+    socket.emit('keyup', {msg:2, location:{x:me.shadow.object.x,y:me.shadow.object.y}});
   });
   //left
   leftKey.onDown.add(function() {
     socket.emit('keydown', 3);
   });
   leftKey.onUp.add(function() {
-    socket.emit('keyup', {msg:3, location:{x:me.legs.object.x,y:me.legs.object.y}});
+    socket.emit('keyup', {msg:3, location:{x:me.shadow.object.x,y:me.shadow.object.y}});
   });
 
   //Fire

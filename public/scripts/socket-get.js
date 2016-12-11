@@ -39,8 +39,8 @@
   socket.on('respawn', function (data) {
     var tPlayer = findPlayer(data.id);
     tPlayer.playerinfo = data.playerinfo;
-    tPlayer.legs.object.x = data.playerinfo.x;
-    tPlayer.legs.object.y = data.playerinfo.y;
+    tPlayer.shadow.object.x = data.playerinfo.x;
+    tPlayer.shadow.object.y = data.playerinfo.y;
   });
   
   socket.on('mysocket', function (data) {
@@ -57,8 +57,8 @@
   socket.on('keyup', function (data) {
     var tempplayer = findPlayer(data.socket);
     tempplayer.playerinfo = data.playerinfo;
-    tempplayer.legs.object.x = data.playerinfo.x;
-    tempplayer.legs.object.y = data.playerinfo.y;
+    tempplayer.shadow.object.x = data.playerinfo.x;
+    tempplayer.shadow.object.y = data.playerinfo.y;
   });
   
   socket.on('players', function (data) {
@@ -71,7 +71,7 @@
   
   socket.on('fire', function (data) {
     var tempPlayer = findPlayer(data.id);
-    var fromPos = {x: tempPlayer.legs.object.x, y: tempPlayer.legs.object.y};
+    var fromPos = {x: tempPlayer.shadow.object.x, y: tempPlayer.shadow.object.y};
     var toPos = data.toPos;
     var owner = data.id;
     obj_spear.create(owner, fromPos, toPos, data.spearId, data.distance);
@@ -99,7 +99,13 @@
       var text = tempplayer.texts[key];
       text.destroy();
     }
+    tempplayer.shadow.object.destroy();
+    tempplayer.feet.object.destroy();
     tempplayer.legs.object.destroy();
     tempplayer.torso.object.destroy();
     tempplayer.head.object.destroy();
+  });
+
+  socket.on('connection-lost', function (socket) {
+    window.location.reload()
   });
