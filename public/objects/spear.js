@@ -31,9 +31,9 @@ obj_spear.update = function(spear) {
     spear.object.destroy();
     spear.shadow.destroy();
   } else {
-    spear.distanceTraveled +=5;
-    spear.shadow.x += 5 * Math.cos(spear.object.angle * Math.PI / 180);
-    spear.shadow.y += 5 * Math.sin(spear.object.angle * Math.PI / 180);
+    spear.distanceTraveled += 25 * delta;
+    spear.shadow.x += ( 25 * Math.cos(spear.object.angle * Math.PI / 180) ) * delta;
+    spear.shadow.y += ( 25 * Math.sin(spear.object.angle * Math.PI / 180) ) * delta;
 
 
     var pointDir = pointDirection(screenCenter(), spear.object.position);

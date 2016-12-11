@@ -41,17 +41,17 @@ obj_camera.update = function() {
   if (me && me.legs) {
     
     if (cameraObject.object.x < me.legs.object.x) {
-      cameraObject.object.x += Math.abs(cameraObject.object.x - me.legs.object.x)/50
+      cameraObject.object.x += ( Math.abs(cameraObject.object.x - me.legs.object.x)/10 ) * delta
     }
     if (cameraObject.object.x > me.legs.object.x) {
-      cameraObject.object.x -= Math.abs(cameraObject.object.x - me.legs.object.x)/50
+      cameraObject.object.x -= ( Math.abs(cameraObject.object.x - me.legs.object.x)/10 ) * delta
     }
     
     if (cameraObject.object.y < me.legs.object.y) {
-      cameraObject.object.y += Math.abs(cameraObject.object.y - me.legs.object.y)/50
+      cameraObject.object.y += ( Math.abs(cameraObject.object.y - me.legs.object.y)/10 ) * delta
     }
     if (cameraObject.object.y > me.legs.object.y) {
-      cameraObject.object.y -= Math.abs(cameraObject.object.y - me.legs.object.y)/50
+      cameraObject.object.y -= ( Math.abs(cameraObject.object.y - me.legs.object.y)/10 ) * delta
     }
 
     game.camera.follow(cameraObject.object);

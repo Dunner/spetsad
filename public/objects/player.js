@@ -43,16 +43,16 @@ obj_player.update = function(player) {
       player.texts.healthtext.setText(player.playerinfo.health);
       
       if (player.playerinfo.up) {
-        player.legs.object.y -= 2;
+        player.legs.object.y -= 10 * delta;
       }
       if (player.playerinfo.right) {
-        player.legs.object.x += 2;
+        player.legs.object.x += 10 * delta;
       }
       if (player.playerinfo.down) {
-        player.legs.object.y += 2;
+        player.legs.object.y += 10 * delta;
       }
       if (player.playerinfo.left) {
-        player.legs.object.x -= 2;
+        player.legs.object.x -= 10 * delta;
       }
     }
   }
@@ -72,12 +72,12 @@ obj_player.update = function(player) {
     if (currentLeanAngle - player.lastTickData.reqLeanAngle != 0) {
       if (Math.abs(currentLeanAngle - player.lastTickData.reqLeanAngle) < 180) {
           // Rotate current directly towards target.
-          if (currentLeanAngle < player.lastTickData.reqLeanAngle) {currentLeanAngle +=5;}
-          else {currentLeanAngle -= 5;}
+          if (currentLeanAngle < player.lastTickData.reqLeanAngle) {currentLeanAngle +=25 * delta;}
+          else {currentLeanAngle -= 25 * delta;}
       } else {
           // Rotate the other direction towards target.
-          if (currentLeanAngle < player.lastTickData.reqLeanAngle) {currentLeanAngle -=5;}
-          else {currentLeanAngle += 5;}
+          if (currentLeanAngle < player.lastTickData.reqLeanAngle) {currentLeanAngle -=25 * delta;}
+          else {currentLeanAngle += 25 * delta;}
       }
     }
   } else {
@@ -125,8 +125,8 @@ obj_player.update = function(player) {
     if (aiming) {
       reticle.object.angle = me.head.object.angle;
       if (reticle.xScale < 3) {
-        reticle.xScale += 0.1;
-        reticle.yScale += 0.05;
+        reticle.xScale += 0.5 * delta;
+        reticle.yScale += 0.25 * delta;
       }
     } else {
       reticle.xScale = 0;

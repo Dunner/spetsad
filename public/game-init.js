@@ -3,8 +3,9 @@ var socket = window.socket = io.connect();
 
   
   var groups = {},
+      delta,
       healthStyle,
-      reticle;
+      reticle,
       textureRegistry = {},
       canvasElement = document.getElementById('spetsad-canvas');
 
@@ -102,6 +103,7 @@ var socket = window.socket = io.connect();
   }
 
   function update() {
+    delta = game.time.elapsedMS/100 ; //Turn this into a ratio
 
     controls.update();
 
