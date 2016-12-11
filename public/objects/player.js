@@ -2,9 +2,9 @@ var obj_player = {},
     players = [];
 
 obj_player.create = function(data) {
-  var legs = {z: 0, parent: null, object:game.add.sprite(data.playerinfo.x,data.playerinfo.y, 'legs-test-ss')},
-      torso = {z: 5, parent: legs, object:game.add.sprite(data.playerinfo.x,data.playerinfo.y, 'torso-test-ss')},
-      head = {z: 5, parent: torso, object:game.add.sprite(data.playerinfo.x,data.playerinfo.y, 'head-test-ss')};
+  var legs = {z: 0, parent: null, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'legs-test-ss')},
+      torso = {z: 5, parent: legs, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'torso-test-ss')},
+      head = {z: 5, parent: torso, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'head-test-ss')};
       var legsAnim = legs.object.animations.add('walk');
       var torsoAnim = torso.object.animations.add('walk');
       var headAnim = head.object.animations.add('walk');
@@ -104,9 +104,7 @@ obj_player.update = function(player) {
   
   if (!aiming) {
     player.torso.object.angle = currentLeanAngle;
-  } else if(player.legs.object.x !== player.lastTickData.x || player.legs.object.y !== player.lastTickData.y){
-    player.torso.object.angle = player.lastTickData.leanAngle;
-  } else {
+  } else if(player == me){
     var pointDir = pointDirection(aiming.target, player.torso.object.position);
     if  (pointDir < 0) {pointDir += 360};
     player.torso.object.angle = pointDir;

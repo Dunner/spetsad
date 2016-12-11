@@ -5,8 +5,8 @@ var obj_obstacle = {},
 obj_obstacle.create = function(data) {
 
   var tempObstacle = {};
-  tempObstacle.foot = {z: 0, object: game.add.sprite(data.x,data.y, createBlock(data.diameter, data.diameter,'#000'))};
-  tempObstacle.roof = {z: 5, object: game.add.sprite(data.x,data.y, createBlock(data.diameter, data.diameter,data.color))};
+  tempObstacle.foot = {z: 0, object: game.add.image(data.x,data.y, createBlock(data.diameter, data.diameter,'#000'))};
+  tempObstacle.roof = {z: 5, object: game.add.image(data.x,data.y, createBlock(data.diameter, data.diameter,data.color))};
   tempObstacle.data = data;
   tempObstacle.foot.object.anchor.setTo(0.5, 0.5);
   tempObstacle.roof.object.anchor.setTo(0.5, 0.5);

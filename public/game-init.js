@@ -37,7 +37,7 @@ var socket = window.socket = io.connect();
     }, this);
 
     reticle = {}
-    reticle.object = game.add.sprite(600,600, 'reticle');
+    reticle.object = game.add.image(600,600, 'reticle');
     reticle.object.anchor.set(0, 0.5);
     reticle.xScale = 0;
     reticle.yScale = 1;
@@ -62,13 +62,40 @@ var socket = window.socket = io.connect();
       height: 4,
     })
 
-    obj_obstacle.create({
+    obj_pinetree.create({
       x: 1200,
-      y: 850,
+      y: 870,
+      diameter: 40,
+      height: 5,
+    })
+    
+    obj_pinetree.create({
+      x: 600,
+      y: 100,
       diameter: 40,
       height: 4,
-      color: 'white'
     })
+
+    obj_pinetree.create({
+      x: 500,
+      y: 1200,
+      diameter: 40,
+      height: 3,
+    })
+    
+    obj_pinetree.create({
+      x: 1100,
+      y: 800,
+      diameter: 40,
+      height: 2,
+    })
+    // obj_obstacle.create({
+    //   x: 1200,
+    //   y: 850,
+    //   diameter: 40,
+    //   height: 4,
+    //   color: 'white'
+    // })
     
     obj_camera.create();
 

@@ -5,10 +5,10 @@ var obj_camera = {},
 
 obj_camera.create = function() {
 
-  cameraObject.object = game.add.sprite(0,0, createBlock(0, 0,'#000'));
+  cameraObject.object = game.add.image(0,0, createBlock(0, 0,'#000'));
   cameraObject.object.anchor.setTo(0.5, 0.5);
 
-  mouse = game.add.sprite(game.input.mousePointer.x,game.input.mousePointer.y, createBlock(1, 1,'red'));
+  mouse = game.add.image(game.input.mousePointer.x,game.input.mousePointer.y, createBlock(1, 1,'red'));
   mouse.anchor.setTo(0.5, 0.5);
 
   //Edgetint overlay
@@ -16,14 +16,20 @@ obj_camera.create = function() {
   edgeTint.object = game.add.sprite(600,600, 'edgeTint');
   edgeTint.object.fixedToCamera = true;
   edgeTint.object.cameraOffset.setTo(0, 0);
-  edgeTint.object.alpha = 1;
+  edgeTint.object.alpha = 0.5;
 
 
   tintScaleX = canvasElement.offsetWidth / edgeTint.object.width;
   tintScaleY = canvasElement.offsetHeight / edgeTint.object.height
   
-  console.log(tintScaleX, tintScaleY)
   edgeTint.object.scale.setTo(tintScaleX, tintScaleY);
+
+  var overlayFilter = game.add.image(0,0, createBlock(canvasElement.offsetWidth, canvasElement.offsetHeight,'#fff'));
+  overlayFilter.fixedToCamera = true;
+  overlayFilter.cameraOffset.setTo(0, 0);
+  overlayFilter.alpha = 0.1;
+  overlayFilter.tint = RGBtoHEX(150,80,0);
+
 }
 
 obj_camera.update = function() {

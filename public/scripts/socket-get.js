@@ -8,7 +8,7 @@
   
   socket.on('death', function (data) {
     var tPlayer = findPlayer(data.id);
-    var deathobj = game.add.sprite(tPlayer.playerinfo.x,tPlayer.playerinfo.y, createBlock(20, 20,'red'));
+    var deathobj = game.add.image(tPlayer.playerinfo.x,tPlayer.playerinfo.y, createBlock(20, 20,'red'));
     deathobj.anchor.setTo(0.5, 0.5);
     
     var deathtime = game.add.text(0, 0, "3", healthStyle);
