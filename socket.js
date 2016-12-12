@@ -31,6 +31,8 @@ module.exports = function(app, io) {
     });
   
     sockets.push(socket);
+    socket.kills = 0;
+    socket.deaths = 0;
     
     socket.on('keydown', function (msg) {
       if(socket.playerinfo) {
@@ -98,18 +100,37 @@ module.exports = function(app, io) {
     });
     
     socket.on('spearhit', function (data) {
-      socket.playerinfo.health -= data.distanceTraveled;
-      
-      broadcast('spearhit', {
-        id: socket.id,
-        spearId: data.spearId,
-        playerinfo: socket.playerinfo
-      });
-      
-      if( JSON.parse(socket.playerinfo.health) <= 0) {
-        broadcast('death', {
-          id: socket.id
+      if (socket.playerinfo) {
+        socket.playerinfo.health -= data.distanceTraveled;
+        
+        broadcast('spearhit', {
+          id: socket.id,
+          spearId: data.spearId,
+          playerinfo: socket.playerinfo
         });
+        
+        if( JSON.parse(socket.playerinfo.health) <= 0) {
+
+          broadcast('death', {
+            id: socket.id
+          });
+
+          async.map(sockets, function (socket) {
+            if (socket.id == data.spearOwner){
+              socket.kills +=1;
+            }
+          });
+          socket.deaths +=1;
+
+          broadcast('kill', {
+            by: data.spearOwner,
+            victim: socket.id,
+            with: 'spear'
+          });
+
+          updateRoster();
+
+        }
       }
     });
   
@@ -151,7 +172,12 @@ module.exports = function(app, io) {
   function updateRoster() {
     async.map(sockets, function (socket, callback) {
         if (socket){
-          callback(null,{socket: socket.id, name: socket.name});
+          callback(null, {
+            socket: socket.id,
+            name: socket.name,
+            kills: socket.kills,
+            deaths: socket.deaths
+          });
         }
       },
       function (err, players) {

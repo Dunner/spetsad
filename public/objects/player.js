@@ -174,13 +174,13 @@ obj_player.update = function(player) {
   };
 
   if (player == me) {
-    me.head.object.angle = pointDirection(me.shadow.object.position, mouse.position); // TODO OWL 360 -> 180 forwards
+    me.head.object.angle = pointDirection(me.shadow.object.position, mouse.position)+180; // TODO OWL 360 -> 180 forwards
     
     reticle.object.x = me.shadow.object.x;
     reticle.object.y = me.shadow.object.y;
 
     if (aiming) {
-      reticle.object.angle = me.head.object.angle;
+      reticle.object.angle = me.head.object.angle-180;
       if (reticle.xScale < 3) {
         reticle.xScale += 0.5 * delta;
         reticle.yScale += 0.25 * delta;

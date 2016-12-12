@@ -5,6 +5,11 @@ var controls = {},
     rightKey,
     fireKey,
 
+    wKey,
+    dKey,
+    sKey,
+    aKey,
+
     aiming = false;
 
 

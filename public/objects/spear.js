@@ -31,9 +31,9 @@ obj_spear.update = function(spear) {
     spear.object.destroy();
     spear.shadow.destroy();
   } else {
-    spear.distanceTraveled += 25 * delta;
-    spear.shadow.x += ( 25 * Math.cos(spear.object.angle * Math.PI / 180) ) * delta;
-    spear.shadow.y += ( 25 * Math.sin(spear.object.angle * Math.PI / 180) ) * delta;
+    spear.distanceTraveled += 32 * delta;
+    spear.shadow.x += ( 32 * Math.cos(spear.object.angle * Math.PI / 180) ) * delta;
+    spear.shadow.y += ( 32 * Math.sin(spear.object.angle * Math.PI / 180) ) * delta;
 
 
     var pointDir = pointDirection(screenCenter(), spear.object.position);
@@ -46,7 +46,7 @@ obj_spear.update = function(spear) {
     spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
     if (checkOverlap(me.shadow.object, spear.object) && me.id !== spear.owner && me.playerinfo.health > 0) {
-      socket.emit('spearhit', {spearId: spear.id, distanceTraveled: spear.distanceTraveled});
+      socket.emit('spearhit', {spearId: spear.id, distanceTraveled: spear.distanceTraveled, spearOwner:spear.owner});
       me.playerinfo.health -= spear.distanceTraveled;
     }
   }

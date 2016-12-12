@@ -20,6 +20,11 @@
     setName();
   });
   
+  socket.on('kill', function (data) {
+    var byName = findPlayer(data.by).name;
+    var victimName = findPlayer(data.victim).name;
+  });
+
   socket.on('message', function (msg) {
     messages.push(msg);
     
@@ -46,7 +51,7 @@
     for(i=0; i<players.length; i++) {
       var rosterName = document.createElement('li');
       rosterName.className = 'user';
-      rosterName.appendChild( document.createTextNode( players[i].name) );
+      rosterName.appendChild( document.createTextNode( players[i].name + ' - kills: ' + players[i].kills + '. deaths: ' + players[i].deaths) );
       usersEl.appendChild(rosterName);
     }
     players = players;
