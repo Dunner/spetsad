@@ -43,8 +43,6 @@ obj_player.create = function(data) {
     }
   };
 
-  console.log(data.playerinfo)
-
   tempplayer.texts.nameplate = game.add.text(0, 0, tempplayer.name, healthStyle);
   tempplayer.texts.nameplate.anchor.set(0.5, -1);
 
