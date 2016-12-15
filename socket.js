@@ -167,8 +167,10 @@ module.exports = function(app, io) {
       socket.name = String(name || 'Anonymous');
       updateRoster();
     });
+
   });
   
+
   function updateRoster() {
     async.map(sockets, function (socket, callback) {
         if (socket){

@@ -3,7 +3,7 @@ var obj_pinetree = {},
 
 
 obj_pinetree.create = function(data) {
-
+  
   var tempPinetree = {};
   tempPinetree.data = data;
 
@@ -36,22 +36,35 @@ obj_pinetree.create = function(data) {
   }
   tempPinetree.shadow.object.scale = tempPinetree.children[0].object.scale;  // i/data.sections
   tempPinetree.shadow.object.angle = tempPinetree.children[0].object.angle;
-  pinetrees.push(tempPinetree);
 
+  
+  if (debug) { //DEBUGGING ###############
+    tempPinetree.shadow.object.inputEnabled = true;
+    tempPinetree.shadow.object.input.pixelPerfectOver = true;
+    tempPinetree.shadow.object.events.onInputOver.add( function() {
+      console.log(tempPinetree.data.id, 
+                  'x:' + tempPinetree.shadow.object.x, 
+                  'y:' + tempPinetree.shadow.object.y)
+    }, this);
+  } //####################################
+
+
+  pinetrees.push(tempPinetree);
 
 }
 
 obj_pinetree.update = function(pinetree) {
   // ###### pinetrees 
-  if (pointDistance(screenCenter(),pinetree.shadow.object.position) < 600) {
+  if (pointDistance(game.camera.center(),pinetree.shadow.object.position) < 600) {
 
-    var pointDir = pointDirection(screenCenter(), pinetree.shadow.object.position);
+
+    var pointDir = pointDirection(game.camera.center(), pinetree.shadow.object.position);
     if  (pointDir < 0) {pointDir += 360};
 
     for (var i = 0; i < pinetree.children.length; i++) {
       var child = pinetree.children[i];
 
-      var offCenter = child.z * (Math.abs(pointDistance(screenCenter(), pinetree.shadow.object.position))/100);
+      var offCenter = child.z * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
       var ldirCenter = lengthDir(offCenter, pointDir / 57);
 
       child.object.x = pinetree.shadow.object.x + ldirCenter.x;

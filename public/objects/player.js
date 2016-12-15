@@ -78,9 +78,14 @@ obj_player.update = function(player) {
     }
   }
   
+
   var currentLeanAngle = player.lastTickData.leanAngle;
 
   if (player.shadow.object.x !== player.lastTickData.x || player.shadow.object.y !== player.lastTickData.y) {
+
+    if (player == me) {game.camera.zoomTo(1.5,300)}
+    
+
     player.lastTickData.reqLeanAngle = pointDirection(player.shadow.object.position, player.lastTickData);
     if  (player.lastTickData.reqLeanAngle < 0) {player.lastTickData.reqLeanAngle += 360};
     
@@ -107,6 +112,9 @@ obj_player.update = function(player) {
       }
     }
   } else {
+
+    if (player == me) {game.camera.zoomTo(1.0,300)}
+
     player.shadow.object.animations.stop('walk');
     player.feet.object.animations.stop('walk');
     player.legs.object.animations.stop('walk');
@@ -123,23 +131,23 @@ obj_player.update = function(player) {
   player.shadow.object.alpha = 0.4;
 
 
-  var tempFeetOffCenter = player.feet.z * (Math.abs(pointDistance(screenCenter(), player.feet.parent.object.position))/100);
-  var tempFeetLengthdir = lengthDir(tempFeetOffCenter, (((pointDirection(screenCenter(), player.feet.object.position) % 360) + 360) % 360) / 57);
+  var tempFeetOffCenter = player.feet.z * (Math.abs(pointDistance(game.camera.center(), player.feet.parent.object.position))/100);
+  var tempFeetLengthdir = lengthDir(tempFeetOffCenter, (((pointDirection(game.camera.center(), player.feet.object.position) % 360) + 360) % 360) / 57);
   player.feet.object.x = player.shadow.object.x + tempFeetLengthdir.x;
   player.feet.object.y = player.shadow.object.y + tempFeetLengthdir.y;
   
-  var tempLegsOffCenter = player.legs.z * (Math.abs(pointDistance(screenCenter(), player.legs.parent.object.position))/100);
-  var tempLegsLengthdir = lengthDir(tempLegsOffCenter, (((pointDirection(screenCenter(), player.legs.object.position) % 360) + 360) % 360) / 57);
+  var tempLegsOffCenter = player.legs.z * (Math.abs(pointDistance(game.camera.center(), player.legs.parent.object.position))/100);
+  var tempLegsLengthdir = lengthDir(tempLegsOffCenter, (((pointDirection(game.camera.center(), player.legs.object.position) % 360) + 360) % 360) / 57);
   player.legs.object.x = player.feet.object.x + tempLegsLengthdir.x;
   player.legs.object.y = player.feet.object.y + tempLegsLengthdir.y;
 
-  var tempBodyOffCenter = player.torso.z * (Math.abs(pointDistance(screenCenter(), player.torso.parent.object.position))/100);
-  var tempBodyLengthdir = lengthDir(tempBodyOffCenter, (((pointDirection(screenCenter(), player.torso.object.position) % 360) + 360) % 360) / 57);
+  var tempBodyOffCenter = player.torso.z * (Math.abs(pointDistance(game.camera.center(), player.torso.parent.object.position))/100);
+  var tempBodyLengthdir = lengthDir(tempBodyOffCenter, (((pointDirection(game.camera.center(), player.torso.object.position) % 360) + 360) % 360) / 57);
   player.torso.object.x = player.legs.object.x + tempBodyLengthdir.x;
   player.torso.object.y = player.legs.object.y + tempBodyLengthdir.y;
   
-  var tempHeadOffCenter = player.head.z * (Math.abs(pointDistance(screenCenter(), player.head.parent.object.position))/100);
-  var tempHeadLengthdir = lengthDir(tempHeadOffCenter, (((pointDirection(screenCenter(), player.head.object.position) % 360) + 360) % 360) / 57);
+  var tempHeadOffCenter = player.head.z * (Math.abs(pointDistance(game.camera.center(), player.head.parent.object.position))/100);
+  var tempHeadLengthdir = lengthDir(tempHeadOffCenter, (((pointDirection(game.camera.center(), player.head.object.position) % 360) + 360) % 360) / 57);
   player.head.object.x = player.torso.object.x + tempHeadLengthdir.x; 
   player.head.object.y = player.torso.object.y + tempHeadLengthdir.y;
 

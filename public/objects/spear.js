@@ -36,10 +36,10 @@ obj_spear.update = function(spear) {
     spear.shadow.y += ( 32 * Math.sin(spear.object.angle * Math.PI / 180) ) * delta;
 
 
-    var pointDir = pointDirection(screenCenter(), spear.object.position);
+    var pointDir = pointDirection(game.camera.center(), spear.object.position);
     if  (pointDir < 0) {pointDir += 360};
     
-    var tempShaftOffCenter = spear.z * (Math.abs(pointDistance(screenCenter(), spear.object.position))/100);
+    var tempShaftOffCenter = spear.z * (Math.abs(pointDistance(game.camera.center(), spear.object.position))/100);
     var tempShaftLengthdir = lengthDir(tempShaftOffCenter, pointDir / 57);
 
     spear.object.x = spear.shadow.x + tempShaftLengthdir.x;

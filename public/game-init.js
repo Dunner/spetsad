@@ -1,8 +1,8 @@
 
 var socket = window.socket = io.connect();
 
-  
   var groups = {},
+      debug = false,
       delta,
       healthStyle,
       reticle,
@@ -12,7 +12,7 @@ var socket = window.socket = io.connect();
   function preload() {
     game.stage.disableVisibilityChange = true;
     game.load.crossOrigin = 'anonymous';
-    game.load.image('background','sprites/bg-playground.png');
+    game.load.image('background','sprites/lane-bg.png');
     game.load.spritesheet('feet-test-ss', 'sprites/feet-test-ss.png', 32, 32, 4);
     game.load.spritesheet('legs-test-ss', 'sprites/legs-test-ss.png', 32, 32, 4);
     game.load.spritesheet('torso-test-ss', 'sprites/torso-test-ss.png', 32, 32, 4);
@@ -28,9 +28,9 @@ var socket = window.socket = io.connect();
 
     game.time.advancedTiming = true;
 
-    game.add.tileSprite(0, 0, 1920, 1920, 'background');
+    game.add.tileSprite(0, 0, 900, 1920, 'background');
     game.stage.backgroundColor = '#787878';
-    game.world.setBounds(0, 0, 1920, 1920);
+    game.world.setBounds(0, 0, 900, 1920);
     
     healthStyle = { font: "12px Arial", fill: "#fff", align: "left" };
 
@@ -68,6 +68,8 @@ var socket = window.socket = io.connect();
   }
 
   function update() {
+
+
     delta = game.time.elapsedMS/100 ; //Turn this into a ratio
 
     controls.update();

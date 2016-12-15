@@ -14,8 +14,8 @@
 
   function randomSpawnLocation() {
     return {
-      x: 700 + (Math.floor(Math.random() * 600) + 1),
-      y: 700 + (Math.floor(Math.random() * 600) + 1)
+      x: 300 + (Math.floor(Math.random() * 300) + 1),
+      y: 800 + (Math.floor(Math.random() * 300) + 1)
     };
   }
 
@@ -47,13 +47,6 @@
     return Phaser.Rectangle.intersects(boundsA, boundsB);
   }
 
-  function screenCenter() {
-    return {
-      x: game.camera.width / 2 + game.camera.x,
-      y: game.camera.height / 2 + game.camera.y,
-    }
-  }
-  
   function pointDirection(object1, object2) {
     // Returns angle between two vectors
     return Math.atan2(object2.y - object1.y, object2.x - object1.x) * 180 / Math.PI;

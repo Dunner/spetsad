@@ -27,5 +27,5 @@
   for (var key in css){
     stretchWrapperEl.style[key] = css[key];
   }
-
 })();
+

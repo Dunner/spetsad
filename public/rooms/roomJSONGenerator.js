@@ -1,16 +1,19 @@
+var increment = 0;
 
 window.generateJSON = function() {
+  increment = 0;
 
-  console.log({
-    trees: createTreesInArea(150, 150, 800, 1920, 150, 6, 3)
-  })
+  var trees = createTreesInArea(0, 0, 350, 1920, 100, 6, 3)
+      .concat(createTreesInArea(650, 0, 900, 1920, 100, 6, 3));
+
+  console.log(trees);
 
 }
 
 
 function createTreesInArea(x0,y0,x1,y1,density,maxHeight,minHeight) {
 
-  var i = 0,
+  var i = increment++,
       trees = [],
 
       areaWidth = (x1 - x0),

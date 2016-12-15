@@ -1,15 +1,54 @@
 var obj_camera = {},
+    objScreenCenter = {},
     cameraObject = {},
     mouse;
 
-
 obj_camera.create = function() {
+
+  game.camera.zoomTo = function(scale, duration) {
+    var bounds       = Phaser.Rectangle.clone(game.world.bounds);
+    var cameraBounds = game.camera.bounds;
+    if (!duration) {
+      cameraBounds.x      = bounds.width  * (1 - scale) / 2;
+      cameraBounds.y      = bounds.height * (1 - scale) / 2;
+      cameraBounds.width  = bounds.width  * scale;
+      cameraBounds.height = bounds.height * scale;
+      cameraBounds.scale  = scale;
+    } else {
+      game.add.tween(cameraBounds).to({
+          x      : bounds.width  * (1 - scale) / 2,
+          y      : bounds.height * (1 - scale) / 2,
+          width  : bounds.width  * scale,
+          height : bounds.height * scale,
+          scale  : scale
+      }, duration).start();
+      return game.add.tween(this.scale).to({
+          x: scale, y: scale, scale:scale
+      }, duration).start();
+    }
+  }
+
+  game.camera.pos = function() {
+    return {
+      x: game.camera.x,
+      y: game.camera.y,
+    }
+  }
+
+  game.camera.center = function() {
+    return {
+      x: game.camera.width / 2 + game.camera.x + game.camera.bounds.x,
+      y: game.camera.height / 2 + game.camera.y + game.camera.bounds.y,
+    }
+  }
+
 
   cameraObject.object = game.add.image(0,0, createBlock(0, 0,'#000'));
   cameraObject.object.anchor.setTo(0.5, 0.5);
 
-  mouse = game.add.image(game.input.mousePointer.x,game.input.mousePointer.y, createBlock(5, 5,'red'));
-  mouse.anchor.setTo(0.5, 0.5);
+  objScreenCenter = game.add.image(0,0, createBlock(5, 5,'green'));
+
+  mouse = game.add.image(0,0, createBlock(5, 5,'red'));
 
   //Edgetint overlay
   var edgeTint = {}, tintScaleX, tintScaleY;
@@ -34,8 +73,11 @@ obj_camera.create = function() {
 
 obj_camera.update = function() {
 
-  mouse.x = game.input.mousePointer.worldX;
-  mouse.y = game.input.mousePointer.worldY;
+  objScreenCenter.position = game.camera.center();
+
+
+  mouse.x = (game.input.activePointer.x + game.camera.x)/game.camera.bounds.scale;
+  mouse.y = (game.input.activePointer.y + game.camera.y)/game.camera.bounds.scale;
 
   // ###### Camera 
   if (me && me.shadow) {
@@ -55,7 +97,6 @@ obj_camera.update = function() {
     }
 
     game.camera.follow(cameraObject.object);
-
   }
 
 }
