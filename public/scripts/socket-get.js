@@ -7,40 +7,21 @@
 
   
   socket.on('death', function (data) {
-    var tPlayer = findPlayer(data.id);
-    var deathobj = game.add.image(tPlayer.playerinfo.x,tPlayer.playerinfo.y, createBlock(20, 20,'red'));
-    deathobj.anchor.setTo(0.5, 0.5);
-    
-    var deathtime = game.add.text(0, 0, "3", healthStyle);
-    deathtime.anchor.set(0.5, 0.5);
-    deathtime.x = deathobj.x;
-    deathtime.y = deathobj.y;
-    setTimeout(function(){
-      deathtime.setText('2');
-    }, 1000);
-    setTimeout(function(){
-      deathtime.setText('1');
-    }, 2000);
-    setTimeout(function(){
-      deathtime.destroy();
-      deathobj.destroy();
-    }, 3000);
-  
-    if (tPlayer.id === me.id) {
-      //move cameraObj to deathobj
-      setTimeout(function(){
-        var tSpawn = randomSpawnLocation();
-        socket.emit('respawn', tSpawn);
-      }, 3000);
-    }
-    
+    var player = findPlayer(data.id);
+    obj_player.dead(player);
   });
   
   socket.on('respawn', function (data) {
-    var tPlayer = findPlayer(data.id);
-    tPlayer.playerinfo = data.playerinfo;
-    tPlayer.shadow.object.x = data.playerinfo.x;
-    tPlayer.shadow.object.y = data.playerinfo.y;
+    var player = findPlayer(data.id);
+    player.alive = true;
+    player.playerinfo = data.playerinfo;
+    player.shadow.object.x = data.playerinfo.x;
+    player.shadow.object.y = data.playerinfo.y;
+    player.shadow.object.alpha = 1;
+    player.feet.object.alpha = 1;
+    player.legs.object.alpha = 1;
+    player.torso.object.alpha = 1;
+    player.head.object.alpha = 1;
   });
   
   socket.on('mysocket', function (data) {
@@ -50,15 +31,19 @@
   });
   
   socket.on('keydown', function (data) {
-    var tempplayer = findPlayer(data.socket);
-    tempplayer.playerinfo = data.playerinfo;
+    var player = findPlayer(data.socket);
+    if (player.alive) {
+      player.playerinfo = data.playerinfo;
+    }
   });
   
   socket.on('keyup', function (data) {
-    var tempplayer = findPlayer(data.socket);
-    tempplayer.playerinfo = data.playerinfo;
-    tempplayer.shadow.object.x = data.playerinfo.x;
-    tempplayer.shadow.object.y = data.playerinfo.y;
+    var player = findPlayer(data.socket);
+    if (player.alive) {
+      player.playerinfo = data.playerinfo;
+      player.shadow.object.x = data.playerinfo.x;
+      player.shadow.object.y = data.playerinfo.y;
+    }
   });
   
   socket.on('players', function (data) {
@@ -70,11 +55,13 @@
   });
   
   socket.on('fire', function (data) {
-    var tempPlayer = findPlayer(data.id);
-    var fromPos = {x: tempPlayer.shadow.object.x, y: tempPlayer.shadow.object.y};
-    var toPos = data.toPos;
-    var owner = data.id;
-    obj_spear.create(owner, fromPos, toPos, data.spearId, data.distance);
+    var player = findPlayer(data.id);
+    if (player.alive) {
+      var fromPos = {x: player.shadow.object.x, y: player.shadow.object.y};
+      var toPos = data.toPos;
+      var owner = data.id;
+      obj_spear.create(owner, fromPos, toPos, data.spearId, data.distance);
+    }
   });
   
   socket.on('spearhit', function (data) {
@@ -95,9 +82,9 @@
   
   socket.on('roster', function (players) {
     for (var i = 0; i < players.length; i++) {
-      var tp = findPlayer(players[i].socket);
-      if (tp) {
-        tp.name = players[i].name;
+      var player = findPlayer(players[i].socket);
+      if (player) {
+        player.name = players[i].name;
       }
     }
   });

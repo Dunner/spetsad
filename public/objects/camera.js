@@ -1,11 +1,14 @@
 var obj_camera = {},
     objScreenCenter = {},
     cameraObject = {},
-    mouse;
+    mouse,
+    cameraAnimation = 'none';
 
 obj_camera.create = function() {
 
-  game.camera.zoomTo = function(scale, duration) {
+  game.camera.zoomTo = function(scale, duration, name) {
+    cameraAnimation = name;
+
     var bounds       = Phaser.Rectangle.clone(game.world.bounds);
     var cameraBounds = game.camera.bounds;
     if (!duration) {
@@ -73,11 +76,11 @@ obj_camera.create = function() {
 
 obj_camera.update = function() {
 
-  objScreenCenter.position = game.camera.center();
+  //objScreenCenter.position = game.camera.center();
 
 
-  mouse.x = (game.input.activePointer.x + game.camera.x)/game.camera.bounds.scale;
-  mouse.y = (game.input.activePointer.y + game.camera.y)/game.camera.bounds.scale;
+  mouse.x = (game.input.mousePointer.x + game.camera.x)/game.camera.bounds.scale;
+  mouse.y = (game.input.mousePointer.y + game.camera.y)/game.camera.bounds.scale;
 
   // ###### Camera 
   if (me && me.shadow) {

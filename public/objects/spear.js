@@ -11,14 +11,16 @@ obj_spear.create = function(owner, fromPos, toPos, id, distance) {
   spear.shadow.angle = pointDirection(fromPos, toPos);
   spear.shadow.alpha = 0.3
   groups.spears.add(spear.shadow);
+  groups.allObjects.add(spear.shadow);
 
   spear.object = game.add.image(fromPos.x,fromPos.y, 'spear-ash');
   spear.object.anchor.setTo(0.5, 1);
   spear.object.angle = pointDirection(fromPos, toPos);
   groups.spears.add(spear.object);
+  groups.allObjects.add(spear.object);
 
   spear.id = id;
-  spear.z = 8;
+  spear.object.depth = 8;
   spear.distanceTraveled = 0;
   spear.owner = owner;
   spear.distance = distance;
@@ -39,7 +41,7 @@ obj_spear.update = function(spear) {
     var pointDir = pointDirection(game.camera.center(), spear.object.position);
     if  (pointDir < 0) {pointDir += 360};
     
-    var tempShaftOffCenter = spear.z * (Math.abs(pointDistance(game.camera.center(), spear.object.position))/100);
+    var tempShaftOffCenter = spear.object.depth * (Math.abs(pointDistance(game.camera.center(), spear.object.position))/100);
     var tempShaftLengthdir = lengthDir(tempShaftOffCenter, pointDir / 57);
 
     spear.object.x = spear.shadow.x + tempShaftLengthdir.x;

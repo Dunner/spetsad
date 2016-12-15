@@ -34,13 +34,13 @@ var socket = window.socket = io.connect();
     
     healthStyle = { font: "12px Arial", fill: "#fff", align: "left" };
 
-    ['players', 'spears', 'obstacles'].forEach(function(group) {
+    ['allObjects', 'players', 'spears', 'obstacles'].forEach(function(group) {
       groups[group] = game.add.group();
       groups[group].setAll('checkWorldBounds', true);
       //groups[group].setAll('outOfBoundsKill', true);
     }, this);
 
-    reticle = {}
+    reticle = {};
     reticle.object = game.add.image(600,600, 'reticle');
     reticle.object.anchor.set(0, 0.5);
     reticle.xScale = 0;
@@ -92,9 +92,12 @@ var socket = window.socket = io.connect();
     }, this);
 
     obj_camera.update();
-    game.debug.text(game.time.fps, 2, 14, "#00ff00");
-  }
 
+    game.debug.text(game.time.fps, 2, 14, "#00ff00");
+
+    groups.allObjects.sort('depth', Phaser.Group.SORT_ASCENDING);
+
+  }
 
 
   /*jshint validthis:true */

@@ -7,20 +7,20 @@ obj_pinetree.create = function(data) {
   var tempPinetree = {};
   tempPinetree.data = data;
 
-  tempPinetree.shadow = {z: 0, object: game.add.image(data.x,data.y, 'pinetree5')};
+  tempPinetree.shadow = {object: game.add.image(data.x,data.y, 'pinetree5')};
   tempPinetree.shadow.object.anchor.setTo(0.5, 0.5);
-  tempPinetree.shadow.object.tint = RGBtoHEX(0,0,0)
-  tempPinetree.shadow.object.alpha = '0.4'
+  tempPinetree.shadow.object.tint = RGBtoHEX(0,0,0);
+  tempPinetree.shadow.object.alpha = '0.4';
+  groups.allObjects.add(tempPinetree.shadow.object);
 
   //add children
   tempPinetree.children = [];
   for (var i = 1; i < data.sections+1 ; i++) {
-    var child = {
-      z: i*5,
-      object: game.add.image(data.x,data.y, 'pinetree5')
-    };
+    var child = {object: game.add.image(data.x,data.y, 'pinetree5')};
+    child.object.depth = i*5;
     child.object.anchor.setTo(0.5, 0.5);
     tempPinetree.children.push(child);
+    groups.allObjects.add(child.object);
   }
 
   //manipulate children
@@ -64,7 +64,7 @@ obj_pinetree.update = function(pinetree) {
     for (var i = 0; i < pinetree.children.length; i++) {
       var child = pinetree.children[i];
 
-      var offCenter = child.z * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
+      var offCenter = child.object.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
       var ldirCenter = lengthDir(offCenter, pointDir / 57);
 
       child.object.x = pinetree.shadow.object.x + ldirCenter.x;
