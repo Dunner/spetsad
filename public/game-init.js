@@ -1,13 +1,18 @@
 
 var socket = window.socket = io.connect();
 
-  var groups = {},
-      debug = false,
-      delta,
-      healthStyle,
-      reticle,
-      textureRegistry = {},
-      canvasElement = document.getElementById('spetsad-canvas');
+var game;
+var groups = {},
+    debug = false,
+    delta,
+    healthStyle,
+    reticle,
+    textureRegistry = {},
+    canvasElement = document.getElementById('spetsad-canvas');
+    
+
+    
+function startGame() {
 
   function preload() {
     game.stage.disableVisibilityChange = true;
@@ -47,7 +52,7 @@ var socket = window.socket = io.connect();
     reticle.yScale = 1;
 
 
-    socket.emit('spawn', randomSpawnLocation());
+    //socket.emit('spawn', randomSpawnLocation());
     socket.emit('getplayers');
 
     controls.create();
@@ -101,5 +106,6 @@ var socket = window.socket = io.connect();
 
 
   /*jshint validthis:true */
-  var game;
   game = new Phaser.Game(canvasElement.offsetWidth, canvasElement.offsetHeight, Phaser.AUTO, 'spetsad-canvas', {preload: preload, create: create, update: update});
+
+}

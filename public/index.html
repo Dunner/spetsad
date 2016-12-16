@@ -16,18 +16,46 @@
 
       <!-- Canvas -->
       <div id="spetsad-canvas"></div>
-      
+     
+
+      <!-- Game Lobby-->
+      <div class="ui-overlay animate-disperse" id="game-lobby">
+        <div class="ui-overlay-inside" id="game-lobby-inside">
+          
+          blue team:
+          <ul id="blue-team" class="lobby-team">
+          </ul>
+          
+          red team:
+          <ul id="red-team" class="lobby-team">
+          </ul>
+
+          <div class="ui-overlay-button" id="game-lobby-leave-button">Leave lobby</div>
+          <div class="ui-overlay-button" id="game-lobby-start-button">Start game</div>
+        </div>
+      </div>
+
+      <!-- Games List-->
+      <div class="ui-overlay animate-disperse" id="games-list">
+        <div class="ui-overlay-inside" id="games-list-inside">
+          Active games:
+          <ul id="lobbies"></ul>
+          <div class="ui-overlay-button" id="games-list-create-button">Create lobby</div>
+        </div>
+      </div>
+
       <!-- My Name -->
-      <div id="name-entry">
-        <div id="name-entry-inside">
+      <div class="ui-overlay animate-disperse" id="name-entry">
+        <div class="ui-overlay-inside" id="name-entry-inside">
           <label>
             <div class="question">
               What's your name?</div>
             <input type="text" id="myName" placeholder="" autofocus>
           </label>
-          <div id="name-entry-button">PLAY!</div>
+          <div class="ui-overlay-button" id="name-entry-button">PLAY!</div>
         </div>
       </div>
+
 
       <!-- User interface -->
       <div id="ui">

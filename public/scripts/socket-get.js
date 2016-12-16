@@ -1,11 +1,24 @@
-  var mySocket,
-      me;
+  var mySocketID;
+
+  socket.on('welcome', function (socketid) {
+    mySocketID = socketid;
+  });
+
+  socket.on('lobbies', function (lobbies) {
+    printLobbies(lobbies);
+  });
+
+  socket.on('stageChange', function (stageName, stageData) {
+    stageChange(stageName, stageData);
+  });
+
+
 
   socket.on('spawn', function (data) {
     obj_player.create(data);
+    roomInit();
   });
 
-  
   socket.on('death', function (data) {
     var player = findPlayer(data.id);
     obj_player.dead(player);
@@ -22,12 +35,6 @@
     player.legs.object.alpha = 1;
     player.torso.object.alpha = 1;
     player.head.object.alpha = 1;
-  });
-  
-  socket.on('mysocket', function (data) {
-    mySocket = data;
-    me = findPlayer(data);
-    //me.torso.object.tint = RGBtoHEX(0,255,0);
   });
   
   socket.on('keydown', function (data) {
@@ -47,7 +54,7 @@
   });
   
   socket.on('players', function (data) {
-    if (data.socket !== mySocket) {
+    if (data.socket !== mySocketID) {
       if (!findPlayer(data.socket)) {
         obj_player.create(data);
       }
@@ -91,6 +98,8 @@
 
   socket.on('player-dc', function (socket) {
     var tempplayer = findPlayer(socket);
+    if (!tempplayer) return;
+
     for (var key in tempplayer.texts) {
       var text = tempplayer.texts[key];
       text.destroy();
@@ -103,5 +112,6 @@
   });
 
   socket.on('connection-lost', function (socket) {
-    window.location.reload()
+    windows.location.reload();
+    stageChange('gamesList');
   });

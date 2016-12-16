@@ -82,6 +82,7 @@ obj_camera.update = function() {
   mouse.x = (game.input.mousePointer.x + game.camera.x)/game.camera.bounds.scale;
   mouse.y = (game.input.mousePointer.y + game.camera.y)/game.camera.bounds.scale;
 
+  var me = findPlayer(mySocketID);
   // ###### Camera 
   if (me && me.shadow) {
     

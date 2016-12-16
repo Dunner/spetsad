@@ -19,9 +19,19 @@
     };
   }
 
+  function findSocket(id) {
+    for (var i = 0; i < sockets.length; i++) {
+      if (sockets[i].id == id) {
+        return sockets[i];
+      }
+    }
+    return false;
+  }
+
   function findPlayer(id) {
     for (var i = 0; i < players.length; i++) {
-      if (players[i].id === id) {
+      console.log(players[i].id, id)
+      if (players[i].id == id) {
         return players[i];
       }
     }
