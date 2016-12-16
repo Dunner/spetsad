@@ -51,6 +51,7 @@
       game: {
         element: null,
         show: function() {
+          startGame();
           chatEl.style.visibility = 'visible';
         }
       }
@@ -97,7 +98,10 @@
 
         if (playerid !== 'empty') {
           var host = '';
-          if (playerid == lobby.host) {host = ' [host]'}
+          if (playerid == lobby.host) {
+            host = ' [host]';
+          }
+
           listElName.setAttribute('player-id', playerid);
           listElName.appendChild( document.createTextNode(
             findSocket(playerid).name + host
@@ -116,6 +120,11 @@
               e.target.getAttribute('team'),
               e.target.getAttribute('slot'));
           }
+        }
+        if (lobby.host == mySocketID) {
+          gameLobbyButtonStartEl.style.visibility = 'visible';
+        } else {
+          gameLobbyButtonStartEl.style.visibility = 'hidden';
         }
 
         listElWrapper.appendChild(listElName);
@@ -163,8 +172,7 @@
   };
 
   gameLobbyButtonStartEl.onclick = function(){
-    //startGame();
-    stageChange('game');
+    socket.emit('startGame');
   };
 
 

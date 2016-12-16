@@ -30,7 +30,6 @@
 
   function findPlayer(id) {
     for (var i = 0; i < players.length; i++) {
-      console.log(players[i].id, id)
       if (players[i].id == id) {
         return players[i];
       }

@@ -16,9 +16,12 @@ module.exports = function(app, io) {
     sockets.push(socket);
     socket.kills = 0;
     socket.deaths = 0;
-    
+
     io.to(socket.id).emit('welcome', socket.id);
     playerStageChange(socket.id, 'nameEntry');
+
+    // INTRO & LOBBIES ############################################### LOBBIES
+
 
     socket.on('setName', function (name) {
       socket.name = String(name || 'Anonymous');
@@ -43,16 +46,17 @@ module.exports = function(app, io) {
         }
       }
       lobbies.push(tempLobby);
-      //playerStageChange(socket.id, 'gameLobby', tempLobby.id);
       broadcast('lobbies', lobbies);
+      io.to(socket.id).emit('createdLobbyJoin', tempLobby.id);
     });
 
     socket.on('joinLobby', function (lobbyID) {
       var lobby = findLobby(lobbyID);
-      playerStageChange(socket.id, 'gameLobby', lobby);
       lobby.players.push(socket.id);
       socket.lobbyID = lobbyID;
       lobby.host = lobby.players[0];
+
+      playerStageChange(socket.id, 'gameLobby', lobby);
       broadcast('lobbies', lobbies);
     });
 
@@ -84,33 +88,68 @@ module.exports = function(app, io) {
 
       lobbyPlayerLeave(socket.id, socket.lobbyID)
 
-      //broadcast('lobbies', lobbies);
     });
 
-    messages.forEach(function (data) {
-      socket.emit('message', data);
+    socket.on('startGame', function () {
+      if (!socket.lobbyID) return;
+
+      var lobby = findLobby(socket.lobbyID);
+      if (!lobby) return;
+
+      if (socket.id == lobby.host) {
+        lobby.players.forEach(function (tempSocketID) {
+          io.to(tempSocketID).emit('startGame');
+          playerStageChange(tempSocketID, 'game');
+        });
+      }
+
     });
+
     
 
+    // GAME ############################################### GAME
+    socket.on('getplayers', function () {
+      if (!socket.lobbyID) return;
+      if (socket.id == socket.lobbyID) {
 
+        var lobby = findLobby(socket.lobbyID);
+        if (!lobby) return;
+        lobby.players.forEach(function (tempSocketID) {
+          if (io.sockets.connected[tempSocketID]) {
+            var data = io.sockets.connected[tempSocketID];
+            io.to(tempSocketID).emit(
+              'players', {
+                socket: data.id,
+                playerinfo: data.playerinfo,
+                name:socket.name
+            });
+          }
+        });
+      }
+    });
 
     socket.on('spawn', function (location) {
+      if (!socket.lobbyID) return;
+
       socket.playerinfo = location;
       socket.playerinfo.up = false;
       socket.playerinfo.right = false;
       socket.playerinfo.down = false;
       socket.playerinfo.left = false;
       socket.playerinfo.health = 100;
-      broadcast('spawn', {socket: socket.id, playerinfo: socket.playerinfo, name: socket.name});
+      broadcastLobby(socket.lobbyID,
+        'spawn', {
+          socket: socket.id,
+          playerinfo: socket.playerinfo,
+          name: socket.name
+        });
     });
     
-    socket.on('getplayers', function () {
-      sockets.forEach(function (data) {
-        socket.emit('players', {socket: data.id, playerinfo: data.playerinfo, name:socket.name});
-      });
-    });
+
     
     socket.on('keydown', function (msg) {
+      if (!socket.lobbyID) return;
+
       if(socket.playerinfo) {
         switch(msg) {
           case 0: // up
@@ -128,13 +167,22 @@ module.exports = function(app, io) {
           default:
             return;
         }
-        broadcast('keydown', {socket: socket.id, playerinfo: socket.playerinfo});
+        broadcastLobby(socket.lobbyID,
+          'keydown', {
+            socket: socket.id,
+            playerinfo: socket.playerinfo
+          });
       } else {
-        broadcast('connection-lost', {socket: socket.id});
+        broadcastLobby(socket.lobbyID,
+          'connection-lost', {
+            socket: socket.id
+          });
       }
     });
     
     socket.on('keyup', function (data) {
+      if (!socket.lobbyID) return;
+
       if(socket.playerinfo) {
         switch(data.msg) {
           case 0: // up
@@ -160,36 +208,50 @@ module.exports = function(app, io) {
           socket.playerinfo.x = location.x;
           socket.playerinfo.y = location.y;
         }
-        broadcast('keyup', {socket: socket.id, playerinfo: socket.playerinfo});
+        broadcastLobby(socket.lobbyID,
+          'keyup', {
+            socket: socket.id,
+            playerinfo: socket.playerinfo
+          });
       } else {
-        broadcast('connection-lost', {socket: socket.id});
+        broadcastLobby(socket.lobbyID,
+          'connection-lost', {
+            socket: socket.id
+          });
       }
     });
   
     socket.on('fire', function (data) {
-      broadcast('fire', {
-        id: socket.id,
-        toPos: data,
-        spearId: data.spearId,
-        distance: data.distance
-      });
+      if (!socket.lobbyID) return;
+
+      broadcastLobby(socket.lobbyID,
+        'fire', {
+          id: socket.id,
+          toPos: data,
+          spearId: data.spearId,
+          distance: data.distance
+        });
     });
     
     socket.on('spearhit', function (data) {
+      if (!socket.lobbyID) return;
+
       if (socket.playerinfo) {
         socket.playerinfo.health -= data.distanceTraveled;
         
-        broadcast('spearhit', {
-          id: socket.id,
-          spearId: data.spearId,
-          playerinfo: socket.playerinfo
-        });
+        broadcastLobby(socket.lobbyID,
+          'spearhit', {
+            id: socket.id,
+            spearId: data.spearId,
+            playerinfo: socket.playerinfo
+          });
         
         if( JSON.parse(socket.playerinfo.health) <= 0) {
 
-          broadcast('death', {
-            id: socket.id
-          });
+          broadcastLobby(socket.lobbyID,
+            'death', {
+              id: socket.id
+            });
 
           async.map(sockets, function (socket) {
             if (socket.id == data.spearOwner){
@@ -198,11 +260,12 @@ module.exports = function(app, io) {
           });
           socket.deaths +=1;
 
-          broadcast('kill', {
-            by: data.spearOwner,
-            victim: socket.id,
-            with: 'spear'
-          });
+          broadcastLobby(socket.lobbyID,
+            'kill', {
+              by: data.spearOwner,
+              victim: socket.id,
+              with: 'spear'
+            });
 
           updateRoster();
 
@@ -211,6 +274,8 @@ module.exports = function(app, io) {
     });
   
     socket.on('respawn', function (data) {
+      if (!socket.lobbyID) return;
+
       socket.playerinfo.health = 100;
       socket.playerinfo.x = data.x;
       socket.playerinfo.y = data.y;
@@ -225,7 +290,15 @@ module.exports = function(app, io) {
       sockets.splice(sockets.indexOf(socket), 1);
       updateRoster();
     });
-  
+
+
+
+
+    // MESSAGES ############################################### MESSAGES
+    messages.forEach(function (data) {
+      socket.emit('message', data);
+    });
+
     socket.on('message', function (msg) {
       var text = String(msg || '');
   
@@ -240,9 +313,11 @@ module.exports = function(app, io) {
       messages.push(data);
     });
 
-
   });
   
+
+
+
 
   function updateRoster() {
     async.map(sockets, function (socket, callback) {
@@ -276,9 +351,6 @@ module.exports = function(app, io) {
     var lobby = findLobby(lobbyID);
     if (!lobby) return;
 
-    sockets.forEach(function (socket) {
-      socket.emit(event, data);
-    });
     lobby.players.forEach(function (tempSocketID) {
       io.to(tempSocketID).emit(event, data);
     });

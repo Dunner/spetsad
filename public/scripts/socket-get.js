@@ -12,11 +12,14 @@
     stageChange(stageName, stageData);
   });
 
+  socket.on('createdLobbyJoin', function (lobbyID) {
+    socket.emit('joinLobby', lobbyID);
+  });
+  
 
 
   socket.on('spawn', function (data) {
     obj_player.create(data);
-    roomInit();
   });
 
   socket.on('death', function (data) {

@@ -1,5 +1,6 @@
 var obj_player = {},
-    players = [];
+    players = [],
+    me;
 
 obj_player.create = function(data) {
 
@@ -69,6 +70,7 @@ obj_player.create = function(data) {
 }
 
 obj_player.update = function(player) {
+  me = findPlayer(mySocketID);
   if (!player.alive) return;
   if (player.shadow.object) {
     if (player.playerinfo) {
@@ -98,7 +100,7 @@ obj_player.update = function(player) {
 
   if (player.shadow.object.x !== player.lastTickData.x || player.shadow.object.y !== player.lastTickData.y) {
 
-    if (player == me && cameraAnimation !== 'zoomIn') {game.camera.zoomTo(1.5,500,'zoomIn')}
+    if (player == me && cameraAnimation !== 'zoomIn') {game.camera.zoomTo(1.2,500,'zoomIn')}
     
 
     player.lastTickData.reqLeanAngle = pointDirection(player.shadow.object.position, player.lastTickData);

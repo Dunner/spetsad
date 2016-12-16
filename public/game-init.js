@@ -52,7 +52,7 @@ function startGame() {
     reticle.yScale = 1;
 
 
-    //socket.emit('spawn', randomSpawnLocation());
+    socket.emit('spawn', randomSpawnLocation());
     socket.emit('getplayers');
 
     controls.create();
