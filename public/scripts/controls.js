@@ -4,6 +4,7 @@ var controls = {},
     leftKey,
     rightKey,
     fireKey,
+    fireKeyTouch,
 
     wKey,
     dKey,
@@ -27,6 +28,7 @@ controls.create = function() {
   dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
   fireKey = game.input.activePointer.leftButton;
+  fireKeyTouch = game.input.pointer1;
 
   //up
   upKey.onDown.add(function() {
@@ -85,31 +87,43 @@ controls.create = function() {
     socket.emit('keyup', {msg:3, location:{x:me.shadow.object.x,y:me.shadow.object.y}});
   });
 
-  //Fire
-  fireKey.onUp.add(function() {
-    aiming = false;
-    if (canFire()) {
-      var spearId = randomId('spear');
-      socket.emit('fire', {
-        x: mouse.x,
-        y: mouse.y,
-        spearId: spearId,
-        distance: 96 * reticle.xScale
-      });
-    }
-  });
-
 }
 
 controls.update = function() {
   //Fire
   if (fireKey.isDown) {
-    aiming = {
-      target: {
-        x: mouse.x,
-        y: mouse.y
-      }
+    aim('mouse');
+  }
+  if (fireKeyTouch.isDown) {
+    aim('touch');
+  }
+  if ( fireKeyTouch.isUp && aiming && aiming.pointerType == 'touch' ) {
+    throwSpear();
+  }
+  if ( fireKey.isUp && aiming && aiming.pointerType == 'mouse' ) {
+    throwSpear();
+  }
+}
+
+function aim(pointerType) {
+  aiming = {
+    pointerType: pointerType,
+    target: {
+      x: mouse.x,
+      y: mouse.y
     }
   }
-  
+}
+
+function throwSpear() {
+  aiming = false;
+  if (canFire()) {
+    var spearId = randomId('spear');
+    socket.emit('fire', {
+      x: mouse.x,
+      y: mouse.y,
+      spearId: spearId,
+      distance: 96 * reticle.xScale
+    });
+  }
 }

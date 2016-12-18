@@ -1,5 +1,5 @@
-(function(){
 
+function stretchWrapper() {
   var stretchWrapperEl = document.getElementById('stretchWrapper'),
       parent = stretchWrapperEl.offsetParent,
       wh = parent.offsetHeight,
@@ -12,7 +12,7 @@
     dw = ww;
   } else {
     dh = (wh/10 * 8);
-    dw = dh/2;
+    dw = dh/1.3333;
   }
 
   var css ={
@@ -27,5 +27,12 @@
   for (var key in css){
     stretchWrapperEl.style[key] = css[key];
   }
+}
+
+(function(){
+  stretchWrapper();
 })();
 
+window.onresize = function(event) {
+  stretchWrapper();
+};

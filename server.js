@@ -16,10 +16,10 @@ app.use('/phaser',express.static(__dirname + '/node_modules/phaser/build/'));
 app.use(express.static('public'));
 
 // listen for requests :)
-
 listener = http.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
 // socket messages ===============================================
 require('./socket')(app, io);
+var update = require('./update')();

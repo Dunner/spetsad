@@ -1,19 +1,17 @@
 var async = require('async');
+var update = require('./update');
+var dataService = require('./dataService');
 
 //Socket
 module.exports = function(app, io) {
-  
-  var messages = [];
-  var sockets = [];
-  var lobbies = [];
-  
+
   io.on('connection', function (socket) {
 
     //New player
     //give player his/her id
-    console.log('connection ###############################', sockets.length+1);
+    console.log('connection ###############################', dataService.sockets.length+1);
 
-    sockets.push(socket);
+    dataService.sockets.push(socket);
     socket.kills = 0;
     socket.deaths = 0;
 
@@ -30,7 +28,7 @@ module.exports = function(app, io) {
     });
 
     socket.on('getLobbies', function () {
-      io.to(socket.id).emit('lobbies', lobbies);
+      io.to(socket.id).emit('lobbies', dataService.lobbies);
     });
 
     socket.on('createLobby', function () {
@@ -43,21 +41,23 @@ module.exports = function(app, io) {
         teams:{
           red: ['empty', 'empty', 'empty'],
           blue: ['empty', 'empty', 'empty']
-        }
+        },
+        removeTimer: 5
       }
-      lobbies.push(tempLobby);
-      broadcast('lobbies', lobbies);
+      dataService.lobbies.push(tempLobby);
+      broadcast('lobbies', dataService.lobbies);
       io.to(socket.id).emit('createdLobbyJoin', tempLobby.id);
     });
 
     socket.on('joinLobby', function (lobbyID) {
       var lobby = findLobby(lobbyID);
+      if (!lobby) {return;}
       lobby.players.push(socket.id);
       socket.lobbyID = lobbyID;
       lobby.host = lobby.players[0];
 
       playerStageChange(socket.id, 'gameLobby', lobby);
-      broadcast('lobbies', lobbies);
+      broadcast('lobbies', dataService.lobbies);
     });
 
     socket.on('lobbyTakeSpot', function (lobbyID, teamName, spot) {
@@ -80,7 +80,7 @@ module.exports = function(app, io) {
       lobby.players.forEach(function (socketID) {
         playerStageChange(socketID, 'gameLobby', lobby);
       });
-      //broadcast('lobbies', lobbies);
+      //broadcast('lobbies', dataService.lobbies);
     });
 
     socket.on('lobbyLeave', function () {
@@ -253,7 +253,7 @@ module.exports = function(app, io) {
               id: socket.id
             });
 
-          async.map(sockets, function (socket) {
+          async.map(dataService.sockets, function (socket) {
             if (socket.id == data.spearOwner){
               socket.kills +=1;
             }
@@ -287,7 +287,7 @@ module.exports = function(app, io) {
     socket.on('disconnect', function () {
       broadcast('player-dc', socket.id);
       lobbyPlayerLeave(socket.id, socket.lobbyID);
-      sockets.splice(sockets.indexOf(socket), 1);
+      dataService.sockets.splice(dataService.sockets.indexOf(socket), 1);
       updateRoster();
     });
 
@@ -295,7 +295,7 @@ module.exports = function(app, io) {
 
 
     // MESSAGES ############################################### MESSAGES
-    messages.forEach(function (data) {
+    dataService.messages.forEach(function (data) {
       socket.emit('message', data);
     });
 
@@ -310,7 +310,7 @@ module.exports = function(app, io) {
         text: text
       };
       broadcast('message', data);
-      messages.push(data);
+      dataService.messages.push(data);
     });
 
   });
@@ -320,7 +320,7 @@ module.exports = function(app, io) {
 
 
   function updateRoster() {
-    async.map(sockets, function (socket, callback) {
+    async.map(dataService.sockets, function (socket, callback) {
         if (socket){
           callback(null, {
             id: socket.id,
@@ -342,7 +342,7 @@ module.exports = function(app, io) {
   }
 
   function broadcast(event, data) {
-    sockets.forEach(function (socket) {
+    dataService.sockets.forEach(function (socket) {
       socket.emit(event, data);
     });
   }
@@ -357,9 +357,9 @@ module.exports = function(app, io) {
   }
 
   function findLobby(lobbyID) {
-    for (var i = lobbies.length - 1; i >= 0; i--) {
-      if (lobbies[i].id == lobbyID) {
-        return lobbies[i];
+    for (var i = dataService.lobbies.length - 1; i >= 0; i--) {
+      if (dataService.lobbies[i].id == lobbyID) {
+        return dataService.lobbies[i];
       }
     }
   }

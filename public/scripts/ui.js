@@ -11,13 +11,14 @@
       gameLobbyButtonStartEl = document.getElementById('game-lobby-start-button'),
 
       lobbiesEl = document.getElementById('lobbies'),
+      lobbyNameEl = document.getElementById('lobby-name'),
 
 
       usersEl = document.getElementById('users'),
 
       messagesEl = document.getElementById('messages'),
       messageEl = document.getElementById('message'),
-      chatEl = document.getElementById('chat');
+      chatEl = document.getElementById('coms');
 
 
   var sockets = [], messages = [], lobby = {}, i;
@@ -53,6 +54,7 @@
         show: function() {
           startGame();
           chatEl.style.visibility = 'visible';
+          usersEl.style.visibility = 'visible';
         }
       }
     }
@@ -73,6 +75,7 @@
       }
       if (stage != 'game') {
         chatEl.style.visibility = 'hidden';
+        usersEl.style.visibility = 'hidden';
       }
     }
   }
@@ -85,7 +88,7 @@
       red: document.getElementById('red-team')
     }
     teamElements['blue'].innerHTML = teamElements['red'].innerHTML = '';
-
+    lobbyNameEl.innerHTML = lobby.name
     for(var team in teams) {
       team = teams[team];
       for (var i = 0; i < 3; i++) {
@@ -97,9 +100,13 @@
             listElName.className = 'lobby-element';
 
         if (playerid !== 'empty') {
+          listElName.className = 'lobby-element lobby-element-taken';
           var host = '';
           if (playerid == lobby.host) {
-            host = ' [host]';
+            var listElHost = document.createElement('div');
+            listElHost.className = 'lobby-element-host';
+            listElHost.appendChild( document.createTextNode('H'));
+            listElWrapper.appendChild(listElHost);
           }
 
           listElName.setAttribute('player-id', playerid);
@@ -110,15 +117,16 @@
           listElName.setAttribute('lobby-id', lobby.id);
           listElName.setAttribute('team', team);
           listElName.setAttribute('slot', i);
-          listElName.appendChild( 
-            document.createTextNode( 
-              i+1 + ' Click to take this spot' 
-          ));
+          listElName.appendChild(htmlToElement('<span>free slot</span>'));
           listElName.onclick = function(e) {
+            var target = e.target
+            if(target.getAttribute('lobby-id') == null) {
+              target = target.parentNode;
+            }
             socket.emit('lobbyTakeSpot',
-              e.target.getAttribute('lobby-id'),
-              e.target.getAttribute('team'),
-              e.target.getAttribute('slot'));
+              target.getAttribute('lobby-id'),
+              target.getAttribute('team'),
+              target.getAttribute('slot'));
           }
         }
         if (lobby.host == mySocketID) {
@@ -147,15 +155,31 @@
       var listElName = document.createElement('div');
           listElName.className = 'lobby-element';
           listElName.setAttribute('lobby-id', lobby.id);
-          listElName.appendChild( document.createTextNode(lobby.name) );
+          listElName.appendChild( 
+            htmlToElement('<span>' + lobby.name + '<span><span style="float:right"> players: '+ lobby.players.length + '</span>' )
+          );
+
 
       listElWrapper.appendChild(listElName);
       lobbiesEl.appendChild(listElWrapper);
 
       listElName.onclick = function(e) {
-        socket.emit('joinLobby', e.target.getAttribute('lobby-id'));
+        var target = e.target
+        if(target.getAttribute('lobby-id') == null) {
+          target = target.parentNode;
+        }
+        socket.emit('joinLobby', target.getAttribute('lobby-id'));
       }
     }
+
+    if (lobbies.length == 0) {
+      lobbiesEl.appendChild( document.createTextNode( 'No lobbies for you to join [sadface]')  );
+      lobbiesEl.appendChild(document.createElement('br'));
+      lobbiesEl.appendChild(document.createElement('br'));
+      lobbiesEl.appendChild( document.createTextNode( 'Create one below so that nobody has to experience this calamity again')  );
+      lobbiesEl.appendChild(document.createElement('br'));
+    }
+
   }
 
   nameEntryButtonEl.onclick = function(){

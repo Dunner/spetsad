@@ -45,7 +45,6 @@ obj_camera.create = function() {
     }
   }
 
-
   cameraObject.object = game.add.image(0,0, createBlock(0, 0,'#000'));
   cameraObject.object.anchor.setTo(0.5, 0.5);
 
@@ -74,13 +73,13 @@ obj_camera.create = function() {
 
 }
 
+
 obj_camera.update = function() {
 
   //objScreenCenter.position = game.camera.center();
 
-
-  mouse.x = (game.input.mousePointer.x + game.camera.x)/game.camera.bounds.scale;
-  mouse.y = (game.input.mousePointer.y + game.camera.y)/game.camera.bounds.scale;
+  mouse.x = (game.input.activePointer.x + game.camera.x)/game.camera.bounds.scale;
+  mouse.y = (game.input.activePointer.y + game.camera.y)/game.camera.bounds.scale;
 
   var me = findPlayer(mySocketID);
   // ###### Camera 

@@ -79,3 +79,9 @@
   function RGBtoHEX(r, g, b) {
     return r << 16 | g << 8 | b;
   }
+
+  function htmlToElement(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}

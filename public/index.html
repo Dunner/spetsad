@@ -22,23 +22,36 @@
       <div class="ui-overlay animate-disperse" id="game-lobby">
         <div class="ui-overlay-inside" id="game-lobby-inside">
           
-          blue team:
+          <div id="game-lobby-leave-button">
+            Leave lobby
+          </div>
+
+          <hr><br>
+
+          <div class="big-text" id="lobby-name"></div>
+
+          <div class="team-name team-name-blue" >
+            BLUE TEAM
+          </div>
           <ul id="blue-team" class="lobby-team">
           </ul>
           
-          red team:
+          <div class="team-name team-name-red">
+            RED TEAM
+          </div>
           <ul id="red-team" class="lobby-team">
           </ul>
 
-          <div class="ui-overlay-button" id="game-lobby-leave-button">Leave lobby</div>
           <div class="ui-overlay-button" id="game-lobby-start-button">Start game</div>
         </div>
       </div>
 
       <!-- Games List-->
       <div class="ui-overlay animate-disperse" id="games-list">
-        <div class="ui-overlay-inside" id="games-list-inside">
-          Active games:
+        <div class="ui-overlay-inside" id="games-list-inside" >
+          <div class="big-text">
+            Game lobbies
+          </div>
           <ul id="lobbies"></ul>
           <div class="ui-overlay-button" id="games-list-create-button">Create lobby</div>
         </div>
@@ -50,25 +63,25 @@
           <label>
             <div class="question">
               What's your name?</div>
-            <input type="text" id="myName" placeholder="" autofocus>
+            <input type="text" id="myName" placeholder="" autofocus value="Anonymous">
           </label>
-          <div class="ui-overlay-button" id="name-entry-button">PLAY!</div>
         </div>
+        <div class="ui-overlay-button" id="name-entry-button">PLAY!</div>
       </div>
 
 
       <!-- User interface -->
-      <div id="ui">
+      <div id="game-ui">
 
 
         <!-- User List -->
         <div class="users">
-          <small>Online users:</small>
+          <small>Online users</small>
           <ul id="users"></ul>
         </div>
 
         <!-- Chat -->
-        <div class="coms">
+        <div id="coms">
           <div id="messages">
           </div>
           <form class="input" id="chat">

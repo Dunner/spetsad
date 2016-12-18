@@ -10,8 +10,6 @@ var groups = {},
     textureRegistry = {},
     canvasElement = document.getElementById('spetsad-canvas');
     
-
-    
 function startGame() {
 
   function preload() {
@@ -34,7 +32,7 @@ function startGame() {
     game.time.advancedTiming = true;
 
     game.add.tileSprite(0, 0, 900, 1920, 'background');
-    game.stage.backgroundColor = '#787878';
+    game.stage.backgroundColor = '#192504';
     game.world.setBounds(0, 0, 900, 1920);
     
     healthStyle = { font: "12px Arial", fill: "#fff", align: "left" };
@@ -103,7 +101,6 @@ function startGame() {
     groups.allObjects.sort('depth', Phaser.Group.SORT_ASCENDING);
 
   }
-
 
   /*jshint validthis:true */
   game = new Phaser.Game(canvasElement.offsetWidth, canvasElement.offsetHeight, Phaser.AUTO, 'spetsad-canvas', {preload: preload, create: create, update: update});
