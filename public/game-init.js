@@ -1,7 +1,8 @@
 
 var socket = window.socket = io.connect();
 
-var game;
+var game,
+    lobby;
 var groups = {},
     debug = false,
     delta,
@@ -9,15 +10,15 @@ var groups = {},
     reticle,
 
     spawns = {
-      'blue': {x: 450, y:300},
-      'red': {x: 450, y:1620}
+      'blue': {x: 450, y:500},
+      'red': {x: 450, y:1420}
     }
 
     textureRegistry = {},
     canvasElement = document.getElementById('spetsad-canvas');
     
-function startGame() {
-
+function startGame(data) {
+  lobby = data;
   function preload() {
     game.stage.disableVisibilityChange = true;
     game.load.crossOrigin = 'anonymous';
@@ -55,29 +56,21 @@ function startGame() {
     reticle.xScale = 0;
     reticle.yScale = 1;
 
-    var team = findSocket(mySocketID).team;
+    var myTeamInfo = findTeamSlot(lobby, mySocketID);
     socket.emit('spawn', 
       randomSpawnLocation(
-        spawns[team].x,
-        spawns[team].y,
-        150 //randomradius
+        spawns[myTeamInfo.team].x,
+        spawns[myTeamInfo.team].y,
+        80 //randomradius
       ));
     socket.emit('getplayers');
 
     controls.create();
 
-    forrest.init();
-
-
-    // obj_obstacle.create({
-    //   x: 1200,
-    //   y: 850,
-    //   diameter: 40,
-    //   height: 4,
-    //   color: 'white'
-    // })
-    
     obj_camera.create();
+
+    forrest.init();
+    
 
   }
 
@@ -92,12 +85,20 @@ function startGame() {
       obj_obstacle.update(obstacle);
     }, this);
 
-    pinetrees.forEach(function(obstacle) {
-      obj_pinetree.update(obstacle);
+    pinetrees.forEach(function(pinetree) {
+      obj_pinetree.update(pinetree);
+    }, this);
+
+    towers.forEach(function(tower) {
+      obj_tower.update(tower);
     }, this);
 
     spears.forEach(function(spear) {
       obj_spear.update(spear);
+    }, this);
+
+    towerSpears.forEach(function(spear) {
+      obj_tower_spear.update(spear);
     }, this);
 
     players.forEach(function(player) {

@@ -80,6 +80,18 @@
     return r << 16 | g << 8 | b;
   }
 
+  function findTeamSlot(lobby, id) {
+    for(var teamName in lobby.teams) {
+      var team = lobby.teams[teamName];
+      for (var i = 0; i < 3; i++) {
+        var pid = team.players[i];
+        if (pid == id) {
+          return {team:teamName, slot: i};
+        }
+      }
+    }
+  }
+
   function htmlToElement(html) {
     var template = document.createElement('template');
     template.innerHTML = html;

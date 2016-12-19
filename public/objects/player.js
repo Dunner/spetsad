@@ -36,6 +36,7 @@ obj_player.create = function(data) {
   head.object.anchor.setTo(0.5, 0.5);
   var tempplayer = {
     name: data.name,
+    team: data.team,
     id: data.socket,
     alive: true,
     shadow: shadow,
@@ -265,10 +266,11 @@ obj_player.dead = function(player) {
     //move cameraObj to deathobj  
     setTimeout(function(){
       var tSpawn = randomSpawnLocation(
-        spawns[team].x,
-        spawns[team].y,
-        150 //randomradius
+        spawns[me.team].x,
+        spawns[me.team].y,
+        80 //randomradius
       );
+      console.log(tSpawn);
       socket.emit('respawn', tSpawn);
     }, 3000);
   }

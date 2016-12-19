@@ -6,7 +6,7 @@ var dataService = require('./dataService');
 module.exports = function(io) {
 
   io.on('connection', function (socket) {
-
+    
     //New player
     //give player his/her id
     console.log('connection ###############################', dataService.sockets.length+1);
@@ -39,8 +39,30 @@ module.exports = function(io) {
         hostid: null,
         playing: false,
         teams:{
-          red: ['empty', 'empty', 'empty'],
-          blue: ['empty', 'empty', 'empty']
+          red: {
+            players:['empty', 'empty', 'empty'],
+            kills: 0,
+            deaths: 0,
+            creeps: [],
+            base: {
+              health: 10000
+            },
+            tower: {
+              health: 5000
+            }
+          },
+          blue: {
+            players: ['empty', 'empty', 'empty'],
+            kills: 0,
+            deaths: 0,
+            creeps: [],
+            base: {
+              health: 10000
+            },
+            tower: {
+              health: 5000
+            }
+          }
         },
         removeTimer: 5
       }
@@ -68,13 +90,14 @@ module.exports = function(io) {
       for (var team in teams) {
         team = teams[team];
         for(var i=0;i<3;i++) {
-          if(lobby.teams[team][i] == socket.id) {
-            lobby.teams[team][i] = 'empty';
+          if(lobby.teams[team].players[i] == socket.id) {
+            lobby.teams[team].players[i] = 'empty';
           }
         }
       }
-      if (lobby.teams[teamName][spot] == 'empty') {
-        lobby.teams[teamName][spot] = socket.id;
+      if (lobby.teams[teamName].players[spot] == 'empty') {
+        lobby.teams[teamName].players[spot] = socket.id;
+        socket.team = teamName;
       }
 
       lobby.players.forEach(function (socketID) {
@@ -97,10 +120,19 @@ module.exports = function(io) {
       if (!lobby) return;
 
       if (socket.id == lobby.host) {
+        //only lobby host can start game
         lobby.playing = true;
         lobby.players.forEach(function (tempSocketID) {
+          if (!findTeamSlot(lobby, tempSocketID)) {
+            //kick players without slots
+            lobby.players.splice(lobby.players.indexOf(tempSocketID), 1);
+            playerStageChange(tempSocketID, 'gamesList');
+          }
+        });
+        lobby.players.forEach(function (tempSocketID) {
+          //start game for players
           io.to(tempSocketID).emit('startGame');
-          playerStageChange(tempSocketID, 'game');
+          playerStageChange(tempSocketID, 'game', lobby);
         });
       }
 
@@ -122,7 +154,8 @@ module.exports = function(io) {
               'players', {
                 socket: data.id,
                 playerinfo: data.playerinfo,
-                name:socket.name
+                name:socket.name,
+                team:socket.team,
             });
           }
         });
@@ -142,7 +175,8 @@ module.exports = function(io) {
         'spawn', {
           socket: socket.id,
           playerinfo: socket.playerinfo,
-          name: socket.name
+          name: socket.name,
+          team: socket.team,
         });
     });
     
@@ -234,14 +268,14 @@ module.exports = function(io) {
         });
     });
     
-    socket.on('spearhit', function (data) {
+    socket.on('spearHit', function (data) {
       if (!socket.lobbyID) return;
 
       if (socket.playerinfo) {
         socket.playerinfo.health -= data.distanceTraveled;
         
         broadcastLobby(socket.lobbyID,
-          'spearhit', {
+          'spearHit', {
             id: socket.id,
             spearId: data.spearId,
             playerinfo: socket.playerinfo
@@ -254,9 +288,9 @@ module.exports = function(io) {
               id: socket.id
             });
 
-          async.map(dataService.sockets, function (socket) {
-            if (socket.id == data.spearOwner){
-              socket.kills +=1;
+          async.map(dataService.sockets, function (tempSocket) {
+            if (tempSocket.id == data.spearOwner){
+              tempSocket.kills +=1;
             }
           });
           socket.deaths +=1;
@@ -274,6 +308,42 @@ module.exports = function(io) {
       }
     });
   
+
+    socket.on('towerSpearHit', function (data) {
+      if (!socket.lobbyID) return;
+
+      if (socket.playerinfo) {
+        socket.playerinfo.health -= 20;
+        
+        broadcastLobby(socket.lobbyID,
+          'towerSpearHit', {
+            spearID: data.spearID,
+            targetID: data.targetID,
+            targetinfo: socket.playerinfo
+          });
+        
+        if( JSON.parse(socket.playerinfo.health) <= 0) {
+
+          broadcastLobby(socket.lobbyID,
+            'death', {
+              id: socket.id
+            });
+
+          socket.deaths +=1;
+
+          broadcastLobby(socket.lobbyID,
+            'kill', {
+              by: 'tower',
+              victim: socket.id,
+              with: 'spear'
+            });
+
+          updateRoster();
+
+        }
+      }
+    });
+
     socket.on('respawn', function (data) {
       if (!socket.lobbyID) return;
 
@@ -373,13 +443,13 @@ module.exports = function(io) {
     for (var team in teams) {
       team = teams[team];
       for(var i=0;i<3;i++) {
-        if(lobby.teams[team][i] == socketID) {
-          lobby.teams[team][i] = 'empty';
+        if(lobby.teams[team].players[i] == socketID) {
+          lobby.teams[team].players[i] = 'empty';
         }
       }
     }
     lobby.players.splice(lobby.players.indexOf(socketID), 1);
-    playerStageChange(socketID, 'gamesList', lobby);
+    playerStageChange(socketID, 'gamesList');
     
     lobby.players.forEach(function (tempSocketID) {
       playerStageChange(tempSocketID, 'gameLobby', lobby);
@@ -388,6 +458,19 @@ module.exports = function(io) {
     if (io.sockets.connected[socketID]) {
       io.sockets.connected[socketID].lobbyID = null;
     }
+  }
+
+  function findTeamSlot(lobby, id) {
+    for(var teamName in lobby.teams) {
+      var team = lobby.teams[teamName];
+      for (var i = 0; i < 3; i++) {
+        var pid = team.players[i];
+        if (pid == id) {
+          return {team:teamName, slot: i};
+        }
+      }
+    }
+    return false;
   }
 
 };

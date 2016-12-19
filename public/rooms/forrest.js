@@ -3,14 +3,15 @@ var forrest = {};
 forrest.init = function() {
 
   var room = {
-    trees: trees,
-    width: 1920,
+    trees: roomTrees,
+    towers: roomTowers,
+    width: 900,
     height: 1920
   };
 
+  //Trees create
   for (var i = 0; i < room.trees.length; i++) {
     var tree = room.trees[i];
-
     obj_pinetree.create({
       id: tree.id,
       x: tree.x,
@@ -18,11 +19,36 @@ forrest.init = function() {
       sections: tree.sections,
     });
   }
-
+  //Towers create
+  for (var i = 0; i < room.towers.length; i++) {
+    var tower = room.towers[i];
+    obj_tower.create({
+      id: tower.id,
+      team: tower.team,
+      x: tower.x,
+      y: tower.y,
+    });
+  }
 
 }
+var roomTowers = [
+  {
+    "id": 0,
+    "team": "blue",
+    "angle": 206,
+    "x": 350,
+    "y": 700,
+  },
+  {
+    "id": 1,
+    "team": "red",
+    "angle": 206,
+    "x": 550,
+    "y": 1220,
+  }
+];
 
-var trees = [
+var roomTrees = [
   {
     "id": 0,
     "angle": 206,

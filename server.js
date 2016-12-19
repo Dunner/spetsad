@@ -22,4 +22,4 @@ listener = http.listen(port, function () {
 
 // socket messages ===============================================
 require('./socket')(io);
-var update = require('./update')();
+require('./update')(io);

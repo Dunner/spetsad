@@ -48,7 +48,7 @@ obj_spear.update = function(spear) {
     spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
     if (checkOverlap(me.shadow.object, spear.object) && me.id !== spear.owner && me.playerinfo.health > 0) {
-      socket.emit('spearhit', {spearId: spear.id, distanceTraveled: spear.distanceTraveled, spearOwner:spear.owner});
+      socket.emit('spearHit', {spearId: spear.id, distanceTraveled: spear.distanceTraveled, spearOwner:spear.owner});
       me.playerinfo.health -= spear.distanceTraveled;
     }
   }

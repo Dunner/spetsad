@@ -50,8 +50,8 @@
       },
       game: {
         element: null,
-        show: function() {
-          startGame();
+        show: function(lobby) {
+          startGame(lobby);
           chatEl.style.visibility = 'visible';
           usersEl.style.visibility = 'visible';
         }
@@ -91,16 +91,12 @@
     for(var team in teams) {
       team = teams[team];
       for (var i = 0; i < 3; i++) {
-        var playerid = lobby.teams[team][i];
+        var playerid = lobby.teams[team].players[i];
 
         var listElWrapper = document.createElement('li');
             listElWrapper.className = 'outsidediv';
         var listElName = document.createElement('div');
             listElName.className = 'lobby-element';
-
-        if(playerid == mySocketID) {
-          findSocket(mySocketID).team = team;
-        }
 
         if (playerid !== 'empty') {
           listElName.className = 'lobby-element lobby-element-taken';

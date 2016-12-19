@@ -73,9 +73,8 @@
       obj_spear.create(owner, fromPos, toPos, data.spearId, data.distance);
     }
   });
-  
-  socket.on('spearhit', function (data) {
 
+  socket.on('spearHit', function (data) {
     for (var i =0; i < spears.length; i++) {
       var spear = spears[i];
       if (spear.id === data.spearId) {
@@ -86,8 +85,23 @@
         break;
       }
     }
+  });
 
-
+  socket.on('towerAttack', function (data) {
+    obj_tower_spear.create(data)
+  });
+  
+  socket.on('towerSpearHit', function (data) {
+    for (var i =0; i < towerSpears.length; i++) {
+      var spear = towerSpears[i];
+      if (spear.id === data.spearID) {
+        towerSpears.splice(i,1);
+        findPlayer(data.targetID).playerinfo = data.targetinfo;
+        spear.object.destroy();
+        spear.shadow.destroy();
+        break;
+      }
+    }
   });
   
   socket.on('roster', function (players) {
