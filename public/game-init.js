@@ -4,6 +4,7 @@ var socket = window.socket = io.connect();
 var game,
     lobby;
 var groups = {},
+    enableMovement = false,
     debug = false,
     delta,
     healthStyle,
@@ -57,15 +58,20 @@ function startGame(data) {
     reticle.yScale = 1;
 
     var myTeamInfo = findTeamSlot(lobby, mySocketID);
-    socket.emit('spawn', 
-      randomSpawnLocation(
-        spawns[myTeamInfo.team].x,
-        spawns[myTeamInfo.team].y,
-        80 //randomradius
-      ));
+
+    setTimeout(function(){
+      socket.emit('spawn', 
+        randomSpawnLocation(
+          spawns[myTeamInfo.team].x,
+          spawns[myTeamInfo.team].y,
+          80 //randomradius
+        ));
+      controls.create();
+      enableMovement = true;
+    }, 3000)
+
     socket.emit('getplayers');
 
-    controls.create();
 
     obj_camera.create();
 
@@ -79,7 +85,9 @@ function startGame(data) {
 
     delta = game.time.elapsedMS/100 ; //Turn this into a ratio
 
-    controls.update();
+    if (enableMovement) {
+      controls.update();
+    }
 
     obstacles.forEach(function(obstacle) {
       obj_obstacle.update(obstacle);
