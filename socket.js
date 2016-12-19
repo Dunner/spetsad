@@ -182,11 +182,14 @@ module.exports = function(io) {
     
 
     
-    socket.on('keydown', function (msg) {
+    socket.on('keydown', function (data) {
       if (!socket.lobbyID) return;
+      socket.playerinfo.lastUpdate = Date.now();
 
       if(socket.playerinfo) {
-        switch(msg) {
+        socket.playerinfo.lastUpdate = Date.now();
+        setLocation(socket, data.location);
+        switch(data.msg) {
           case 0: // up
             socket.playerinfo.up = true;
             break;
@@ -217,31 +220,25 @@ module.exports = function(io) {
     
     socket.on('keyup', function (data) {
       if (!socket.lobbyID) return;
+      socket.playerinfo.lastUpdate = Date.now();
+      setLocation(socket, data.location);
 
       if(socket.playerinfo) {
         switch(data.msg) {
           case 0: // up
             socket.playerinfo.up = false;
-            setLocation(data.location);
             break;
           case 1: // right
             socket.playerinfo.right = false;
-            setLocation(data.location);
             break;
           case 2: // down
             socket.playerinfo.down = false;
-            setLocation(data.location);
             break;
           case 3: // left
             socket.playerinfo.left = false;
-            setLocation(data.location);
             break;
           default:
             return;
-        }
-        function setLocation(location) {
-          socket.playerinfo.x = location.x;
-          socket.playerinfo.y = location.y;
         }
         broadcastLobby(socket.lobbyID,
           'keyup', {
@@ -406,7 +403,12 @@ module.exports = function(io) {
       }
     );
   }
-  
+
+  function setLocation(socket, location) {
+    socket.playerinfo.x = location.x;
+    socket.playerinfo.y = location.y;
+  }
+
   function playerStageChange(socketid, stageName, stageData) {
     //io.sockets.connected[socketid].currentState = stageName;
     io.to(socketid).emit('stageChange', stageName, stageData);

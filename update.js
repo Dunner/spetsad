@@ -24,9 +24,41 @@ module.exports = function(io){
       if(lobby.playing) {
 
         //players ######################################
+        lobby.players.forEach(function (socketID) {
+          dataService.sockets.forEach(function (tempSocket) {
+            if (!tempSocket.playerinfo) {return;}
 
-        
-        
+            if (tempSocket.id == socketID) {
+              var now = Date.now(),
+                  maxDistance = 100,
+                  dt = now - tempSocket.playerinfo.lastUpdate,
+                  distance = dt < 1000 ? dt/10 : maxDistance;
+
+              if(tempSocket.playerinfo.up) {
+                tempSocket.playerinfo.y -= distance;
+              }
+              if(tempSocket.playerinfo.right) {
+                tempSocket.playerinfo.x += distance
+              }
+              if(tempSocket.playerinfo.down) {
+                tempSocket.playerinfo.y += distance;
+              }
+              if(tempSocket.playerinfo.left) {
+                tempSocket.playerinfo.x -= distance
+              }
+
+              lobby.players.forEach(function (tempSocketID) {
+                io.to(tempSocketID).emit('keyup', {
+                  socket: tempSocket.id,
+                  playerinfo: tempSocket.playerinfo
+                });
+              });
+
+            };
+          });
+
+        });
+
         //towers #######################################
 
         var towers = [{"x": 350,"y": 700, "team": 'blue'}, {"x": 550,"y": 1220, "team": 'red'}];
@@ -61,7 +93,7 @@ module.exports = function(io){
             lobby.players.forEach(function (tempSocketID) {
               io.to(tempSocketID).emit('towerAttack', {
                 tower: tower.team,
-                targetID: tempSocketID
+                targetID: tower.target.id
               });
             });
           }
