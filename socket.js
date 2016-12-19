@@ -1,6 +1,7 @@
 var async = require('async');
 var update = require('./update');
 var dataService = require('./dataService');
+var utils = require('./utils');
 
 //Socket
 module.exports = function(io) {

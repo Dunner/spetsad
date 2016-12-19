@@ -92,16 +92,8 @@
   });
   
   socket.on('towerSpearHit', function (data) {
-    for (var i =0; i < towerSpears.length; i++) {
-      var spear = towerSpears[i];
-      if (spear.id === data.spearID) {
-        towerSpears.splice(i,1);
-        findPlayer(data.targetID).playerinfo = data.targetinfo;
-        spear.object.destroy();
-        spear.shadow.destroy();
-        break;
-      }
-    }
+    findPlayer(data.targetID).playerinfo = data.targetinfo;
+    obj_tower_spear.delete(data.spearID)
   });
   
   socket.on('roster', function (players) {

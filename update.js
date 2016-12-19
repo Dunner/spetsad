@@ -1,5 +1,6 @@
 var async = require('async');
 var dataService = require('./dataService');
+var utils = require('./utils');
 
 
 module.exports = function(io){
@@ -92,6 +93,7 @@ module.exports = function(io){
           if (tower.target.type == 'player') {
             lobby.players.forEach(function (tempSocketID) {
               io.to(tempSocketID).emit('towerAttack', {
+                spearID: utils.randomID('spear'),
                 tower: tower.team,
                 targetID: tower.target.id
               });
