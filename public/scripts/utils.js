@@ -12,10 +12,10 @@
     return prepend + Math.random().toString(36).substr(2, 9);
   }
 
-  function randomSpawnLocation() {
+  function randomSpawnLocation(x,y, radius) {
     return {
-      x: 300 + (Math.floor(Math.random() * 300) + 1),
-      y: 800 + (Math.floor(Math.random() * 300) + 1)
+      x: (x - radius) + (Math.floor(Math.random() * (radius*2)) + 1),
+      y: (y - radius) + (Math.floor(Math.random() * (radius*2)) + 1)
     };
   }
 

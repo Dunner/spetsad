@@ -262,9 +262,13 @@ obj_player.dead = function(player) {
   }, 3000);
 
   if (player.id === me.id) {
-    //move cameraObj to deathobj
+    //move cameraObj to deathobj  
     setTimeout(function(){
-      var tSpawn = randomSpawnLocation();
+      var tSpawn = randomSpawnLocation(
+        spawns[team].x,
+        spawns[team].y,
+        150 //randomradius
+      );
       socket.emit('respawn', tSpawn);
     }, 3000);
   }

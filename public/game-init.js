@@ -7,6 +7,12 @@ var groups = {},
     delta,
     healthStyle,
     reticle,
+
+    spawns = {
+      'blue': {x: 450, y:300},
+      'red': {x: 450, y:1620}
+    }
+
     textureRegistry = {},
     canvasElement = document.getElementById('spetsad-canvas');
     
@@ -49,8 +55,13 @@ function startGame() {
     reticle.xScale = 0;
     reticle.yScale = 1;
 
-
-    socket.emit('spawn', randomSpawnLocation());
+    var team = findSocket(mySocketID).team;
+    socket.emit('spawn', 
+      randomSpawnLocation(
+        spawns[team].x,
+        spawns[team].y,
+        150 //randomradius
+      ));
     socket.emit('getplayers');
 
     controls.create();

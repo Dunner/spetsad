@@ -3,7 +3,7 @@ var update = require('./update');
 var dataService = require('./dataService');
 
 //Socket
-module.exports = function(app, io) {
+module.exports = function(io) {
 
   io.on('connection', function (socket) {
 
@@ -97,6 +97,7 @@ module.exports = function(app, io) {
       if (!lobby) return;
 
       if (socket.id == lobby.host) {
+        lobby.playing = true;
         lobby.players.forEach(function (tempSocketID) {
           io.to(tempSocketID).emit('startGame');
           playerStageChange(tempSocketID, 'game');

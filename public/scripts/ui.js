@@ -20,7 +20,6 @@
       messageEl = document.getElementById('message'),
       chatEl = document.getElementById('coms');
 
-
   var sockets = [], messages = [], lobby = {}, i;
 
 
@@ -99,6 +98,10 @@
         var listElName = document.createElement('div');
             listElName.className = 'lobby-element';
 
+        if(playerid == mySocketID) {
+          findSocket(mySocketID).team = team;
+        }
+
         if (playerid !== 'empty') {
           listElName.className = 'lobby-element lobby-element-taken';
           var host = '';
@@ -149,6 +152,9 @@
 
     for (var i = lobbies.length - 1; i >= 0; i--) {
       var lobby = lobbies[i];
+
+      //DOn't show currently playing lobbies
+      if (lobby.playing) {return;}
 
       var listElWrapper = document.createElement('li');
           listElWrapper.className = 'outsidediv';
