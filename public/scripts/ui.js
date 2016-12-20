@@ -41,7 +41,11 @@
     stages: {
       nameEntry: {
         element: document.getElementById('name-entry'),
-        show: function() {}
+        show: function() {
+          if (reticle) {
+            window.location.reload();
+          }
+        }
       },
       gamesList: {
         element: document.getElementById('games-list'),

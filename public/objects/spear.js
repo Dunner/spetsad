@@ -19,6 +19,11 @@ obj_spear.create = function(owner, fromPos, toPos, id, distance) {
   groups.spears.add(spear.object);
   groups.allObjects.add(spear.object);
 
+  spear.bounds = game.add.image(fromPos.x,fromPos.y, createBlock(3, 3,'red'));
+  spear.bounds.alpha = 0;
+  spear.bounds.anchor.setTo(-6, 1);
+  spear.bounds.angle = pointDirection(fromPos, toPos);
+
   spear.id = id;
   spear.object.depth = 8;
   spear.distanceTraveled = 0;
@@ -29,8 +34,6 @@ obj_spear.create = function(owner, fromPos, toPos, id, distance) {
 
 obj_spear.update = function(spear) {
 
-  // console.log('1', spear.shadow)
-  //if (spear.shadow) {game.debug.spriteBounds(spear.shadow);}
   
 
   if(spear.distanceTraveled >= spear.distance) {
@@ -46,13 +49,16 @@ obj_spear.update = function(spear) {
     var tempShaftOffCenter = spear.object.depth * (Math.abs(pointDistance(game.camera.center(), spear.object.position))/100);
     var tempShaftLengthdir = lengthDir(tempShaftOffCenter, pointDir / 57);
 
-    spear.object.x = spear.shadow.x + tempShaftLengthdir.x;
-    spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
+    spear.bounds.x = spear.object.x = spear.shadow.x + tempShaftLengthdir.x;
+    spear.bounds.y = spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
-    if (checkOverlap(me.shadow.object, spear.shadow) && me.id !== spear.owner && me.playerinfo.health > 0) {
+    if (checkOverlap(me.shadow.object, spear.bounds) && me.id !== spear.owner && me.playerinfo.health > 0) {
       socket.emit('spearHit', {spearId: spear.id, distanceTraveled: spear.distanceTraveled, spearOwner:spear.owner});
-      me.playerinfo.health -= spear.distanceTraveled;
+      // me.playerinfo.health -= spear.distanceTraveled;
     }
+
+    if (spear.shadow && debug) {game.debug.spriteBounds(spear.bounds);}
+
   }
 
 }

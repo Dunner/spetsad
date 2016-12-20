@@ -32,6 +32,11 @@ obj_tower_spear.create = function(data) {
   groups.spears.add(spear.object);
   groups.allObjects.add(spear.object);
 
+  spear.bounds = game.add.image(fromPos.x,fromPos.y, createBlock(3, 3,'red'));
+  spear.bounds.alpha = 0;
+  spear.bounds.anchor.setTo(-6, 1);
+  spear.bounds.angle = pointDirection(fromPos, toPos);
+
   spear.id = data.spearID;
   spear.targetID = data.targetID;
   spear.object.depth = 8;
@@ -66,7 +71,7 @@ obj_tower_spear.update = function(spear) {
     spear.object.x = spear.shadow.x + tempShaftLengthdir.x;
     spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
-    if (checkOverlap(me.shadow.object, spear.shadow) && me.playerinfo.health > 0) {
+    if (checkOverlap(me.shadow.object, spear.bounds) && me.playerinfo.health > 0) {
       socket.emit('towerSpearHit', {spearID: spear.id, targetID: spear.targetID});
       me.playerinfo.health -= 20;
       obj_tower_spear.delete(spear.id);

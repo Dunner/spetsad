@@ -279,7 +279,7 @@ module.exports = function(io) {
       if (!socket.lobbyID) return;
 
       if (socket.playerinfo) {
-        socket.playerinfo.health -= data.distanceTraveled;
+        socket.playerinfo.health -= data.distanceTraveled/4.5;
         
         broadcastLobby(socket.lobbyID,
           'spearHit', {
