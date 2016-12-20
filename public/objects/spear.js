@@ -29,14 +29,16 @@ obj_spear.create = function(owner, fromPos, toPos, id, distance) {
 
 obj_spear.update = function(spear) {
 
+  // console.log('1', spear.shadow)
+  //if (spear.shadow) {game.debug.spriteBounds(spear.shadow);}
+  
+
   if(spear.distanceTraveled >= spear.distance) {
-    spear.object.destroy();
-    spear.shadow.destroy();
+    obj_spear.delete(spear.id);
   } else {
     spear.distanceTraveled += 32 * delta;
     spear.shadow.x += ( 32 * Math.cos(spear.object.angle * Math.PI / 180) ) * delta;
     spear.shadow.y += ( 32 * Math.sin(spear.object.angle * Math.PI / 180) ) * delta;
-
 
     var pointDir = pointDirection(game.camera.center(), spear.object.position);
     if  (pointDir < 0) {pointDir += 360};
@@ -47,7 +49,7 @@ obj_spear.update = function(spear) {
     spear.object.x = spear.shadow.x + tempShaftLengthdir.x;
     spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
-    if (checkOverlap(me.shadow.object, spear.object) && me.id !== spear.owner && me.playerinfo.health > 0) {
+    if (checkOverlap(me.shadow.object, spear.shadow) && me.id !== spear.owner && me.playerinfo.health > 0) {
       socket.emit('spearHit', {spearId: spear.id, distanceTraveled: spear.distanceTraveled, spearOwner:spear.owner});
       me.playerinfo.health -= spear.distanceTraveled;
     }
@@ -55,4 +57,14 @@ obj_spear.update = function(spear) {
 
 }
 
-obj_spear.delete = function() {}
+obj_spear.delete = function(spearID) {
+  for(i=0;i<spears.length;i++) {
+    var spear = spears[i];
+    if (spear.id == spearID) {
+      spear.object.destroy();
+      spear.shadow.destroy();
+      spears.splice(i, 1);
+      break;
+    }
+  }
+}

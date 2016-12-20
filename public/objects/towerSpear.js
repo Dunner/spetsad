@@ -66,7 +66,7 @@ obj_tower_spear.update = function(spear) {
     spear.object.x = spear.shadow.x + tempShaftLengthdir.x;
     spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
-    if (checkOverlap(me.shadow.object, spear.object) && me.playerinfo.health > 0) {
+    if (checkOverlap(me.shadow.object, spear.shadow) && me.playerinfo.health > 0) {
       socket.emit('towerSpearHit', {spearID: spear.id, targetID: spear.targetID});
       me.playerinfo.health -= 20;
       obj_tower_spear.delete(spear.id);
@@ -77,10 +77,11 @@ obj_tower_spear.update = function(spear) {
 
 obj_tower_spear.delete = function(spearID) {
   for (var i = 0; i <towerSpears.length; i++) {
-    if (towerSpears[i].id = spearID) {
+    if (towerSpears[i].id == spearID) {
       towerSpears[i].object.destroy();
       towerSpears[i].shadow.destroy();
       towerSpears.splice(i, 1);
+      break;
     }
   }
 
