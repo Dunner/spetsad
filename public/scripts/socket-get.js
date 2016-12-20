@@ -37,6 +37,7 @@
     player.feet.object.alpha = 1;
     player.legs.object.alpha = 1;
     player.torso.object.alpha = 1;
+    player.arms.object.alpha = 1;
     player.head.object.alpha = 1;
   });
   

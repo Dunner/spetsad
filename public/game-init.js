@@ -76,9 +76,6 @@ function startGame(data) {
 
     obj_camera.create();
 
-    forrest.init();
-    
-
   }
 
   function update() {

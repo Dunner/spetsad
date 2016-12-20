@@ -75,6 +75,11 @@ module.exports = function(io) {
     socket.on('joinLobby', function (lobbyID) {
       var lobby = findLobby(lobbyID);
       if (!lobby) {return;}
+      if (lobby.players.length == 0) {
+        //first lobby visitor takes a position automatically
+        lobby.teams['blue'].players[0] = socket.id;
+        socket.team = 'blue';
+      }
       lobby.players.push(socket.id);
       socket.lobbyID = lobbyID;
       lobby.host = lobby.players[0];
@@ -100,6 +105,9 @@ module.exports = function(io) {
         lobby.teams[teamName].players[spot] = socket.id;
         socket.team = teamName;
       }
+      if (lobby.players.length == 0) {
+        lobby.host == socket.id;
+      }
 
       lobby.players.forEach(function (socketID) {
         playerStageChange(socketID, 'gameLobby', lobby);
@@ -111,6 +119,7 @@ module.exports = function(io) {
       if (!socket.lobbyID) return;
 
       lobbyPlayerLeave(socket.id, socket.lobbyID)
+      
 
     });
 
@@ -454,6 +463,8 @@ module.exports = function(io) {
     lobby.players.splice(lobby.players.indexOf(socketID), 1);
     playerStageChange(socketID, 'gamesList');
     
+    lobby.host = lobby.players[0];
+
     lobby.players.forEach(function (tempSocketID) {
       playerStageChange(tempSocketID, 'gameLobby', lobby);
     });

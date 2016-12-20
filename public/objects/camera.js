@@ -73,6 +73,8 @@ obj_camera.create = function() {
 
   game.camera.zoomTo(1.0,500,'zoomOut')
 
+  forrest.init();
+  
 }
 
 

@@ -39,6 +39,7 @@ obj_player.create = function(data) {
   arms.object.anchor.setTo(0.5, 0.5);
   torso.object.anchor.setTo(0.5, 0.5);
   head.object.anchor.setTo(0.5, 0.5);
+
   var tempplayer = {
     name: data.name,
     team: data.team,
@@ -199,7 +200,6 @@ obj_player.update = function(player) {
   if (!aiming) {
     if (player.arms.object.key !== 'arms-test-ss') {
       player.arms.object.loadTexture('arms-test-ss', 0, false);
-      player.arms.object.depth = 4;
     }
     player.arms.object.angle = currentLeanAngle;
     player.torso.object.angle = currentLeanAngle;
@@ -211,7 +211,6 @@ obj_player.update = function(player) {
       var throwAnim = player.arms.object.animations.add('throw');
       throwAnim.enableUpdate = true;
       player.arms.object.animations.play('throw', 12, false);
-      player.arms.object.depth = 6;
     }
     var pointDir = pointDirection(aiming.target, player.torso.object.position);
     if  (pointDir < 0) {pointDir += 360};
@@ -292,7 +291,6 @@ obj_player.dead = function(player) {
         spawns[me.team].y,
         80 //randomradius
       );
-      console.log(tSpawn);
       socket.emit('respawn', tSpawn);
     }, 3000);
   }
