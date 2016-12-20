@@ -223,23 +223,18 @@ obj_player.update = function(player) {
 
   if (player == me) {
     if (holdClick) {
-      if (player.arms.object.key !== 'arms-throw-ss') {
-        player.arms.object.loadTexture('arms-throw-ss', 0, true);
-        var throwAnim = player.arms.object.animations.add('throw');
-        throwAnim.enableUpdate = true;
-        player.arms.object.animations.play('throw', 12, false);
-      }
       var pointDir = pointDirection(mouse.position, player.torso.object.position);
       if  (pointDir < 0) {pointDir += 360};
       player.arms.object.angle = pointDir;
       player.torso.object.angle = pointDir;
       player.shadow.object.angle = pointDir;
       player.head.object.angle = pointDirection(player.shadow.object.position, mouse.position)+180; // TODO OWL 360 -> 180 forwards
-      reticle.object.angle = me.head.object.angle-180;
 
-      if (reticle.xScale < 3) {
-        reticle.xScale += 0.5 * delta;
-        reticle.yScale += 0.25 * delta;
+      if (player.currentWeapon == 'spear') {
+        spearAim();
+      }
+      if (player.currentWeapon == 'axe') {
+        axeChop();
       }
     } else {
       walk();
@@ -263,6 +258,29 @@ obj_player.update = function(player) {
 
   }
 
+  function spearAim() {
+    if (player.arms.object.key !== 'arms-throw-ss') {
+      player.arms.object.loadTexture('arms-throw-ss', 0, true);
+      var throwAnim = player.arms.object.animations.add('throw');
+      throwAnim.enableUpdate = true;
+      player.arms.object.animations.play('throw', 12, false);
+    }
+    reticle.object.angle = me.head.object.angle-180;
+    if (reticle.xScale < 3) {
+      reticle.xScale += 0.5 * delta;
+      reticle.yScale += 0.25 * delta;
+    }
+  }
+
+  function axeChop() {
+    if (player.arms.object.key !== 'arms-chop-ss') {
+      player.arms.object.loadTexture('arms-chop-ss', 0, true);
+      var chopAnim = player.arms.object.animations.add('chop');
+      chopAnim.enableUpdate = true;
+      player.arms.object.animations.play('chop', 12, false);
+    }
+  }
+
   reticle.object.scale.setTo(reticle.xScale, reticle.yScale);
 
 
@@ -271,6 +289,7 @@ obj_player.update = function(player) {
 obj_player.delete = function() {
 
 }
+
 
 obj_player.dead = function(player) {
   player.alive = false;
