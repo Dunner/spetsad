@@ -5,7 +5,7 @@ var game,
     lobby;
 var groups = {},
     enableMovement = false,
-    debug = true,
+    debug = false,
     delta,
     healthStyle,
     reticle,
@@ -56,7 +56,7 @@ function startGame(data) {
     reticle.object = game.add.image(600,600, 'reticle');
     reticle.object.anchor.set(0, 0.5);
     reticle.xScale = 0;
-    reticle.yScale = 1;
+    reticle.yScale = 0;
 
     var myTeamInfo = findTeamSlot(lobby, mySocketID);
 

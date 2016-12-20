@@ -13,8 +13,13 @@
       lobbiesEl = document.getElementById('lobbies'),
       lobbyNameEl = document.getElementById('lobby-name'),
 
-
       usersEl = document.getElementById('users'),
+
+      weaponEls = {
+        axe: document.getElementById('weapon-axe'),
+        spear: document.getElementById('weapon-spear'),
+        torch: document.getElementById('weapon-torch'),
+      }
 
       messagesEl = document.getElementById('messages'),
       messageEl = document.getElementById('message'),
@@ -213,6 +218,20 @@
   };
 
 
+  function UIWeapons(player) {
+    for(var weaponName in weaponEls) {
+      var weaponEl = weaponEls[weaponName];
+      if (weaponName == player.currentWeapon) {
+        weaponEl.className = 'weapon-slot active';
+      } else {
+        weaponEl.className = 'weapon-slot';
+      }
+    }
+
+  }
+  weaponEls['axe'].onclick = function(){obj_player.changeWeapon('axe');}
+  weaponEls['spear'].onclick = function(){obj_player.changeWeapon('spear');}
+  weaponEls['torch'].onclick = function(){obj_player.changeWeapon('torch');}
 
 
   

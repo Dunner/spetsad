@@ -51,6 +51,21 @@ obj_player.create = function(data) {
     arms: arms,
     torso: torso,
     head: head,
+    spears: 0,
+    currentWeapon: 'axe',
+    weapons: {
+      spear: {
+        canUse: true,
+        amount: 5
+      },
+      axe: {
+        canUse: true
+      },
+      torch: {
+        canUse: true,
+        amount: 80
+      },
+    },
     texts: [],
     playerinfo: data.playerinfo,
     lastTickData: {
@@ -80,6 +95,8 @@ obj_player.create = function(data) {
 
 obj_player.update = function(player) {
   me = findPlayer(mySocketID);
+  UIWeapons(me);
+
   if (!player.alive) return;
   if (player.shadow.object) {
     if (player.playerinfo) {
@@ -197,27 +214,6 @@ obj_player.update = function(player) {
   player.legs.object.angle = currentLeanAngle; 
   player.head.object.angle = currentLeanAngle; 
   
-  if (!aiming) {
-    if (player.arms.object.key !== 'arms-test-ss') {
-      player.arms.object.loadTexture('arms-test-ss', 0, false);
-    }
-    player.arms.object.angle = currentLeanAngle;
-    player.torso.object.angle = currentLeanAngle;
-    player.shadow.object.angle = currentLeanAngle;
-
-  } else if(player == me){
-    if (player.arms.object.key !== 'arms-throw-ss') {
-      player.arms.object.loadTexture('arms-throw-ss', 0, true);
-      var throwAnim = player.arms.object.animations.add('throw');
-      throwAnim.enableUpdate = true;
-      player.arms.object.animations.play('throw', 12, false);
-    }
-    var pointDir = pointDirection(aiming.target, player.torso.object.position);
-    if  (pointDir < 0) {pointDir += 360};
-    player.arms.object.angle = pointDir;
-    player.torso.object.angle = pointDir;
-    player.shadow.object.angle = pointDir;
-  }
   player.lastTickData = {
     x: player.shadow.object.x,
     y: player.shadow.object.y,
@@ -226,24 +222,48 @@ obj_player.update = function(player) {
   };
 
   if (player == me) {
-    me.head.object.angle = pointDirection(me.shadow.object.position, mouse.position)+180; // TODO OWL 360 -> 180 forwards
-    
-    reticle.object.x = me.shadow.object.x;
-    reticle.object.y = me.shadow.object.y;
-
-    if (aiming) {
+    if (holdClick) {
+      if (player.arms.object.key !== 'arms-throw-ss') {
+        player.arms.object.loadTexture('arms-throw-ss', 0, true);
+        var throwAnim = player.arms.object.animations.add('throw');
+        throwAnim.enableUpdate = true;
+        player.arms.object.animations.play('throw', 12, false);
+      }
+      var pointDir = pointDirection(mouse.position, player.torso.object.position);
+      if  (pointDir < 0) {pointDir += 360};
+      player.arms.object.angle = pointDir;
+      player.torso.object.angle = pointDir;
+      player.shadow.object.angle = pointDir;
+      player.head.object.angle = pointDirection(player.shadow.object.position, mouse.position)+180; // TODO OWL 360 -> 180 forwards
       reticle.object.angle = me.head.object.angle-180;
+
       if (reticle.xScale < 3) {
         reticle.xScale += 0.5 * delta;
         reticle.yScale += 0.25 * delta;
       }
     } else {
+      walk();
       reticle.xScale = 0;
       reticle.yScale = 0;
     }
-    reticle.object.scale.setTo(reticle.xScale, reticle.yScale);
+    reticle.object.x = me.shadow.object.x;
+    reticle.object.y = me.shadow.object.y;
+  } else { //not me
+    walk();
+
   }
 
+  function walk() {
+    if (player.arms.object.key !== 'arms-test-ss') {
+      player.arms.object.loadTexture('arms-test-ss', 0, false);
+    }
+    player.arms.object.angle = currentLeanAngle;
+    player.torso.object.angle = currentLeanAngle;
+    player.shadow.object.angle = currentLeanAngle;
+
+  }
+
+  reticle.object.scale.setTo(reticle.xScale, reticle.yScale);
 
 
 }
@@ -294,4 +314,11 @@ obj_player.dead = function(player) {
       socket.emit('respawn', tSpawn);
     }, 3000);
   }
+}
+
+obj_player.changeWeapon = function(weaponName) {
+  if (me.weapons[weaponName].canUse) {
+    me.currentWeapon = weaponName;
+  }
+  console.log(me.currentWeapon);
 }

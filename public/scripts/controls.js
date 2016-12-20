@@ -3,15 +3,20 @@ var controls = {},
     downKey,
     leftKey,
     rightKey,
-    fireKey,
-    fireKeyTouch,
+
+    clickKey,
+    touchKey,
+
+    holdClick = false,
+
+    pointerType,
 
     wKey,
     dKey,
     sKey,
     aKey,
 
-    aiming = false;
+    aimSpear = false;
 
 
 controls.create = function() {
@@ -27,8 +32,8 @@ controls.create = function() {
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
   dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
-  fireKey = game.input.activePointer.leftButton;
-  fireKeyTouch = game.input.pointer1;
+  clickKey = game.input.activePointer.leftButton;
+  touchKey = game.input.pointer1;
 
   //up
   upKey.onDown.add(function() {
@@ -91,39 +96,44 @@ controls.create = function() {
 
 controls.update = function() {
   //Fire
-  if (fireKey.isDown) {
-    aim('mouse');
+  if (clickKey.isDown) {
+    pointerType = 'mouse';
+    clickDown();
   }
-  if (fireKeyTouch.isDown) {
-    aim('touch');
+  if (touchKey.isDown) {
+    pointerType = 'touch';
+    clickDown();
   }
-  if ( fireKeyTouch.isUp && aiming && aiming.pointerType == 'touch' ) {
-    throwSpear();
+  if ( touchKey.isUp && pointerType == 'touch' ) {
+    clickUp();
   }
-  if ( fireKey.isUp && aiming && aiming.pointerType == 'mouse' ) {
-    throwSpear();
+  if ( clickKey.isUp && pointerType == 'mouse' ) {
+    clickUp();
   }
 }
 
-function aim(pointerType) {
-  aiming = {
-    pointerType: pointerType,
-    target: {
-      x: mouse.x,
-      y: mouse.y
+function clickDown() {
+  if (!holdClick) {
+    clickOnce();
+    holdClick = true;
+  }
+}
+
+function clickUp() {
+  if (holdClick) {
+    holdClick = false;
+    if (canFire()) {
+      var spearId = randomId('spear');
+      socket.emit('fire', {
+        x: mouse.x,
+        y: mouse.y,
+        spearId: spearId,
+        distance: 96 * reticle.xScale
+      });
     }
   }
 }
 
-function throwSpear() {
-  aiming = false;
-  if (canFire()) {
-    var spearId = randomId('spear');
-    socket.emit('fire', {
-      x: mouse.x,
-      y: mouse.y,
-      spearId: spearId,
-      distance: 96 * reticle.xScale
-    });
-  }
+function clickOnce() {
+
 }
