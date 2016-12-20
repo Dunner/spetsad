@@ -27,7 +27,8 @@ function startGame(data) {
     game.load.spritesheet('feet-test-ss', 'sprites/feet-test-ss.png', 32, 32, 4);
     game.load.spritesheet('legs-test-ss', 'sprites/legs-test-ss.png', 32, 32, 4);
     game.load.spritesheet('torso-test-ss', 'sprites/torso-test-ss.png', 32, 32, 4);
-    game.load.spritesheet('torso-throw-ss', 'sprites/torso-throw-ss.png', 32, 32, 4);
+    game.load.spritesheet('arms-test-ss', 'sprites/arms-test-ss.png', 32, 32, 4);
+    game.load.spritesheet('arms-throw-ss', 'sprites/arms-throw-ss.png', 32, 32, 4);
     game.load.spritesheet('head-test-ss', 'sprites/head-test-ss.png', 32, 32, 1);
     game.load.image('pinetree5','sprites/spr_pine_5.png');
     game.load.image('reticle','sprites/reticle.png');

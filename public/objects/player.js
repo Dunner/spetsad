@@ -7,31 +7,36 @@ obj_player.create = function(data) {
   var shadow = {parent: null, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'torso-test-ss')},
       feet = {parent: shadow, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'feet-test-ss')},
       legs = {parent: feet, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'legs-test-ss')},
+      arms = {parent: legs, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'arms-test-ss')},
       torso = {parent: legs, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'torso-test-ss')},
       head = {parent: torso, object:game.add.image(data.playerinfo.x,data.playerinfo.y, 'head-test-ss')};
 
   shadow.object.depth = 0;
   feet.object.depth = 1;
   legs.object.depth = 3;
+  arms.object.depth = 4;
   torso.object.depth = 5;
   head.object.depth = 6;
 
   var shadowAnim = shadow.object.animations.add('walk');
   var feetAnim = feet.object.animations.add('walk');
   var legsAnim = legs.object.animations.add('walk');
+  var armsAnim = arms.object.animations.add('walk');
   var torsoAnim = torso.object.animations.add('walk');
-  var torsoThrowAnim = torso.object.animations.add('walk');
+  var armsThrowAnim = arms.object.animations.add('walk');
   var headAnim = head.object.animations.add('walk');
 
   shadowAnim.enableUpdate = true;
   feetAnim.enableUpdate = true;
   legsAnim.enableUpdate = true;
+  armsAnim.enableUpdate = true;
   torsoAnim.enableUpdate = true;
   headAnim.enableUpdate = true;
 
   shadow.object.anchor.setTo(0.5, 0.5);
   feet.object.anchor.setTo(0.5, 0.5);
   legs.object.anchor.setTo(0.5, 0.5);
+  arms.object.anchor.setTo(0.5, 0.5);
   torso.object.anchor.setTo(0.5, 0.5);
   head.object.anchor.setTo(0.5, 0.5);
   var tempplayer = {
@@ -42,6 +47,7 @@ obj_player.create = function(data) {
     shadow: shadow,
     feet: feet,
     legs: legs,
+    arms: arms,
     torso: torso,
     head: head,
     texts: [],
@@ -55,6 +61,7 @@ obj_player.create = function(data) {
   groups.allObjects.add(tempplayer.shadow.object);
   groups.allObjects.add(tempplayer.feet.object);
   groups.allObjects.add(tempplayer.legs.object);
+  groups.allObjects.add(tempplayer.arms.object);
   groups.allObjects.add(tempplayer.torso.object);
   groups.allObjects.add(tempplayer.head.object);
 
@@ -110,8 +117,9 @@ obj_player.update = function(player) {
     player.shadow.object.animations.play('walk', 7, true);
     player.feet.object.animations.play('walk', 7, true);
     player.legs.object.animations.play('walk', 7, true);
-    if (player.torso.object.key == 'torso-test-ss') {
-      player.torso.object.animations.play('walk', 7, true);
+    player.torso.object.animations.play('walk', 7, true);
+    if (player.arms.object.key == 'arms-test-ss') {
+      player.arms.object.animations.play('walk', 7, true);
     }
     player.head.object.animations.play('walk', 7, true);
   
@@ -136,9 +144,10 @@ obj_player.update = function(player) {
     player.shadow.object.animations.stop('walk');
     player.feet.object.animations.stop('walk');
     player.legs.object.animations.stop('walk');
-    if (player.torso.object.key == 'torso-test-ss') {
-      player.torso.object.animations.stop('walk');
+    if (player.arms.object.key == 'arms-test-ss') {
+      player.arms.object.animations.stop('walk');
     }
+    player.torso.object.animations.stop('walk');
     player.head.object.animations.stop('walk');
   }
 
@@ -164,12 +173,20 @@ obj_player.update = function(player) {
   var tempLegsLengthdir = lengthDir(tempLegsOffCenter, (((pointDirection(game.camera.center(), player.legs.object.position) % 360) + 360) % 360) / 57);
   player.legs.object.x = player.feet.object.x + atMost(8, tempLegsLengthdir.x);
   player.legs.object.y = player.feet.object.y + atMost(8, tempLegsLengthdir.y);
+  
 
   var tempBodyOffCenter = player.torso.object.depth * (Math.abs(pointDistance(game.camera.center(), player.torso.parent.object.position))/100);
   var tempBodyLengthdir = lengthDir(tempBodyOffCenter, (((pointDirection(game.camera.center(), player.torso.object.position) % 360) + 360) % 360) / 57);
   player.torso.object.x = player.legs.object.x + atMost(8, tempBodyLengthdir.x);
   player.torso.object.y = player.legs.object.y + atMost(8, tempBodyLengthdir.y);
   
+  // player.arms.object.position = player.torso.object.position;
+
+  var tempArmsOffCenter = player.arms.object.depth * (Math.abs(pointDistance(game.camera.center(), player.arms.parent.object.position))/100);
+  var tempArmsLengthdir = lengthDir(tempArmsOffCenter, (((pointDirection(game.camera.center(), player.arms.object.position) % 360) + 360) % 360) / 57);
+  player.arms.object.x = player.legs.object.x + atMost(8, tempArmsLengthdir.x);
+  player.arms.object.y = player.legs.object.y + atMost(8, tempArmsLengthdir.y);
+
   var tempHeadOffCenter = player.head.object.depth * (Math.abs(pointDistance(game.camera.center(), player.head.parent.object.position))/100);
   var tempHeadLengthdir = lengthDir(tempHeadOffCenter, (((pointDirection(game.camera.center(), player.head.object.position) % 360) + 360) % 360) / 57);
   player.head.object.x = player.torso.object.x + atMost(8, tempHeadLengthdir.x); 
@@ -180,21 +197,25 @@ obj_player.update = function(player) {
   player.head.object.angle = currentLeanAngle; 
   
   if (!aiming) {
-    if (player.torso.object.key !== 'torso-test-ss') {
-      player.torso.object.loadTexture('torso-test-ss', 0, false);
+    if (player.arms.object.key !== 'arms-test-ss') {
+      player.arms.object.loadTexture('arms-test-ss', 0, false);
+      player.arms.object.depth = 4;
     }
+    player.arms.object.angle = currentLeanAngle;
     player.torso.object.angle = currentLeanAngle;
     player.shadow.object.angle = currentLeanAngle;
 
   } else if(player == me){
-    if (player.torso.object.key !== 'torso-throw-ss') {
-      player.torso.object.loadTexture('torso-throw-ss', 0, true);
-      var throwAnim = player.torso.object.animations.add('throw');
+    if (player.arms.object.key !== 'arms-throw-ss') {
+      player.arms.object.loadTexture('arms-throw-ss', 0, true);
+      var throwAnim = player.arms.object.animations.add('throw');
       throwAnim.enableUpdate = true;
-      player.torso.object.animations.play('throw', 12, false);
+      player.arms.object.animations.play('throw', 12, false);
+      player.arms.object.depth = 6;
     }
     var pointDir = pointDirection(aiming.target, player.torso.object.position);
     if  (pointDir < 0) {pointDir += 360};
+    player.arms.object.angle = pointDir;
     player.torso.object.angle = pointDir;
     player.shadow.object.angle = pointDir;
   }
@@ -241,6 +262,7 @@ obj_player.dead = function(player) {
   player.shadow.object.alpha = 0;
   player.feet.object.alpha = 0;
   player.legs.object.alpha = 0;
+  player.arms.object.alpha = 0;
   player.torso.object.alpha = 0;
   player.head.object.alpha = 0;
 

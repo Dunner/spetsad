@@ -63,7 +63,7 @@
           <label>
             <div class="question">
               What's your name?</div>
-            <input type="text" id="myName" placeholder="" autofocus value="Anonymous">
+            <input type="text" id="myName" placeholder="Anonymous" autofocus onkeyup="return nameInputChange(event)">
           </label>
         </div>
         <div class="ui-overlay-button" id="name-entry-button">PLAY!</div>

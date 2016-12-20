@@ -1,7 +1,7 @@
 Spetsad
 ============================
 
-Small Phaser socket.io nultiplayer game
+Small Phaser socket.io multiplayer game
 
 
 Made by Jonathan Hägglund jonathanhagglund@live.com

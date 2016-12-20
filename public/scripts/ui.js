@@ -28,6 +28,13 @@
     var name = myNameEl.value;
     socket.emit('setName', name);
   }
+  function nameInputChange(e) { //dom function onkeyup
+    if(e.which == 13 && document.activeElement == myNameEl) {
+      if(document.activeElement == myNameEl) {
+        setName();
+      }
+    }
+  };
 
   var logic= {
     currentStage: 'nameEntry',
