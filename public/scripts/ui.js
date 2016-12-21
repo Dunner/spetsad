@@ -282,3 +282,25 @@
   };  
   
 
+
+//Dissalow Phaser stealing keypresses on certain elements(inputEls)
+document.addEventListener('focus',function(e){
+  if (game) {
+    var disable = false;
+    var inputEls = [
+      messageEl
+    ];
+
+    inputEls.forEach(function(el){
+      if (e.target == el) {
+        disable = true;
+      }
+    })
+
+    if (disable) {
+      game.input.enabled = false;
+    } else {
+      game.input.enabled = true;
+    }
+  }
+}, true);

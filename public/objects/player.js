@@ -67,6 +67,7 @@ obj_player.create = function(data) {
       },
     },
     texts: [],
+    hpbar: [],
     playerinfo: data.playerinfo,
     lastTickData: {
       leanAngle: 0,
@@ -82,11 +83,17 @@ obj_player.create = function(data) {
   groups.allObjects.add(tempplayer.head.object);
 
 
+
+  tempplayer.hpbar.background = game.add.image(data.playerinfo.x, data.playerinfo.y, createBlock(45, 3,'black'));
+  tempplayer.hpbar.health = game.add.image(data.playerinfo.x, data.playerinfo.y, createBlock(10, 3,'green'));
+  tempplayer.hpbar.background.anchor.set(0.5, 8);
+  tempplayer.hpbar.health.anchor.set(0.5, 8);
+
   tempplayer.texts.nameplate = game.add.text(0, 0, tempplayer.name, healthStyle);
   tempplayer.texts.nameplate.anchor.set(0.5, -1);
 
-  tempplayer.texts.healthtext = game.add.text(0, 0, "100", healthStyle);
-  tempplayer.texts.healthtext.anchor.set(1, 1.5);
+  // tempplayer.texts.healthtext = game.add.text(0, 0, "100", healthStyle);
+  // tempplayer.texts.healthtext.anchor.set(0.5, 2);
 
 
   players.push(tempplayer);
@@ -101,10 +108,14 @@ obj_player.update = function(player) {
   if (player.shadow.object) {
     if (player.playerinfo) {
 
+      player.hpbar.health.position = player.hpbar.background.position = player.shadow.object.position;
+      player.hpbar.health.width = (player.hpbar.background.width/100)*player.playerinfo.health;
+
       player.texts.nameplate.position = player.shadow.object.position;
       player.texts.nameplate.setText(player.name);
-      player.texts.healthtext.position = player.shadow.object.position;
-      player.texts.healthtext.setText(Math.round(player.playerinfo.health));
+      
+      // player.texts.healthtext.position = player.shadow.object.position;
+      // player.texts.healthtext.setText(Math.round(player.playerinfo.health));
 
       if (player.playerinfo.up) {
         player.shadow.object.y -= 10 * delta;
@@ -210,25 +221,13 @@ obj_player.update = function(player) {
   player.head.object.x = player.torso.object.x + atMost(8, tempHeadLengthdir.x); 
   player.head.object.y = player.torso.object.y + atMost(8, tempHeadLengthdir.y);
 
-  player.feet.object.angle = currentLeanAngle; // TODO OWL 360 -> 180 forwards
-  player.legs.object.angle = currentLeanAngle; 
-  player.head.object.angle = currentLeanAngle; 
-  
-  player.lastTickData = {
-    x: player.shadow.object.x,
-    y: player.shadow.object.y,
-    reqLeanAngle: player.lastTickData.reqLeanAngle,
-    leanAngle: currentLeanAngle
-  };
+  player.feet.object.angle = player.legs.object.angle = player.head.object.angle = currentLeanAngle;
 
   if (player == me) {
     if (holdClick) {
       var pointDir = pointDirection(mouse.position, player.torso.object.position);
       if  (pointDir < 0) {pointDir += 360};
-      player.arms.object.angle = pointDir;
-      player.torso.object.angle = pointDir;
-      player.shadow.object.angle = pointDir;
-      player.head.object.angle = pointDirection(player.shadow.object.position, mouse.position)+180; // TODO OWL 360 -> 180 forwards
+      player.head.object.angle = player.arms.object.angle = player.torso.object.angle = player.shadow.object.angle = pointDir;
 
       if (player.currentWeapon == 'spear') {
         spearAim();
@@ -252,9 +251,7 @@ obj_player.update = function(player) {
     if (player.arms.object.key !== 'arms-test-ss') {
       player.arms.object.loadTexture('arms-test-ss', 0, false);
     }
-    player.arms.object.angle = currentLeanAngle;
-    player.torso.object.angle = currentLeanAngle;
-    player.shadow.object.angle = currentLeanAngle;
+    player.arms.object.angle = player.torso.object.angle = player.shadow.object.angle = currentLeanAngle;
 
   }
 
@@ -282,7 +279,13 @@ obj_player.update = function(player) {
   }
 
   reticle.object.scale.setTo(reticle.xScale, reticle.yScale);
-
+  
+  player.lastTickData = {
+    x: player.shadow.object.x,
+    y: player.shadow.object.y,
+    reqLeanAngle: player.lastTickData.reqLeanAngle,
+    leanAngle: currentLeanAngle
+  };
 
 }
 

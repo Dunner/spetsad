@@ -36,3 +36,4 @@ function stretchWrapper() {
 window.onresize = function(event) {
   stretchWrapper();
 };
+
