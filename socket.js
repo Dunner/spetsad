@@ -509,7 +509,7 @@ module.exports = function(io) {
       if (item.id == id) {
 
         if (type == 'trees') {
-          if (item[key] !== 0) {
+          if (item[key] > 0) {
             item[key]--;
           } else {
             item[key] = 0;

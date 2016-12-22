@@ -77,7 +77,7 @@ function startGame(data) {
     obj_camera.create();
 
     mapInit(lobby.mapData);
-
+    console.log(game)
   }
 
   function update() {

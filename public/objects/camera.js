@@ -9,26 +9,12 @@ obj_camera.create = function() {
   game.camera.zoomTo = function(scale, duration, name) {
     cameraAnimation = name;
 
-    var bounds       = Phaser.Rectangle.clone(game.world.bounds);
-    var cameraBounds = game.camera.bounds;
-    if (!duration) {
-      cameraBounds.x      = bounds.width  * (1 - scale) / 2;
-      cameraBounds.y      = bounds.height * (1 - scale) / 2;
-      cameraBounds.width  = bounds.width  * scale;
-      cameraBounds.height = bounds.height * scale;
-      cameraBounds.scale  = scale;
-    } else {
-      game.add.tween(cameraBounds).to({
-          x      : bounds.width  * (1 - scale) / 2,
-          y      : bounds.height * (1 - scale) / 2,
-          width  : bounds.width  * scale,
-          height : bounds.height * scale,
-          scale  : scale
-      }, duration).start();
-      return game.add.tween(this.scale).to({
-          x: scale, y: scale, scale:scale
-      }, duration).start();
-    }
+    var bounds       = Phaser.Rectangle.clone(game.camera.view);
+    var cameraBounds = game.camera.view;
+    console.log(scale)
+    return game.add.tween(game.camera.scale).to({
+        x: scale, y: scale, scale:scale
+    }, duration).start();
   }
 
   game.camera.pos = function() {
@@ -40,12 +26,12 @@ obj_camera.create = function() {
 
   game.camera.center = function() {
     return {
-      x: game.camera.width / 2 + game.camera.x + game.camera.bounds.x,
-      y: game.camera.height / 2 + game.camera.y + game.camera.bounds.y,
+      x: (game.camera.view.width / 2 + game.camera.view.x) / game.camera.scale.scale,
+      y: (game.camera.view.height / 2 + game.camera.view.y) / game.camera.scale.scale,
     }
   }
 
-  cameraObject.object = game.add.image(0,0, createBlock(0, 0,'#000'));
+  cameraObject.object = game.add.image(0,0, createBlock(10, 10,'#000'));
   cameraObject.object.anchor.setTo(0.5, 0.5);
 
   objScreenCenter = game.add.image(0,0, createBlock(5, 5,'green'));
@@ -72,16 +58,23 @@ obj_camera.create = function() {
   overlayFilter.tint = RGBtoHEX(150,80,0);
 
   game.camera.zoomTo(1.0,500,'zoomOut')
+
   
 }
 
 
 obj_camera.update = function() {
 
-  //objScreenCenter.position = game.camera.center();
+  game.camera.bounds = new Phaser.Rectangle(-canvasElement.offsetWidth, -canvasElement.offsetHeight, game.world.width+(canvasElement.offsetWidth*2), game.world.height+(canvasElement.offsetHeight*2));
+  console.log(game.camera.bounds)
+  game.camera.view.width = canvasElement.offsetWidth;
+  game.camera.view.height = canvasElement.offsetHeight;
 
-  mouse.x = (game.input.activePointer.x + game.camera.x)/game.camera.bounds.scale;
-  mouse.y = (game.input.activePointer.y + game.camera.y)/game.camera.bounds.scale;
+  objScreenCenter.position = game.camera.center();
+  cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
+
+  mouse.x = (game.input.activePointer.x + game.camera.view.x) // /game.camera.view.scale;
+  mouse.y = (game.input.activePointer.y + game.camera.view.y) // /game.camera.view.scale;
 
   var me = findPlayer(mySocketID);
   // ###### Camera 
