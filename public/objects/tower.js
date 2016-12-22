@@ -19,7 +19,7 @@ obj_tower.create = function(data) {
   collisionObjects.push({
     object: tempTower.foot.object,
     id: data.id,
-    type: 'tower',
+    type: 'towers',
     x: data.x,
     y: data.y,
     solid: true

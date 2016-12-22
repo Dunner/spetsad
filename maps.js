@@ -583,420 +583,420 @@ var maps = {};
         "sections": 8
       },
       {
-        "id": 1,
+        "id": 101,
         "angle": 61,
         "x": 650,
         "y": -39,
         "sections": 8
       },
       {
-        "id": 2,
+        "id": 102,
         "angle": 8,
         "x": 668,
         "y": 128,
         "sections": 5
       },
       {
-        "id": 3,
+        "id": 103,
         "angle": 152,
         "x": 558,
         "y": 181,
         "sections": 3
       },
       {
-        "id": 4,
+        "id": 104,
         "angle": 126,
         "x": 635,
         "y": 305,
         "sections": 3
       },
       {
-        "id": 5,
+        "id": 105,
         "angle": 307,
         "x": 698,
         "y": 377,
         "sections": 3
       },
       {
-        "id": 6,
+        "id": 106,
         "angle": 354,
         "x": 649,
         "y": 478,
         "sections": 4
       },
       {
-        "id": 7,
+        "id": 107,
         "angle": 3,
         "x": 569,
         "y": 556,
         "sections": 5
       },
       {
-        "id": 8,
+        "id": 108,
         "angle": 82,
         "x": 660,
         "y": 674,
         "sections": 8
       },
       // {
-      //   "id": 9,
+      //   "id": 109,
       //   "angle": 99,
       //   "x": 569,
       //   "y": 745,
       //   "sections": 8
       // },
       {
-        "id": 10,
+        "id": 110,
         "angle": 91,
         "x": 675,
         "y": 887,
         "sections": 4
       },
       {
-        "id": 11,
+        "id": 111,
         "angle": 143,
         "x": 659,
         "y": 1020,
         "sections": 3
       },
       {
-        "id": 12,
+        "id": 112,
         "angle": 77,
         "x": 648,
         "y": 1072,
         "sections": 6
       },
       {
-        "id": 13,
+        "id": 113,
         "angle": 355,
         "x": 684,
         "y": 1199,
         "sections": 6
       },
       {
-        "id": 14,
+        "id": 114,
         "angle": 291,
         "x": 699,
         "y": 1284,
         "sections": 8
       },
       {
-        "id": 15,
+        "id": 115,
         "angle": 157,
         "x": 646,
         "y": 1385,
         "sections": 5
       },
       {
-        "id": 16,
+        "id": 116,
         "angle": 126,
         "x": 551,
         "y": 1416,
         "sections": 4
       },
       {
-        "id": 17,
+        "id": 117,
         "angle": 181,
         "x": 572,
         "y": 1603,
         "sections": 6
       },
       {
-        "id": 18,
+        "id": 118,
         "angle": 154,
         "x": 616,
         "y": 1642,
         "sections": 7
       },
       {
-        "id": 19,
+        "id": 119,
         "angle": 259,
         "x": 633,
         "y": 1787,
         "sections": 3
       },
       {
-        "id": 20,
+        "id": 120,
         "angle": 157,
         "x": 653,
         "y": 1813,
         "sections": 7
       },
       {
-        "id": 21,
+        "id": 121,
         "angle": 31,
         "x": 745,
         "y": 54,
         "sections": 4
       },
       {
-        "id": 22,
+        "id": 122,
         "angle": 350,
         "x": 728,
         "y": 22,
         "sections": 6
       },
       {
-        "id": 23,
+        "id": 123,
         "angle": 350,
         "x": 742,
         "y": 103,
         "sections": 5
       },
       {
-        "id": 24,
+        "id": 124,
         "angle": 343,
         "x": 752,
         "y": 233,
         "sections": 3
       },
       {
-        "id": 25,
+        "id": 125,
         "angle": 190,
         "x": 779,
         "y": 332,
         "sections": 6
       },
       {
-        "id": 26,
+        "id": 126,
         "angle": 235,
         "x": 673,
         "y": 500,
         "sections": 4
       },
       {
-        "id": 27,
+        "id": 127,
         "angle": 207,
         "x": 735,
         "y": 569,
         "sections": 4
       },
       {
-        "id": 28,
+        "id": 128,
         "angle": 40,
         "x": 719,
         "y": 662,
         "sections": 8
       },
       {
-        "id": 29,
+        "id": 129,
         "angle": 204,
         "x": 731,
         "y": 779,
         "sections": 5
       },
       {
-        "id": 30,
+        "id": 130,
         "angle": 77,
         "x": 693,
         "y": 865,
         "sections": 8
       },
       {
-        "id": 31,
+        "id": 131,
         "angle": 225,
         "x": 758,
         "y": 1007,
         "sections": 7
       },
       {
-        "id": 32,
+        "id": 132,
         "angle": 215,
         "x": 729,
         "y": 1067,
         "sections": 7
       },
       {
-        "id": 33,
+        "id": 133,
         "angle": 205,
         "x": 696,
         "y": 1192,
         "sections": 5
       },
       {
-        "id": 34,
+        "id": 134,
         "angle": 26,
         "x": 683,
         "y": 1260,
         "sections": 4
       },
       {
-        "id": 35,
+        "id": 135,
         "angle": 100,
         "x": 663,
         "y": 1367,
         "sections": 5
       },
       {
-        "id": 36,
+        "id": 136,
         "angle": 337,
         "x": 778,
         "y": 1488,
         "sections": 8
       },
       {
-        "id": 37,
+        "id": 137,
         "angle": 201,
         "x": 806,
         "y": 1653,
         "sections": 3
       },
       {
-        "id": 38,
+        "id": 138,
         "angle": 173,
         "x": 654,
         "y": 1660,
         "sections": 3
       },
       {
-        "id": 39,
+        "id": 139,
         "angle": 88,
         "x": 766,
         "y": 1760,
         "sections": 5
       },
       {
-        "id": 40,
+        "id": 140,
         "angle": 212,
         "x": 748,
         "y": 1896,
         "sections": 6
       },
       {
-        "id": 41,
+        "id": 141,
         "angle": 225,
         "x": 776,
         "y": -75,
         "sections": 8
       },
       {
-        "id": 42,
+        "id": 142,
         "angle": 199,
         "x": 783,
         "y": 71,
         "sections": 4
       },
       {
-        "id": 43,
+        "id": 143,
         "angle": 61,
         "x": 772,
         "y": 231,
         "sections": 5
       },
       {
-        "id": 44,
+        "id": 144,
         "angle": 242,
         "x": 833,
         "y": 267,
         "sections": 6
       },
       {
-        "id": 45,
+        "id": 145,
         "angle": 103,
         "x": 821,
         "y": 433,
         "sections": 7
       },
       {
-        "id": 46,
+        "id": 146,
         "angle": 108,
         "x": 817,
         "y": 424,
         "sections": 6
       },
       {
-        "id": 47,
+        "id": 147,
         "angle": 29,
         "x": 908,
         "y": 556,
         "sections": 8
       },
       {
-        "id": 48,
+        "id": 148,
         "angle": 334,
         "x": 819,
         "y": 617,
         "sections": 8
       },
       {
-        "id": 49,
+        "id": 149,
         "angle": 249,
         "x": 841,
         "y": 796,
         "sections": 7
       },
       {
-        "id": 50,
+        "id": 150,
         "angle": 295,
         "x": 871,
         "y": 871,
         "sections": 6
       },
       {
-        "id": 51,
+        "id": 151,
         "angle": 87,
         "x": 849,
         "y": 992,
         "sections": 5
       },
       {
-        "id": 52,
+        "id": 152,
         "angle": 45,
         "x": 789,
         "y": 1111,
         "sections": 5
       },
       {
-        "id": 53,
+        "id": 153,
         "angle": 88,
         "x": 830,
         "y": 1221,
         "sections": 7
       },
       {
-        "id": 54,
+        "id": 154,
         "angle": 142,
         "x": 824,
         "y": 1317,
         "sections": 8
       },
       {
-        "id": 55,
+        "id": 155,
         "angle": 308,
         "x": 811,
         "y": 1412,
         "sections": 6
       },
       {
-        "id": 56,
+        "id": 156,
         "angle": 230,
         "x": 813,
         "y": 1412,
         "sections": 5
       },
       {
-        "id": 57,
+        "id": 157,
         "angle": 75,
         "x": 787,
         "y": 1596,
         "sections": 6
       },
       {
-        "id": 58,
+        "id": 158,
         "angle": 162,
         "x": 907,
         "y": 1668,
         "sections": 5
       },
       {
-        "id": 59,
+        "id": 159,
         "angle": 318,
         "x": 883,
         "y": 1849,
         "sections": 7
       },
       {
-        "id": 60,
+        "id": 160,
         "angle": 337,
         "x": 775,
         "y": 1871,

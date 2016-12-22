@@ -97,6 +97,21 @@
     obj_tower_spear.delete(data.spearID)
   });
   
+
+  socket.on('mapUpdate', function (data) {
+    if (!lobby) return;
+
+    data.forEach(function(newItem){
+      (lobby.mapData[newItem.type]).forEach(function(mapTreeObject){
+        if (mapTreeObject.id == newItem.id) {
+          mapTreeObject = newItem.item;
+          obj_pinetree.redraw(newItem.id, mapTreeObject);
+        }
+      });
+    });
+    
+  });
+
   socket.on('roster', function (players) {
     for (var i = 0; i < players.length; i++) {
       var player = findPlayer(players[i].socket);

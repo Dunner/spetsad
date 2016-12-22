@@ -279,8 +279,15 @@ module.exports = function(io) {
     });
 
     socket.on('axeChop', function (target) {
-      if (!target) {return;}
-      console.log(target);
+      if (!target) return;
+      if (!socket.lobbyID) return;
+      var lobby = findLobby(socket.lobbyID);
+      if (!lobby) return;
+
+      if (target.type == 'trees') {
+        updateMapData(lobby, target.type, target.id, 'sections', 1);
+      }
+      
     });
     
     socket.on('spearHit', function (data) {
@@ -493,6 +500,32 @@ module.exports = function(io) {
       }
     }
     return false;
+  }
+
+  function updateMapData(lobby, type, id, key, value) {
+    if (!lobby) {return}
+    var updatedData = [];
+    (lobby.mapData[type]).forEach(function(item){
+      if (item.id == id) {
+
+        if (type == 'trees') {
+          if (item[key] !== 0) {
+            item[key]--;
+          } else {
+            item[key] = 0;
+          }
+        } else {
+          item[key] = value;
+        }
+        
+        updatedData.push({type:type,id:id,item:item});
+      }
+    });
+    if (updatedData.length > 0) {
+      broadcastLobby(lobby.id,
+        'mapUpdate', updatedData);
+    }
+
   }
 
 };
