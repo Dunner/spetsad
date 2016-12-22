@@ -5,17 +5,25 @@ var obj_tower = {},
 obj_tower.create = function(data) {
 
   var tempTower = {};
+  tempTower.id = data.id;
+  tempTower.team = data.team;
   tempTower.foot = {object: game.add.image(data.x,data.y, createBlock(50, 50,'#000'))};
   tempTower.roof = {object: game.add.image(data.x,data.y, createBlock(50, 50, 'brown'))};
-  tempTower.data = data;
   tempTower.foot.object.depth = 0;
   tempTower.roof.object.depth = 25;
   tempTower.foot.object.anchor.setTo(0.5, 0.5);
   tempTower.roof.object.anchor.setTo(0.5, 0.5);
-  tempTower.team = data.team;
   towers.push(tempTower);
   groups.allObjects.add(tempTower.foot.object);
   groups.allObjects.add(tempTower.roof.object);
+  collisionObjects.push({
+    object: tempTower.foot.object,
+    id: data.id,
+    type: 'tower',
+    x: data.x,
+    y: data.y,
+    solid: true
+  });
 }
 
 obj_tower.update = function(tower) {

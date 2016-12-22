@@ -75,6 +75,7 @@ obj_player.create = function(data) {
     }
   };
 
+  // groups.collisionObjects.add(tempplayer.shadow.object);
   groups.allObjects.add(tempplayer.shadow.object);
   groups.allObjects.add(tempplayer.feet.object);
   groups.allObjects.add(tempplayer.legs.object);
@@ -84,17 +85,26 @@ obj_player.create = function(data) {
 
 
 
-  tempplayer.hpbar.background = game.add.image(data.playerinfo.x, data.playerinfo.y, createBlock(45, 3,'black'));
+  tempplayer.hpbar.background = game.add.image(data.playerinfo.x, data.playerinfo.y, createBlock(30, 3,'black'));
   tempplayer.hpbar.health = game.add.image(data.playerinfo.x, data.playerinfo.y, createBlock(10, 3,'green'));
+  tempplayer.hpbar.background.alpha = 0.3;
   tempplayer.hpbar.background.anchor.set(0.5, 8);
   tempplayer.hpbar.health.anchor.set(0.5, 8);
+  tempplayer.hpbar.health.alpha = 0.3;
 
-  tempplayer.texts.nameplate = game.add.text(0, 0, tempplayer.name, healthStyle);
-  tempplayer.texts.nameplate.anchor.set(0.5, -1);
-
-  // tempplayer.texts.healthtext = game.add.text(0, 0, "100", healthStyle);
+  // tempplayer.texts.healthtext = game.add.text(0, 0, "100", { font: "12px Arial", fill: "#fff", align: "left" });
   // tempplayer.texts.healthtext.anchor.set(0.5, 2);
 
+  if (tempplayer.id !== mySocketID) {
+    tempplayer.texts.nameplate = game.add.text(0, 0, tempplayer.name, { font: "12px Arial", fill: "#00", align: "left" });
+    tempplayer.texts.nameplate.alpha = 0.5
+    tempplayer.texts.nameplate.anchor.set(0.5, -1);
+  } else {
+    tempplayer.frontCollision = {};
+    tempplayer.frontCollision.object = game.add.image(data.playerinfo.x, data.playerinfo.y, createBlock(20, 20, 'red'));
+    tempplayer.frontCollision.object.anchor.set(0.5, 0.5);
+    tempplayer.frontCollision.object.alpha = 0;
+  }
 
   players.push(tempplayer);
 
@@ -110,12 +120,6 @@ obj_player.update = function(player) {
 
       player.hpbar.health.position = player.hpbar.background.position = player.shadow.object.position;
       player.hpbar.health.width = (player.hpbar.background.width/100)*player.playerinfo.health;
-
-      player.texts.nameplate.position = player.shadow.object.position;
-      player.texts.nameplate.setText(player.name);
-      
-      // player.texts.healthtext.position = player.shadow.object.position;
-      // player.texts.healthtext.setText(Math.round(player.playerinfo.health));
 
       if (player.playerinfo.up) {
         player.shadow.object.y -= 10 * delta;
@@ -242,7 +246,17 @@ obj_player.update = function(player) {
     }
     reticle.object.x = me.shadow.object.x;
     reticle.object.y = me.shadow.object.y;
+
+    var tempFrontCollisionLengthdir = lengthDir(15, (((player.head.object.angle-180 % 360) + 360) % 360) / 57);
+    player.frontCollision.object.x = player.shadow.object.x + tempFrontCollisionLengthdir.x;
+    player.frontCollision.object.y = player.shadow.object.y + tempFrontCollisionLengthdir.y;
+
   } else { //not me
+      player.texts.nameplate.position = player.shadow.object.position;
+      player.texts.nameplate.setText(player.name);
+      // player.texts.healthtext.position = player.shadow.object.position;
+      // player.texts.healthtext.setText(Math.round(player.playerinfo.health));
+
     walk();
 
   }
@@ -250,6 +264,7 @@ obj_player.update = function(player) {
   function walk() {
     if (player.arms.object.key !== 'arms-test-ss') {
       player.arms.object.loadTexture('arms-test-ss', 0, false);
+      player.arms.object.animations.stop();
     }
     player.arms.object.angle = player.torso.object.angle = player.shadow.object.angle = currentLeanAngle;
 
@@ -274,7 +289,19 @@ obj_player.update = function(player) {
       player.arms.object.loadTexture('arms-chop-ss', 0, true);
       var chopAnim = player.arms.object.animations.add('chop');
       chopAnim.enableUpdate = true;
-      player.arms.object.animations.play('chop', 12, false);
+      player.arms.object.animations.play('chop', 12, true);
+      chopAnim.onLoop.add(function(){
+        (collisionObjects).forEach(function(item) {
+          if (checkOverlap(player.frontCollision.object, item.object)) {
+            var target = {
+              type: item.type,
+              id: item.id
+            };
+            socket.emit('axeChop', target);
+            console.log(target);
+          }
+        }, this);
+      }, this);
     }
   }
 
@@ -297,9 +324,10 @@ obj_player.delete = function() {
 obj_player.dead = function(player) {
   player.alive = false;
 
-  player.texts.nameplate.setText('');
-  player.texts.healthtext.setText('');
-
+  if (player.texts.nameplate) {
+    player.texts.nameplate.setText('');
+  }
+  
   player.shadow.object.alpha = 0;
   player.feet.object.alpha = 0;
   player.legs.object.alpha = 0;
@@ -310,7 +338,7 @@ obj_player.dead = function(player) {
   var deathobj = game.add.image(player.playerinfo.x,player.playerinfo.y, createBlock(20, 20,'red'));
   deathobj.anchor.setTo(0.5, 0.5);
   
-  var deathtime = game.add.text(0, 0, "3", healthStyle);
+  var deathtime = game.add.text(0, 0, "3", { font: "12px Arial", fill: "#fff", align: "left" });
   deathtime.anchor.set(0.5, 0.5);
   deathtime.x = deathobj.x;
   deathtime.y = deathobj.y;

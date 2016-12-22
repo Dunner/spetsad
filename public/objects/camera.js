@@ -72,8 +72,6 @@ obj_camera.create = function() {
   overlayFilter.tint = RGBtoHEX(150,80,0);
 
   game.camera.zoomTo(1.0,500,'zoomOut')
-
-  forrest.init();
   
 }
 

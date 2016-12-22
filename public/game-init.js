@@ -5,10 +5,11 @@ var game,
     lobby;
 var groups = {},
     enableMovement = false,
-    debug = false,
+    debug = true,
     delta,
     healthStyle,
     reticle,
+    collisionObjects = [],
 
     spawns = {
       'blue': {x: 450, y:500},
@@ -45,8 +46,6 @@ function startGame(data) {
     game.stage.backgroundColor = '#192504';
     game.world.setBounds(0, 0, 900, 1920);
     
-    healthStyle = { font: "12px Arial", fill: "#fff", align: "left" };
-
     ['allObjects', 'players', 'spears', 'obstacles'].forEach(function(group) {
       groups[group] = game.add.group();
       groups[group].setAll('checkWorldBounds', true);
@@ -70,12 +69,13 @@ function startGame(data) {
         ));
       controls.create();
       enableMovement = true;
-    }, 3000)
+    }, 1000)
 
     socket.emit('getplayers');
 
-
     obj_camera.create();
+
+    mapInit(lobby.mapData);
 
   }
 

@@ -39,6 +39,8 @@ module.exports = function(io) {
         players: [],
         hostid: null,
         playing: false,
+        mapName: 'deep-forrest',
+        mapData: {},
         teams:{
           red: {
             players:['empty', 'empty', 'empty'],
@@ -142,6 +144,7 @@ module.exports = function(io) {
         lobby.players.forEach(function (tempSocketID) {
           //start game for players
           io.to(tempSocketID).emit('startGame');
+          lobby.mapData = dataService.maps[lobby.mapName];
           playerStageChange(tempSocketID, 'game', lobby);
         });
       }
@@ -273,6 +276,11 @@ module.exports = function(io) {
           spearId: data.spearId,
           distance: data.distance
         });
+    });
+
+    socket.on('axeChop', function (target) {
+      if (!target) {return;}
+      console.log(target);
     });
     
     socket.on('spearHit', function (data) {

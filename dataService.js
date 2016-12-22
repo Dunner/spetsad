@@ -1,8 +1,10 @@
+var maps = require('./maps');
 
 var dataService = {
   messages: [],
   sockets: [],
-  lobbies: []
+  lobbies: [],
+  maps: maps
 }
 
 module.exports = dataService;

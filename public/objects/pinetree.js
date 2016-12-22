@@ -11,8 +11,21 @@ obj_pinetree.create = function(data) {
   tempPinetree.shadow.object.anchor.setTo(0.5, 0.5);
   tempPinetree.shadow.object.tint = RGBtoHEX(0,0,0);
   tempPinetree.shadow.object.alpha = '0.4';
+  tempPinetree.id = data.id;
   groups.allObjects.add(tempPinetree.shadow.object);
 
+  tempPinetree.bounds = game.add.image(data.x,data.y, createBlock(40, 40,'green'));
+  tempPinetree.bounds.alpha = 1;
+  tempPinetree.bounds.anchor.setTo(0.5, 0.5);
+
+  collisionObjects.push({
+    object: tempPinetree.bounds,
+    id: data.id,
+    type: 'tree',
+    x: data.x,
+    y: data.y,
+    solid: true
+  });
   //add children
   tempPinetree.children = [];
   for (var i = 1; i < data.sections+1 ; i++) {
@@ -39,12 +52,12 @@ obj_pinetree.create = function(data) {
 
   
   if (debug) { //DEBUGGING ###############
-    tempPinetree.shadow.object.inputEnabled = true;
-    tempPinetree.shadow.object.input.pixelPerfectOver = true;
-    tempPinetree.shadow.object.events.onInputOver.add( function() {
+    tempPinetree.bounds.inputEnabled = true;
+    tempPinetree.bounds.input.pixelPerfectOver = true;
+    tempPinetree.bounds.events.onInputOver.add( function() {
       console.log(tempPinetree.data.id, 
-                  'x:' + tempPinetree.shadow.object.x, 
-                  'y:' + tempPinetree.shadow.object.y)
+                  'x:' + tempPinetree.bounds.x, 
+                  'y:' + tempPinetree.bounds.y)
     }, this);
   } //####################################
 
