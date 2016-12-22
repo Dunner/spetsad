@@ -73,8 +73,8 @@ obj_camera.update = function() {
   objScreenCenter.position = game.camera.center();
   cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
 
-  mouse.x = (game.input.activePointer.x + game.camera.view.x) // /game.camera.view.scale;
-  mouse.y = (game.input.activePointer.y + game.camera.view.y) // /game.camera.view.scale;
+  mouse.x = (game.input.activePointer.x + game.camera.view.x) / game.camera.scale.scale;
+  mouse.y = (game.input.activePointer.y + game.camera.view.y) / game.camera.scale.scale;
 
   var me = findPlayer(mySocketID);
   // ###### Camera 
