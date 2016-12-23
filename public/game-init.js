@@ -38,6 +38,7 @@ function startGame(data) {
     game.load.image('reticle','sprites/reticle.png');
     game.load.image('spear-ash','sprites/spear.png');
     game.load.image('edgeTint','sprites/edge-tint-overlay.png');
+
   }
 
   function create() {

@@ -10,6 +10,11 @@ var obj_camera = {},
     dynamicCameraScaleGameWidth600;
 
 obj_camera.create = function() {
+  game.camera.fade(0x000000,1);
+  setTimeout(function(){
+  game.camera.flash(0x000000,500);
+    // game.camera.resetFX(300);
+  },1500)
 
   game.camera.zoomTo = function(scale, duration, name) {
     cameraAnimation = name;
@@ -67,12 +72,13 @@ obj_camera.create = function() {
   game.camera.zoomTo(0.7,500,'zoomOut')
   game.camera.bounds = new Phaser.Rectangle(-game.camera.view.width, -game.camera.view.height, game.world.width+(game.camera.view.width*2), game.world.height+(game.camera.view.height*2));
 
+
 }
 
 
 obj_camera.update = function() {
   dynamicCameraScaleGameWidth600 = game.camera.view.width / 600;
-  
+
   if (debug) {
     cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
     objScreenCenter.alpha = 0.3;
