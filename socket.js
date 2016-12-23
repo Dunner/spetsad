@@ -144,7 +144,7 @@ module.exports = function(io) {
         lobby.players.forEach(function (tempSocketID) {
           //start game for players
           io.to(tempSocketID).emit('startGame');
-          lobby.mapData = dataService.maps[lobby.mapName];
+          lobby.mapData = JSON.parse(JSON.stringify(dataService.maps[lobby.mapName]));
           playerStageChange(tempSocketID, 'game', lobby);
         });
       }

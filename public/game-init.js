@@ -5,7 +5,7 @@ var game,
     lobby;
 var groups = {},
     enableMovement = false,
-    debug = true,
+    debug = false,
     delta,
     healthStyle,
     reticle,
@@ -56,6 +56,7 @@ function startGame(data) {
     reticle = {};
     reticle.object = game.add.image(600,600, 'reticle');
     reticle.object.anchor.set(0, 0.5);
+    reticle.object.scale.setTo(0,0);
     reticle.xScale = 0;
     reticle.yScale = 0;
 
@@ -77,7 +78,6 @@ function startGame(data) {
     obj_camera.create();
 
     mapInit(lobby.mapData);
-    console.log(game)
   }
 
   function update() {

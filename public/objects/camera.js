@@ -11,7 +11,7 @@ obj_camera.create = function() {
 
     var bounds       = Phaser.Rectangle.clone(game.camera.view);
     var cameraBounds = game.camera.view;
-    console.log(scale)
+
     return game.add.tween(game.camera.scale).to({
         x: scale, y: scale, scale:scale
     }, duration).start();
@@ -33,8 +33,12 @@ obj_camera.create = function() {
 
   cameraObject.object = game.add.image(0,0, createBlock(10, 10,'#000'));
   cameraObject.object.anchor.setTo(0.5, 0.5);
+  cameraObject.object.alpha = 0;
+  cameraObject.object.x = 450;
+  cameraObject.object.y = 960;
 
   objScreenCenter = game.add.image(0,0, createBlock(5, 5,'green'));
+  objScreenCenter.alpha = 0;
 
   mouse = game.add.image(0,0, createBlock(5, 5,'red'));
 
@@ -65,13 +69,17 @@ obj_camera.create = function() {
 
 obj_camera.update = function() {
 
+  if (debug) {
+    cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
+    objScreenCenter.alpha = 0.3
+  }
+
   game.camera.bounds = new Phaser.Rectangle(-canvasElement.offsetWidth, -canvasElement.offsetHeight, game.world.width+(canvasElement.offsetWidth*2), game.world.height+(canvasElement.offsetHeight*2));
-  console.log(game.camera.bounds)
   game.camera.view.width = canvasElement.offsetWidth;
   game.camera.view.height = canvasElement.offsetHeight;
 
   objScreenCenter.position = game.camera.center();
-  cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
+
 
   mouse.x = (game.input.activePointer.x + game.camera.view.x) / game.camera.scale.scale;
   mouse.y = (game.input.activePointer.y + game.camera.view.y) / game.camera.scale.scale;

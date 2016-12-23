@@ -298,7 +298,6 @@ obj_player.update = function(player) {
               id: item.id
             };
             socket.emit('axeChop', target);
-            console.log(target);
           }
         }, this);
       }, this);
