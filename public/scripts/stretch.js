@@ -35,5 +35,11 @@ function stretchWrapper() {
 
 window.onresize = function(event) {
   stretchWrapper();
+  if (game) {
+    game.scale.setGameSize(canvasElement.offsetWidth, canvasElement.offsetHeight);
+    game.camera.zoomTo(dynamicCameraScaleGameWidth600,300,'zoomOut')
+    game.camera.bounds = new Phaser.Rectangle(-game.camera.view.width, -game.camera.view.height, game.world.width+(game.camera.view.width*2), game.world.height+(game.camera.view.height*2));
+    
+  }
 };
 

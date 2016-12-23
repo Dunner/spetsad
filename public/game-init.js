@@ -26,6 +26,7 @@ function startGame(data) {
     game.load.crossOrigin = 'anonymous';
     game.load.image('background','sprites/lane-bg.png');
     game.load.spritesheet('stump-ss', 'sprites/stump-ss.png', 32, 32, 1);
+    game.load.spritesheet('logs-ss', 'sprites/logs-ss.png', 32, 32, 4);
     game.load.spritesheet('feet-test-ss', 'sprites/feet-test-ss.png', 32, 32, 4);
     game.load.spritesheet('legs-test-ss', 'sprites/legs-test-ss.png', 32, 32, 4);
     game.load.spritesheet('torso-test-ss', 'sprites/torso-test-ss.png', 32, 32, 4);

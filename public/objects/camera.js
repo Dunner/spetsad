@@ -2,7 +2,12 @@ var obj_camera = {},
     objScreenCenter = {},
     cameraObject = {},
     mouse,
-    cameraAnimation = 'none';
+    cameraAnimation = 'none',
+    overlayFilter = {},
+    edgeTint = {},
+    tintScaleX,
+    tintScaleY,
+    dynamicCameraScaleGameWidth600;
 
 obj_camera.create = function() {
 
@@ -43,40 +48,38 @@ obj_camera.create = function() {
   mouse = game.add.image(0,0, createBlock(5, 5,'red'));
 
   //Edgetint overlay
-  var edgeTint = {}, tintScaleX, tintScaleY;
-  edgeTint.object = game.add.sprite(600,600, 'edgeTint');
-  edgeTint.object.fixedToCamera = true;
-  edgeTint.object.cameraOffset.setTo(0, 0);
-  edgeTint.object.alpha = 0.5;
+  // edgeTint.object = game.add.sprite(600,600, 'edgeTint');
+  // edgeTint.object.fixedToCamera = true;
+  // edgeTint.object.cameraOffset.setTo(0, 0);
+  // edgeTint.object.alpha = 0.5;
 
-
-  tintScaleX = canvasElement.offsetWidth / edgeTint.object.width;
-  tintScaleY = canvasElement.offsetHeight / edgeTint.object.height
+  // tintScaleX = game.camera.view.width / edgeTint.object.width;
+  // tintScaleY = game.camera.view.height / edgeTint.object.height
   
-  edgeTint.object.scale.setTo(tintScaleX, tintScaleY);
+  // edgeTint.object.scale.setTo(tintScaleX, tintScaleY);
 
-  var overlayFilter = game.add.image(0,0, createBlock(canvasElement.offsetWidth, canvasElement.offsetHeight,'#fff'));
-  overlayFilter.fixedToCamera = true;
-  overlayFilter.cameraOffset.setTo(0, 0);
-  overlayFilter.alpha = 0.1;
-  overlayFilter.tint = RGBtoHEX(150,80,0);
+  // overlayFilter = game.add.image(0,0, createBlock(game.camera.view.width, game.camera.view.height,'#fff'));
+  // overlayFilter.fixedToCamera = true;
+  // overlayFilter.cameraOffset.setTo(0, 0);
+  // overlayFilter.alpha = 0.1;
+  // overlayFilter.tint = RGBtoHEX(150,80,0);
 
-  game.camera.zoomTo(1.0,500,'zoomOut')
+  game.camera.zoomTo(0.7,500,'zoomOut')
+  game.camera.bounds = new Phaser.Rectangle(-game.camera.view.width, -game.camera.view.height, game.world.width+(game.camera.view.width*2), game.world.height+(game.camera.view.height*2));
 
-  
 }
 
 
 obj_camera.update = function() {
-
+  dynamicCameraScaleGameWidth600 = game.camera.view.width / 600;
+  
   if (debug) {
     cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
-    objScreenCenter.alpha = 0.3
+    objScreenCenter.alpha = 0.3;
   }
 
-  game.camera.bounds = new Phaser.Rectangle(-canvasElement.offsetWidth, -canvasElement.offsetHeight, game.world.width+(canvasElement.offsetWidth*2), game.world.height+(canvasElement.offsetHeight*2));
-  game.camera.view.width = canvasElement.offsetWidth;
-  game.camera.view.height = canvasElement.offsetHeight;
+  game.camera.view.width = game.camera.view.width;
+  game.camera.view.height = game.camera.view.height;
 
   objScreenCenter.position = game.camera.center();
 
@@ -87,7 +90,7 @@ obj_camera.update = function() {
   var me = findPlayer(mySocketID);
   // ###### Camera 
   if (me && me.shadow) {
-    
+
     if (cameraObject.object.x < me.shadow.object.x) {
       cameraObject.object.x += ( Math.abs(cameraObject.object.x - me.shadow.object.x)/10 ) * delta
     }

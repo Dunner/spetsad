@@ -140,10 +140,12 @@ obj_player.update = function(player) {
   var currentLeanAngle = player.lastTickData.leanAngle;
 
   if (player.shadow.object.x !== player.lastTickData.x || player.shadow.object.y !== player.lastTickData.y) {
+    //player is moving
 
-    if (player == me && cameraAnimation !== 'zoomIn') {game.camera.zoomTo(1.2,500,'zoomIn')}
+    if (player == me && cameraAnimation !== 'zoomIn' && player.arms.object.key !== 'arms-throw-ss') {
+      game.camera.zoomTo(dynamicCameraScaleGameWidth600+0.1,300,'zoomIn')
+    }
     
-
     player.lastTickData.reqLeanAngle = pointDirection(player.shadow.object.position, player.lastTickData);
     if  (player.lastTickData.reqLeanAngle < 0) {player.lastTickData.reqLeanAngle += 360};
     
@@ -172,7 +174,9 @@ obj_player.update = function(player) {
     }
   } else {
 
-    if (player == me && cameraAnimation !== 'zoomOut') {game.camera.zoomTo(1.0,500,'zoomOut')}
+    if (player == me && cameraAnimation !== 'zoomOut' && player.arms.object.key !== 'arms-throw-ss') {
+      game.camera.zoomTo(dynamicCameraScaleGameWidth600,500,'zoomOut');
+    }
 
     player.shadow.object.animations.stop('walk');
     player.feet.object.animations.stop('walk');
@@ -271,6 +275,9 @@ obj_player.update = function(player) {
   }
 
   function spearAim() {
+    if (cameraAnimation !== 'aiming') {
+      game.camera.zoomTo(dynamicCameraScaleGameWidth600-0.2,300,'aiming')
+    }
     if (player.arms.object.key !== 'arms-throw-ss') {
       player.arms.object.loadTexture('arms-throw-ss', 0, true);
       var throwAnim = player.arms.object.animations.add('throw');
