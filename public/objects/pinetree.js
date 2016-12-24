@@ -114,18 +114,7 @@ obj_pinetree.update = function(pinetree) {
     pinetree.stumpTop.x = pinetree.stumpBot.x + stumpTopldirCenter.x;
     pinetree.stumpTop.y = pinetree.stumpBot.y + stumpTopldirCenter.y;
 
-    if (!pinetree.topple) {
-      for (var i = 0; i < pinetree.children.length; i++) {
-        var child = pinetree.children[i];
-
-        var offCenter = child.object.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
-        var ldirCenter = lengthDir(offCenter, pointDir / 57);
-
-        child.object.x = pinetree.shadow.object.x + ldirCenter.x;
-        child.object.y = pinetree.shadow.object.y + ldirCenter.y;
-      }
-
-    } else {
+    if (pinetree.topple) {
       //Fall animation
       if (pinetree.topple == 0.1) {
         pinetree.childVars = [];
@@ -142,11 +131,16 @@ obj_pinetree.update = function(pinetree) {
           }
         }
         if (pinetree.shadow.object.x > 450) {
-          child.object.x = pinetree.shadow.object.x + pinetree.childVars[i].ldirCenter.x - ((pinetree.topple*1.2)*child.object.depth/2.5);
+          child.object.x = pinetree.shadow.object.x + pinetree.childVars[i].ldirCenter.x - ((pinetree.topple*1.2)*child.object.depth/2.8);
         } else {
-          child.object.x = pinetree.shadow.object.x + pinetree.childVars[i].ldirCenter.x + ((pinetree.topple*1.2)*child.object.depth/2.5);
+          child.object.x = pinetree.shadow.object.x + pinetree.childVars[i].ldirCenter.x + ((pinetree.topple*1.2)*child.object.depth/2.8);
         }
         child.object.y = pinetree.shadow.object.y + pinetree.childVars[i].ldirCenter.y;
+      }
+      if (pinetree.shadow.object.x > 450) {
+        pinetree.shadow.object.x -= 0.5*delta;
+      } else {
+        pinetree.shadow.object.x += 0.5*delta;
       }
       pinetree.topple += 0.5*delta;
       if (pinetree.topple > 20) {
@@ -155,26 +149,73 @@ obj_pinetree.update = function(pinetree) {
           child.object.destroy();
         })
       }
+
+
+    } else {
+
+      if (pinetree.shake){
+        //shake
+        if (pinetree.shake < 1) {
+          //offset
+          pinetree.children.forEach(function(child){
+            child.object.angle += (0.2*child.object.depth)*delta;
+            if (!child.object.shakeangle) {
+              child.object.shakeangle = Math.floor(Math.random() * 360) + 1/ 57;
+            }
+            child.object.shakeldir = lengthDir(child.object.depth/5 * pinetree.shake, child.object.shakeangle / 57);;
+          })
+        } else {
+          //return
+          pinetree.children.forEach(function(child){
+            child.object.angle -= (0.2*child.object.depth)*delta;
+            child.object.shakeldir = lengthDir((child.object.depth/5) / pinetree.shake, child.object.shakeangle / 57);;
+          })
+        }
+        pinetree.shake += 0.5*delta;
+        if (pinetree.shake > 2) {
+          pinetree.shake = false;
+        }
+      }
+
+
+      for (var i = 0; i < pinetree.children.length; i++) {
+        var child = pinetree.children[i];
+
+        var offCenter = child.object.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
+        var ldirCenter = lengthDir(offCenter, pointDir / 57);
+
+        if (!child.object.shakeldir) {child.object.shakeldir = {x:0,y:0};}
+
+        child.object.x = pinetree.shadow.object.x + ldirCenter.x + child.object.shakeldir.x;
+        child.object.y = pinetree.shadow.object.y + ldirCenter.y + child.object.shakeldir.y;
+      }
     }
   }
 
 }
 
-obj_pinetree.redraw = function(pinetreeID) {
+obj_pinetree.topple = function(pinetreeID) {
   for (var i = 0; i < pinetrees.length; i++) {
     if (pinetrees[i].id == pinetreeID) {
       if (pinetrees[i].topple) break;
       pinetrees[i].topple = 0.1;
     }
   }
-
 }
 
+obj_pinetree.shake = function(pinetreeID) {
+  for (var i = 0; i < pinetrees.length; i++) {
+    if (pinetrees[i].id == pinetreeID) {
+      if (pinetrees[i].topple) break;
+      pinetrees[i].shake = 0.1;
+    }
+  }
+}
 
-// obj_pinetree.redraw = function(pinetreeID, mapTreeData) {
-//   obj_pinetree.delete(pinetreeID);
-//   obj_pinetree.create(mapTreeData);
-// }
+obj_pinetree.redraw = function(pinetreeID, mapTreeData) {
+  obj_pinetree.delete(pinetreeID);
+  obj_pinetree.create(mapTreeData);
+}
 
 obj_pinetree.delete = function(pinetreeID) {
   var gameTreeData, gameTreeIndex;

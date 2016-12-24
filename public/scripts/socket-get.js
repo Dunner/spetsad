@@ -105,7 +105,8 @@
       (lobby.mapData[newItem.type]).forEach(function(mapTreeObject){
         if (mapTreeObject.id == newItem.id) {
           mapTreeObject = newItem.item;
-          obj_pinetree.redraw(newItem.id, mapTreeObject);
+          // obj_pinetree.redraw(newItem.id, mapTreeObject);
+          obj_pinetree.shake(newItem.id);
         }
       });
     });
