@@ -91,17 +91,17 @@ obj_pinetree.create = function(data) {
 
 obj_pinetree.update = function(pinetree) {
 
-  // if (me) {
-  //   if (checkOverlap(me.head.object, pinetree.shadow.object)) {
-  //     pinetree.children.forEach(function(section){
-  //       game.add.tween(section.object).to({alpha: 0.1},300, "Linear", true);
-  //     })
-  //   } else {
-  //     pinetree.children.forEach(function(section){
-  //       game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
-  //     })
-  //   }
-  // }
+  if (me && pinetree.shadow.object._bounds) {
+    if (checkOverlap(me.head.object, pinetree.shadow.object)) {
+      pinetree.children.forEach(function(section){
+        game.add.tween(section.object).to({alpha: 0.1},300, "Linear", true);
+      })
+    } else {
+      pinetree.children.forEach(function(section){
+        game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
+      })
+    }
+  }
 
   // ###### pinetrees 
   if (pointDistance(game.camera.center(),pinetree.shadow.object.position) < 600) {
