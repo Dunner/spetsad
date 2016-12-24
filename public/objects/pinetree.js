@@ -21,9 +21,10 @@ obj_pinetree.create = function(data) {
   groups.allObjects.add(tempPinetree.stumpBot);
 
   tempPinetree.stumpTop = game.add.image(data.x,data.y,'stump-ss');
-  tempPinetree.stumpTop.depth = 2;
+  tempPinetree.stumpTop.depth = 1;
   tempPinetree.stumpTop.scale.setTo(tempPinetree.stumpBot.scale.x+0.1, tempPinetree.stumpBot.scale.y+0.1)
   tempPinetree.stumpTop.anchor.setTo(0.5, 0.5);
+  tempPinetree.stumpTop.frame = 1;
   groups.allObjects.add(tempPinetree.stumpTop);
 
   tempPinetree.bounds = game.add.image(data.x,data.y, createBlock(40, 40,'green'));
@@ -90,49 +91,90 @@ obj_pinetree.create = function(data) {
 
 obj_pinetree.update = function(pinetree) {
 
-  if (me) {
-    if (checkOverlap(me.head.object, pinetree.shadow.object)) {
-      pinetree.children.forEach(function(section){
-        game.add.tween(section.object).to({alpha: 0.1},300, "Linear", true);
-      })
-    } else {
-      pinetree.children.forEach(function(section){
-        game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
-      })
-    }
-  }
+  // if (me) {
+  //   if (checkOverlap(me.head.object, pinetree.shadow.object)) {
+  //     pinetree.children.forEach(function(section){
+  //       game.add.tween(section.object).to({alpha: 0.1},300, "Linear", true);
+  //     })
+  //   } else {
+  //     pinetree.children.forEach(function(section){
+  //       game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
+  //     })
+  //   }
+  // }
 
   // ###### pinetrees 
   if (pointDistance(game.camera.center(),pinetree.shadow.object.position) < 600) {
 
-
     var pointDir = pointDirection(game.camera.center(), pinetree.shadow.object.position);
     if  (pointDir < 0) {pointDir += 360};
-
-    for (var i = 0; i < pinetree.children.length; i++) {
-      var child = pinetree.children[i];
-
-      var offCenter = child.object.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
-      var ldirCenter = lengthDir(offCenter, pointDir / 57);
-
-      child.object.x = pinetree.shadow.object.x + ldirCenter.x;
-      child.object.y = pinetree.shadow.object.y + ldirCenter.y;
-    }
 
     var stumpTopOff = pinetree.stumpTop.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.stumpBot.position))/100);
     var stumpTopldirCenter = lengthDir(stumpTopOff, pointDir / 57);
     pinetree.stumpTop.x = pinetree.stumpBot.x + stumpTopldirCenter.x;
     pinetree.stumpTop.y = pinetree.stumpBot.y + stumpTopldirCenter.y;
+
+    if (!pinetree.topple) {
+      for (var i = 0; i < pinetree.children.length; i++) {
+        var child = pinetree.children[i];
+
+        var offCenter = child.object.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
+        var ldirCenter = lengthDir(offCenter, pointDir / 57);
+
+        child.object.x = pinetree.shadow.object.x + ldirCenter.x;
+        child.object.y = pinetree.shadow.object.y + ldirCenter.y;
+      }
+
+    } else {
+      //Fall animation
+      if (pinetree.topple == 0.1) {
+        pinetree.childVars = [];
+      }
+      for (var i = 0; i < pinetree.children.length; i++) {
+        var child = pinetree.children[i];
+
+        if (pinetree.topple == 0.1) {
+          var offCenter = child.object.depth * (Math.abs(pointDistance(game.camera.center(), pinetree.shadow.object.position))/100);
+          var ldirCenter = lengthDir(offCenter, pointDir / 57);
+          pinetree.childVars[i] = {
+            offCenter: offCenter,
+            ldirCenter: ldirCenter
+          }
+        }
+        if (pinetree.shadow.object.x > 450) {
+          child.object.x = pinetree.shadow.object.x + pinetree.childVars[i].ldirCenter.x - ((pinetree.topple*1.2)*child.object.depth/2.5);
+        } else {
+          child.object.x = pinetree.shadow.object.x + pinetree.childVars[i].ldirCenter.x + ((pinetree.topple*1.2)*child.object.depth/2.5);
+        }
+        child.object.y = pinetree.shadow.object.y + pinetree.childVars[i].ldirCenter.y;
+      }
+      pinetree.topple += 0.5*delta;
+      if (pinetree.topple > 20) {
+        pinetree.shadow.object.destroy();
+        pinetree.children.forEach(function(child){
+          child.object.destroy();
+        })
+      }
+    }
   }
 
 }
 
-obj_pinetree.redraw = function(pinetreeID, mapTreeData) {
-  if (!lobby) return;
-  obj_pinetree.delete(pinetreeID);
-  obj_pinetree.create(mapTreeData);
+obj_pinetree.redraw = function(pinetreeID) {
+  for (var i = 0; i < pinetrees.length; i++) {
+    if (pinetrees[i].id == pinetreeID) {
+      if (pinetrees[i].topple) break;
+      pinetrees[i].topple = 0.1;
+    }
+  }
+
 }
 
+
+// obj_pinetree.redraw = function(pinetreeID, mapTreeData) {
+//   obj_pinetree.delete(pinetreeID);
+//   obj_pinetree.create(mapTreeData);
+// }
 
 obj_pinetree.delete = function(pinetreeID) {
   var gameTreeData, gameTreeIndex;
