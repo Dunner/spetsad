@@ -106,7 +106,15 @@
         if (mapTreeObject.id == newItem.id) {
           mapTreeObject = newItem.item;
           // obj_pinetree.redraw(newItem.id, mapTreeObject);
-          obj_pinetree.shake(newItem.id);
+
+          if (newItem.type == 'trees') {
+            if (newItem.item.hitpoints > 0) {
+              obj_pinetree.shake(newItem.id);
+            }else {
+              obj_pinetree.topple(newItem.id);
+            }
+
+          }
         }
       });
     });

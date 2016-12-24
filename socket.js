@@ -285,7 +285,7 @@ module.exports = function(io) {
       if (!lobby) return;
 
       if (target.type == 'trees') {
-        updateMapData(lobby, target.type, target.id, 'sections', 1);
+        updateMapData(lobby, target.type, target.id, 'hitpoints');
       }
       
     });
@@ -510,15 +510,14 @@ module.exports = function(io) {
 
         if (type == 'trees') {
           if (item[key] > 0) {
-            item[key]--;
-          } else {
-            item[key] = 0;
+            item[key] -= 10;
+            updatedData.push({type:type,id:id,item:item});
           }
         } else {
           item[key] = value;
+          updatedData.push({type:type,id:id,item:item});
         }
         
-        updatedData.push({type:type,id:id,item:item});
       }
     });
     if (updatedData.length > 0) {
