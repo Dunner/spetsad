@@ -62,9 +62,9 @@ module.exports = function(io){
 
         //towers #######################################
 
-        var towers = [{"x": 350,"y": 700, "team": 'blue'}, {"x": 550,"y": 1220, "team": 'red'}];
+        
         var teams = ['red', 'blue'];
-        towers.forEach(function (tower) {
+        lobby.mapData.towers.forEach(function (tower) {
           tower.targets = [];
           tower.target = {distance:999};
           var targetsTeamName = 'blue'

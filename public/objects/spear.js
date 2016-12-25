@@ -19,9 +19,9 @@ obj_spear.create = function(owner, fromPos, toPos, id, distance) {
   groups.spears.add(spear.object);
   groups.allObjects.add(spear.object);
 
-  spear.bounds = game.add.image(fromPos.x,fromPos.y, createBlock(3, 3,'red'));
-  spear.bounds.alpha = 0;
-  spear.bounds.anchor.setTo(-6, 1);
+  spear.bounds = game.add.image(fromPos.x,fromPos.y, createBlock(25, 3,'red'));
+  spear.bounds.alpha = 0.7;
+  spear.bounds.anchor.setTo(0, 1);
   spear.bounds.angle = pointDirection(fromPos, toPos);
 
   spear.id = id;
@@ -69,6 +69,7 @@ obj_spear.delete = function(spearID) {
     if (spear.id == spearID) {
       spear.object.destroy();
       spear.shadow.destroy();
+      spear.bounds.destroy();
       spears.splice(i, 1);
       break;
     }
