@@ -107,7 +107,7 @@ obj_pinetree.update = function(pinetree) {
     } else {
       pinetree.children.forEach(function(section){
         game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
-      })
+      });
     }
   }
 

@@ -7,8 +7,8 @@ obj_tower_spear.create = function(data) {
   towers.forEach(function(tower){
     if (tower.team == data.tower) {
       spear.fromPos = {
-        x: tower.foot.object.x,
-        y: tower.foot.object.y
+        x: tower.foot1.object.x,
+        y: tower.foot1.object.y
       }
     }
   });
