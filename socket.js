@@ -512,6 +512,10 @@ module.exports = function(io) {
           if (item[key] > 0) {
             item[key] -= 10;
             updatedData.push({type:type,id:id,item:item});
+            var hp = item.hitpoints;
+            if (utils.isInt(hp) && hp/10 < 15) {
+              createLog(lobby, item);
+            }
           }
         } else {
           item[key] = value;
@@ -527,4 +531,38 @@ module.exports = function(io) {
 
   }
 
+  function createLog(lobby, treeItem) {
+    if (!lobby || !treeItem) return;
+    var log = {
+      id: utils.randomID('log'),
+      x: 0,
+      y: treeItem.y
+    };
+    var xOffTree = 0;
+    if (treeItem.x > 450) {
+      while(checkXTaken('right'));
+      log.x = treeItem.x - xOffTree;
+    } else {
+      while(checkXTaken('left'));
+      log.x = treeItem.x + xOffTree;
+    }
+    function checkXTaken(direction) {
+      xOffTree += 30;
+      var taken;
+      lobby.mapData['logs'].forEach(function(log){
+        if (log.y == treeItem.y) {
+          if (direction == 'left' && log.x == treeItem.x + xOffTree) {
+            taken = true}
+          if (direction == 'right' && log.x == treeItem.x - xOffTree) {
+            taken = true}
+        }
+      })
+      return taken;
+    }
+
+    if (!lobby.mapData['logs']) { lobby.mapData['logs'] = []; }
+    lobby.mapData['logs'].push(log);
+    broadcastLobby(lobby.id,
+      'createLog', log);
+  }
 };

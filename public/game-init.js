@@ -5,7 +5,7 @@ var game,
     lobby;
 var groups = {},
     enableMovement = false,
-    debug = false,
+    debug = true,
     delta,
     healthStyle,
     reticle,
@@ -49,7 +49,7 @@ function startGame(data) {
     game.stage.backgroundColor = '#192504';
     game.world.setBounds(0, 0, 900, 1920);
     
-    ['allObjects', 'players', 'spears', 'obstacles'].forEach(function(group) {
+    ['allObjects', 'players', 'spears', 'obstacles', 'logs'].forEach(function(group) {
       groups[group] = game.add.group();
       groups[group].setAll('checkWorldBounds', true);
       //groups[group].setAll('outOfBoundsKill', true);
@@ -93,6 +93,10 @@ function startGame(data) {
 
     obstacles.forEach(function(obstacle) {
       obj_obstacle.update(obstacle);
+    }, this);
+
+    logs.forEach(function(log) {
+      obj_log.update(log);
     }, this);
 
     pinetrees.forEach(function(pinetree) {

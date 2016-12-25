@@ -121,6 +121,10 @@
     
   });
 
+  socket.on('createLog', function(log) {
+    obj_log.create(log);
+  });
+
   socket.on('roster', function (players) {
     for (var i = 0; i < players.length; i++) {
       var player = findPlayer(players[i].socket);

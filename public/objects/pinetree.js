@@ -14,6 +14,13 @@ obj_pinetree.create = function(data) {
   tempPinetree.shadow.object.depth = 0;
   groups.allObjects.add(tempPinetree.shadow.object);
 
+  // var shadowBounds = Phaser.Rectangle.clone(tempPinetree.shadow.object.getBounds());
+  // tempPinetree.bounds = {
+  //   object: game.add.image(data.x,data.y, createBlock(shadowBounds.width/1.3, shadowBounds.height/1.3,'blue'))};
+  // tempPinetree.bounds.object.anchor.setTo(0.5, 0.5);
+  // tempPinetree.bounds.object.alpha = 0.2;
+  // groups.allObjects.add(tempPinetree.bounds.object);
+
   tempPinetree.stumpBot = game.add.image(data.x,data.y,'stump-ss');
   tempPinetree.stumpBot.depth = 0;
   tempPinetree.stumpBot.anchor.setTo(0.5, 0.5);
@@ -27,12 +34,12 @@ obj_pinetree.create = function(data) {
   tempPinetree.stumpTop.frame = 1;
   groups.allObjects.add(tempPinetree.stumpTop);
 
-  tempPinetree.bounds = game.add.image(data.x,data.y, createBlock(40, 40,'green'));
-  tempPinetree.bounds.alpha = 0.0;
-  tempPinetree.bounds.anchor.setTo(0.5, 0.5);
+  tempPinetree.stumpBounds = game.add.image(data.x,data.y, createBlock(40, 40,'green'));
+  tempPinetree.stumpBounds.alpha = 0.0;
+  tempPinetree.stumpBounds.anchor.setTo(0.5, 0.5);
 
   collisionObjects.push({
-    object: tempPinetree.bounds,
+    object: tempPinetree.stumpBounds,
     id: data.id,
     type: 'trees',
     x: data.x,
@@ -75,12 +82,12 @@ obj_pinetree.create = function(data) {
 
   
   if (debug) { //DEBUGGING ###############
-    tempPinetree.bounds.inputEnabled = true;
-    tempPinetree.bounds.input.pixelPerfectOver = true;
-    tempPinetree.bounds.events.onInputOver.add( function() {
+    tempPinetree.stumpBounds.inputEnabled = true;
+    tempPinetree.stumpBounds.input.pixelPerfectOver = true;
+    tempPinetree.stumpBounds.events.onInputOver.add( function() {
       console.log(tempPinetree.data.id, 
-                  'x:' + tempPinetree.bounds.x, 
-                  'y:' + tempPinetree.bounds.y)
+                  'x:' + tempPinetree.stumpBounds.x, 
+                  'y:' + tempPinetree.stumpBounds.y)
     }, this);
   } //####################################
 
@@ -92,6 +99,7 @@ obj_pinetree.create = function(data) {
 obj_pinetree.update = function(pinetree) {
 
   if (me && pinetree.shadow.object._bounds) {
+    // game.debug.spriteBounds(pinetree.shadow.object);
     if (checkOverlap(me.head.object, pinetree.shadow.object)) {
       pinetree.children.forEach(function(section){
         game.add.tween(section.object).to({alpha: 0.1},300, "Linear", true);

@@ -5,6 +5,8 @@ var maps = {};
   maps['deep-forrest'] = {
     height: 1920,
     width: 900,
+    logs: [
+    ],
     towers: [
       {
         "id": 0,
