@@ -8,6 +8,7 @@ var controls = {},
     touchKey,
 
     holdClick = false,
+    click = false,
 
     pointerType,
 
@@ -135,5 +136,8 @@ function clickUp() {
 }
 
 function clickOnce() {
-
+  click = true;
+  setTimeout(function(){
+    click = false;
+  },1) 
 }

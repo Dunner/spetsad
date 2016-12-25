@@ -232,6 +232,18 @@ obj_player.update = function(player) {
   player.feet.object.angle = player.legs.object.angle = player.head.object.angle = currentLeanAngle;
 
   if (player == me) {
+    if (me.carryingLog && click) {
+      //drop log
+      click = false;
+      var dropData = {
+        x: player.shadow.object.x,
+        y: player.shadow.object.y,
+        logID: me.carryingLog,
+        playerID: me.id
+      }
+      socket.emit('logChangeStatus', 'drop', me.carryingLog, dropData);
+    }
+
     if (holdClick) {
       var pointDir = pointDirection(mouse.position, player.torso.object.position);
       if  (pointDir < 0) {pointDir += 360};

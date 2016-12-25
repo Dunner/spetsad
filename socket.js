@@ -289,6 +289,27 @@ module.exports = function(io) {
       }
       
     });
+
+    socket.on('logChangeStatus', function (action, logID, data) {
+      if (!logID || !data) return;
+      if (!socket.lobbyID) return;
+      var lobby = findLobby(socket.lobbyID);
+      if (!lobby) return;
+
+      if (action == 'pickup') {
+        updateMapData(lobby, 'logs', logID, 'carriedBy', data);
+      }
+      if (action == 'drop') {
+        var dropData = {
+          x: data.x,
+          y: data.y,
+          carriedBy: undefined
+        }
+        updateMapData(lobby, 'logs', logID, dropData);
+      }
+      
+
+    });
     
     socket.on('spearHit', function (data) {
       if (!socket.lobbyID) return;
@@ -516,6 +537,11 @@ module.exports = function(io) {
               createLogs(lobby, item);
             }
           }
+        } else if (typeof key === 'object'){
+          for(var k in key) {
+            item[k] = key[k];
+          }
+          updatedData.push({type:type,id:id,item:item});
         } else {
           item[key] = value;
           updatedData.push({type:type,id:id,item:item});
@@ -533,14 +559,14 @@ module.exports = function(io) {
   function createLogs(lobby, treeItem) {
     if (!lobby || !treeItem) return;
     var logsToSend = [];
-    console.log(treeItem.sections)
+
     for(var i=treeItem.sections; i > 0; i--) {
       var log = {
         id: utils.randomID('log'),
         x: 0,
         y: treeItem.y,
         section: i,
-        grounded: true
+        carriedBy: undefined
       };
       var xOffTree = 0;
       if (treeItem.x > 450) {
@@ -554,6 +580,7 @@ module.exports = function(io) {
       lobby.mapData['logs'].push(log);
       logsToSend.push(log);
     }
+    
     broadcastLobby(lobby.id,
       'createLogs', logsToSend);
 

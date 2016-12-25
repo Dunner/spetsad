@@ -5,7 +5,7 @@ var game,
     lobby;
 var groups = {},
     enableMovement = false,
-    debug = true,
+    debug = false,
     delta,
     healthStyle,
     reticle,

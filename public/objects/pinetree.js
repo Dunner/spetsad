@@ -102,7 +102,7 @@ obj_pinetree.update = function(pinetree) {
     // game.debug.spriteBounds(pinetree.shadow.object);
     if (checkOverlap(me.head.object, pinetree.shadow.object)) {
       pinetree.children.forEach(function(section){
-        game.add.tween(section.object).to({alpha: 0.1},300, "Linear", true);
+        game.add.tween(section.object).to({alpha: 0.2},300, "Linear", true);
       })
     } else {
       pinetree.children.forEach(function(section){
@@ -167,7 +167,7 @@ obj_pinetree.update = function(pinetree) {
           //offset
           pinetree.children.forEach(function(child){
             child.object.angle += (0.2*child.object.depth)*delta;
-            if (!child.object.shakeangle) {
+            if (pinetree.shake == 0.1) { //!child.object.shakeangle
               child.object.shakeangle = Math.floor(Math.random() * 360) + 1/ 57;
             }
             child.object.shakeldir = lengthDir(child.object.depth/5 * pinetree.shake, child.object.shakeangle / 57);;

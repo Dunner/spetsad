@@ -102,11 +102,13 @@
     if (!lobby) return;
 
     data.forEach(function(newItem){
-      (lobby.mapData[newItem.type]).forEach(function(mapTreeObject){
-        if (mapTreeObject.id == newItem.id) {
-          mapTreeObject = newItem.item;
-          // obj_pinetree.redraw(newItem.id, mapTreeObject);
-
+      (lobby.mapData[newItem.type]).forEach(function(mapObject){
+        if (mapObject.id == newItem.id) {
+          mapObject = newItem.item;
+          // obj_pinetree.redraw(newItem.id, mapObject);
+          if (newItem.type == 'logs') {
+            obj_log.changeStatus(newItem.id, newItem.item);
+          }
           if (newItem.type == 'trees') {
             if (newItem.item.hitpoints > 0) {
               obj_pinetree.shake(newItem.id);
@@ -122,8 +124,10 @@
   });
 
   socket.on('createLogs', function(logs) {
+    if (!lobby) return;
     setTimeout(function(){
       logs.forEach(function(log){
+        (lobby.mapData['logs']).push(log);
         obj_log.create(log);
       });
     },4000);
