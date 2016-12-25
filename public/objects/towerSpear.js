@@ -38,7 +38,6 @@ obj_tower_spear.create = function(data) {
   spear.bounds.angle = pointDirection(spear.fromPos, spear.toPos);
 
   spear.id = data.spearID;
-  console.log(data.spearID)
   spear.targetID = data.targetID;
   spear.object.depth = 8;
   spear.distanceTraveled = 0;

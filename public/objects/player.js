@@ -311,7 +311,7 @@ obj_player.update = function(player) {
       player.arms.object.animations.play('chop', 12, true);
       chopAnim.onLoop.add(function(){
         (collisionObjects).forEach(function(item) {
-          if (checkOverlap(player.frontCollision.object, item.object)) {
+          if (item.object && checkOverlap(player.frontCollision.object, item.object)) {
             var target = {
               type: item.type,
               id: item.id

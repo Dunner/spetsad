@@ -34,12 +34,8 @@ obj_pinetree.create = function(data) {
   tempPinetree.stumpTop.frame = 1;
   groups.allObjects.add(tempPinetree.stumpTop);
 
-  tempPinetree.stumpBounds = game.add.image(data.x,data.y, createBlock(40, 40,'green'));
-  tempPinetree.stumpBounds.alpha = 0.0;
-  tempPinetree.stumpBounds.anchor.setTo(0.5, 0.5);
-
   collisionObjects.push({
-    object: tempPinetree.stumpBounds,
+    object: tempPinetree.stumpBot,
     id: data.id,
     type: 'trees',
     x: data.x,
@@ -82,12 +78,12 @@ obj_pinetree.create = function(data) {
 
   
   if (debug) { //DEBUGGING ###############
-    tempPinetree.stumpBounds.inputEnabled = true;
-    tempPinetree.stumpBounds.input.pixelPerfectOver = true;
-    tempPinetree.stumpBounds.events.onInputOver.add( function() {
+    tempPinetree.stumpBot.inputEnabled = true;
+    tempPinetree.stumpBot.input.pixelPerfectOver = true;
+    tempPinetree.stumpBot.events.onInputOver.add( function() {
       console.log(tempPinetree.data.id, 
-                  'x:' + tempPinetree.stumpBounds.x, 
-                  'y:' + tempPinetree.stumpBounds.y)
+                  'x:' + tempPinetree.stumpBot.x, 
+                  'y:' + tempPinetree.stumpBot.y)
     }, this);
   } //####################################
 
@@ -98,21 +94,21 @@ obj_pinetree.create = function(data) {
 
 obj_pinetree.update = function(pinetree) {
 
-  if (me && pinetree.shadow.object._bounds) {
-    // game.debug.spriteBounds(pinetree.shadow.object);
-    if (checkOverlap(me.head.object, pinetree.shadow.object)) {
-      pinetree.children.forEach(function(section){
-        game.add.tween(section.object).to({alpha: 0.2},300, "Linear", true);
-      })
-    } else {
-      pinetree.children.forEach(function(section){
-        game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
-      });
-    }
-  }
-
   // ###### pinetrees 
   if (pointDistance(game.camera.center(),pinetree.shadow.object.position) < 600) {
+
+    if (me && pinetree.shadow.object._bounds) {
+      // game.debug.spriteBounds(pinetree.shadow.object);
+      if (checkOverlap(me.head.object, pinetree.shadow.object)) {
+        pinetree.children.forEach(function(section){
+          game.add.tween(section.object).to({alpha: 0.2},300, "Linear", true);
+        })
+      } else {
+        pinetree.children.forEach(function(section){
+          game.add.tween(section.object).to({alpha: 1},300, "Linear", true);
+        });
+      }
+    }
 
     var pointDir = pointDirection(game.camera.center(), pinetree.shadow.object.position);
     if  (pointDir < 0) {pointDir += 360};
@@ -198,6 +194,9 @@ obj_pinetree.update = function(pinetree) {
         child.object.y = pinetree.shadow.object.y + ldirCenter.y + child.object.shakeldir.y;
       }
     }
+  } else {
+    //pinetree more then 600 pixels away, hide
+
   }
 
 }

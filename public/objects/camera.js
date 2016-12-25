@@ -1,5 +1,4 @@
 var obj_camera = {},
-    objScreenCenter = {},
     cameraObject = {},
     mouse,
     cameraAnimation = 'none',
@@ -19,9 +18,6 @@ obj_camera.create = function() {
   game.camera.zoomTo = function(scale, duration, name) {
     cameraAnimation = name;
 
-    var bounds       = Phaser.Rectangle.clone(game.camera.view);
-    var cameraBounds = game.camera.view;
-
     return game.add.tween(game.camera.scale).to({
         x: scale, y: scale, scale:scale
     }, duration).start();
@@ -35,10 +31,11 @@ obj_camera.create = function() {
   }
 
   game.camera.center = function() {
-    return {
-      x: (game.camera.view.width / 2 + game.camera.view.x) / game.camera.scale.scale,
-      y: (game.camera.view.height / 2 + game.camera.view.y) / game.camera.scale.scale,
-    }
+    return cameraObject.object.position;
+    // return {
+    //   x: (game.camera.view.width / 2 + game.camera.view.x) / game.camera.scale.scale,
+    //   y: (game.camera.view.height / 2 + game.camera.view.y) / game.camera.scale.scale,
+    // }
   }
 
   cameraObject.object = game.add.image(0,0, createBlock(10, 10,'#000'));
@@ -47,8 +44,6 @@ obj_camera.create = function() {
   cameraObject.object.x = 450;
   cameraObject.object.y = 960;
 
-  objScreenCenter = game.add.image(0,0, createBlock(5, 5,'green'));
-  objScreenCenter.alpha = 0;
 
   mouse = game.add.image(0,0, createBlock(5, 5,'red'));
 
@@ -70,7 +65,7 @@ obj_camera.create = function() {
   // overlayFilter.tint = RGBtoHEX(150,80,0);
 
   game.camera.zoomTo(0.7,500,'zoomOut')
-  game.camera.bounds = new Phaser.Rectangle(-game.camera.view.width, -game.camera.view.height, game.world.width+(game.camera.view.width*2), game.world.height+(game.camera.view.height*2));
+  //game.camera.bounds = new Phaser.Rectangle(-game.camera.view.width, -game.camera.view.height, game.world.width+(game.camera.view.width*2), game.world.height+(game.camera.view.height*2));
 
 
 }
@@ -80,14 +75,10 @@ obj_camera.update = function() {
   dynamicCameraScaleGameWidth600 = game.camera.view.width / 600;
 
   if (debug) {
-    cameraObject.object.alpha = objScreenCenter.alpha = 0.3;
-    objScreenCenter.alpha = 0.3;
+    cameraObject.object.alpha = 0.3;
   }
 
-  game.camera.view.width = game.camera.view.width;
-  game.camera.view.height = game.camera.view.height;
-
-  objScreenCenter.position = game.camera.center();
+  //game.camera.bounds = game.camera.view;
 
 
   mouse.x = (game.input.activePointer.x + game.camera.view.x) / game.camera.scale.scale;
@@ -112,6 +103,7 @@ obj_camera.update = function() {
     }
 
     game.camera.follow(cameraObject.object);
+    game.camera.bounds = 1;
   }
 
 }
