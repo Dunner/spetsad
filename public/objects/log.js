@@ -9,6 +9,8 @@ obj_log.create = function(data) {
   groups.logs.add(log.object);
   groups.allObjects.add(log.object);
 
+  log.object.scale.setTo(1, 0.7+(0.1*data.section));
+  console.log(data.section, log.object.scale)
   log.id = data.id;
   log.object.depth = 1;
   logs.push(log);

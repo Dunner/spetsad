@@ -121,8 +121,12 @@
     
   });
 
-  socket.on('createLog', function(log) {
-    obj_log.create(log);
+  socket.on('createLogs', function(logs) {
+    setTimeout(function(){
+      logs.forEach(function(log){
+        obj_log.create(log);
+      });
+    },4000);
   });
 
   socket.on('roster', function (players) {

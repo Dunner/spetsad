@@ -509,12 +509,11 @@ module.exports = function(io) {
       if (item.id == id) {
 
         if (type == 'trees') {
-          if (item[key] > 0) {
-            item[key] -= 10;
+          if (item['hitpoints'] > 0) {
+            item['hitpoints'] -= 10;
             updatedData.push({type:type,id:id,item:item});
-            var hp = item.hitpoints;
-            if (utils.isInt(hp) && hp/10 < 15) {
-              createLog(lobby, item);
+            if (item['hitpoints'] == 10) {
+              createLogs(lobby, item);
             }
           }
         } else {
@@ -531,23 +530,35 @@ module.exports = function(io) {
 
   }
 
-  function createLog(lobby, treeItem) {
+  function createLogs(lobby, treeItem) {
     if (!lobby || !treeItem) return;
-    var log = {
-      id: utils.randomID('log'),
-      x: 0,
-      y: treeItem.y
-    };
-    var xOffTree = 0;
-    if (treeItem.x > 450) {
-      while(checkXTaken('right'));
-      log.x = treeItem.x - xOffTree;
-    } else {
-      while(checkXTaken('left'));
-      log.x = treeItem.x + xOffTree;
+    var logsToSend = [];
+    console.log(treeItem.sections)
+    for(var i=treeItem.sections; i > 0; i--) {
+      var log = {
+        id: utils.randomID('log'),
+        x: 0,
+        y: treeItem.y,
+        section: i,
+        grounded: true
+      };
+      var xOffTree = 0;
+      if (treeItem.x > 450) {
+        while(checkXTaken('right'));
+        log.x = treeItem.x - xOffTree;
+      } else {
+        while(checkXTaken('left'));
+        log.x = treeItem.x + xOffTree;
+      }
+      if (!lobby.mapData['logs']) { lobby.mapData['logs'] = []; }
+      lobby.mapData['logs'].push(log);
+      logsToSend.push(log);
     }
+    broadcastLobby(lobby.id,
+      'createLogs', logsToSend);
+
     function checkXTaken(direction) {
-      xOffTree += 30;
+      xOffTree += 29;
       var taken;
       lobby.mapData['logs'].forEach(function(log){
         if (log.y == treeItem.y) {
@@ -560,9 +571,5 @@ module.exports = function(io) {
       return taken;
     }
 
-    if (!lobby.mapData['logs']) { lobby.mapData['logs'] = []; }
-    lobby.mapData['logs'].push(log);
-    broadcastLobby(lobby.id,
-      'createLog', log);
   }
 };
