@@ -53,16 +53,21 @@ obj_log.changeStatus = function(logID, logMapItem) {
         log.carriedBy = false;
         log.object.x = logMapItem.x;
         log.object.y = logMapItem.y;
+        bases.forEach(function(base){
+          var distanceToBase = pointDistance(log.object.position,base.object.position);
+          if (distanceToBase < 120) {
+            obj_base.processLog(base, log);
+          }
+        })
       }
     }
   })
 }
 obj_log.delete = function(logID) {
-  for(i=0;i<logs.length;i++) {
+  for(i=0;i<lobby.mapData['logs'].length;i++) {
     var log = logs[i];
     if (log.id == logID) {
       log.object.destroy();
-      log.shadow.destroy();
       logs.splice(i, 1);
       break;
     }

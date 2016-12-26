@@ -7,6 +7,20 @@ var maps = {};
     width: 900,
     logs: [
     ],
+    bases: [
+      {
+        "id": 0,
+        "team": "blue",
+        "x": 450,
+        "y": 200,
+      },
+      {
+        "id": 1,
+        "team": "red",
+        "x": 450,
+        "y": 1720,
+      }
+    ],
     towers: [
       {
         "id": 0,

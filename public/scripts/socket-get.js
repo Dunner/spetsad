@@ -98,6 +98,25 @@
   });
   
 
+  socket.on('baseUpdate', function (data) {
+    if (!lobby) return;
+    lobby.teams[data.team].base = data.baseInfo;
+  });
+
+  socket.on('resourceDestroy', function (data) {
+    if (data.type == 'logs') {
+      obj_log.delete(data.resourceID);
+    }
+    // for(var i = 0; i<window[data.type].length; i++) {
+    //   var resource = window[data.type][i];
+    //   if (resource.id == data.resourceID) {
+    //     window[data.type][i].splice(i,1);
+
+    //   }
+    // }
+
+  });
+
   socket.on('mapUpdate', function (data) {
     if (!lobby) return;
 

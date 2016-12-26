@@ -48,6 +48,7 @@ module.exports = function(io) {
             deaths: 0,
             creeps: [],
             base: {
+              logs: 0,
               health: 10000
             },
             tower: {
@@ -60,6 +61,7 @@ module.exports = function(io) {
             deaths: 0,
             creeps: [],
             base: {
+              logs: 0,
               health: 10000
             },
             tower: {
@@ -307,10 +309,34 @@ module.exports = function(io) {
         }
         updateMapData(lobby, 'logs', logID, dropData);
       }
-      
 
     });
     
+    socket.on('baseResourceAdd', function (baseTeam, type, resourceID) {
+      var lobby = findLobby(socket.lobbyID);
+      if (!lobby) return;
+      if (resourceID) {
+        for(var i = 0; i<lobby.mapData[type].length; i++) {
+          var resource = lobby.mapData[type][i];
+          if (resource.id == resourceID) {
+            lobby.mapData[type].splice(i,1);
+            lobby.teams[baseTeam].base[type] +=20;
+            broadcastLobby(socket.lobbyID,
+              'baseUpdate', {
+                team: baseTeam,
+                baseInfo: lobby.teams[baseTeam].base
+              });
+            broadcastLobby(socket.lobbyID,
+              'resourceDestroy', {
+                type: type,
+                resourceID: resourceID
+              });
+          }
+        }
+      }
+      
+    });
+
     socket.on('spearHit', function (data) {
       if (!socket.lobbyID) return;
 

@@ -28,6 +28,7 @@ function startGame(data) {
     game.load.spritesheet('stump-ss', 'sprites/stump-ss.png', 32, 32, 2);
     game.load.spritesheet('logs-ss', 'sprites/logs-ss.png', 32, 32, 1);
     game.load.spritesheet('tower-ss', 'sprites/tower-ss.png', 120, 120, 3);
+    game.load.spritesheet('base-ss', 'sprites/base-ss.png', 120, 120, 1);
     game.load.spritesheet('feet-test-ss', 'sprites/feet-test-ss.png', 32, 32, 4);
     game.load.spritesheet('legs-test-ss', 'sprites/legs-test-ss.png', 32, 32, 4);
     game.load.spritesheet('torso-test-ss', 'sprites/torso-test-ss.png', 32, 32, 4);
@@ -50,7 +51,7 @@ function startGame(data) {
     game.stage.backgroundColor = '#192504';
     game.world.setBounds(0, 0, 900, 1920);
     
-    ['allObjects', 'players', 'spears', 'obstacles', 'logs'].forEach(function(group) {
+    ['allObjects', 'players', 'spears', 'obstacles', 'logs', 'bases'].forEach(function(group) {
       groups[group] = game.add.group();
       groups[group].setAll('checkWorldBounds', true);
       //groups[group].setAll('outOfBoundsKill', true);
@@ -106,6 +107,10 @@ function startGame(data) {
 
     towers.forEach(function(tower) {
       obj_tower.update(tower);
+    }, this);
+
+    bases.forEach(function(base) {
+      obj_base.update(base);
     }, this);
 
     spears.forEach(function(spear) {
