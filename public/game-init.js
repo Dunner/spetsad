@@ -80,6 +80,7 @@ function startGame(data) {
     socket.emit('getplayers');
 
     obj_camera.create();
+    // ambient.create();
 
     mapInit(lobby.mapData);
   }
@@ -127,6 +128,7 @@ function startGame(data) {
     }, this);
 
     obj_camera.update();
+    // ambient.update();
 
     game.debug.text(game.time.fps, 2, 14, "#00ff00");
 
