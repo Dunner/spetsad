@@ -48,7 +48,8 @@ module.exports = function(io) {
             deaths: 0,
             creeps: [],
             base: {
-              logs: 0,
+              creepProgress: 0,
+              spearsAvailable: 0,
               health: 10000
             },
             tower: {
@@ -61,7 +62,8 @@ module.exports = function(io) {
             deaths: 0,
             creeps: [],
             base: {
-              logs: 0,
+              creepProgress: 0,
+              spearsAvailable: 0,
               health: 10000
             },
             tower: {
@@ -312,6 +314,16 @@ module.exports = function(io) {
 
     });
     
+    socket.on('takeSpears', function () {
+      var lobby = findLobby(socket.lobbyID);
+      if (!lobby) return;
+    });
+
+    socket.on('spawnCreep', function () {
+      var lobby = findLobby(socket.lobbyID);
+      if (!lobby) return;
+    });
+
     socket.on('baseResourceAdd', function (baseTeam, type, resourceID) {
       var lobby = findLobby(socket.lobbyID);
       if (!lobby) return;
@@ -320,7 +332,10 @@ module.exports = function(io) {
           var resource = lobby.mapData[type][i];
           if (resource.id == resourceID) {
             lobby.mapData[type].splice(i,1);
-            lobby.teams[baseTeam].base[type] +=20;
+            if (type == 'logs') {
+              lobby.teams[baseTeam].base['spearsAvailable'] += 10;
+              lobby.teams[baseTeam].base['creepProgress'] += 5;
+            }
             broadcastLobby(socket.lobbyID,
               'baseUpdate', {
                 team: baseTeam,
@@ -557,7 +572,7 @@ module.exports = function(io) {
 
         if (type == 'trees') {
           if (item['hitpoints'] > 0) {
-            item['hitpoints'] -= 10;
+            item['hitpoints'] -= 2;
             updatedData.push({type:type,id:id,item:item});
             if (item['hitpoints'] == 10) {
               createLogs(lobby, item);

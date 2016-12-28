@@ -121,10 +121,11 @@
     if (!lobby) return;
 
     data.forEach(function(newItem){
-      (lobby.mapData[newItem.type]).forEach(function(mapObject){
+      for(var i = 0; i < lobby.mapData[newItem.type].length; i++) {
+        var mapObject = lobby.mapData[newItem.type][i];
         if (mapObject.id == newItem.id) {
-          mapObject = newItem.item;
-          // obj_pinetree.redraw(newItem.id, mapObject);
+          lobby.mapData[newItem.type][i] = newItem.item; // set
+
           if (newItem.type == 'logs') {
             obj_log.changeStatus(newItem.id, newItem.item);
           }
@@ -137,7 +138,7 @@
 
           }
         }
-      });
+      };
     });
     
   });

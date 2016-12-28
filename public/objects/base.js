@@ -18,21 +18,35 @@ obj_base.create = function(data) {
   groups.bases.add(base.object);
   groups.allObjects.add(base.object);
 
-  base.texts.logs = game.add.text(0, 0, '0', { font: "22px Arial", fill: "#FFF", align: "left" });
-  base.texts.logs.alpha = 0.5;
-  base.texts.logs.anchor.set(0.5, -1);
+  base.creepSpawner = game.add.image(base.object.x+30,base.object.y-50, createBlock(30, 30,'#ff0000'));
+  base.spearHolder = game.add.image(base.object.x-70,base.object.y-80, createBlock(100, 60,'#00ff00'));
+
+  base.texts.creepProgress = game.add.text(0, 0, '0', { font: "22px Arial", fill: "#FFF", align: "left" });
+  base.texts.creepProgress.alpha = 0.5;
+  base.texts.creepProgress.anchor.set(0.5, -1);
+
+  base.texts.spearsAvailable = game.add.text(0, 0, '0', { font: "22px Arial", fill: "#FFF", align: "left" });
+  base.texts.spearsAvailable.alpha = 0.5;
+  base.texts.spearsAvailable.anchor.set(0.5, -1);
+
 
   bases.push(base);
+
 
 }
 
 obj_base.update = function(base) {
-  var textOffCenter = 22 * (Math.abs(pointDistance(game.camera.center(), base.object.position))/100);
-  var textLengthdir = lengthDir(textOffCenter, (((pointDirection(game.camera.center(), base.object.position) % 360) + 360) % 360) / 57);
-  base.texts.logs.x = base.object.x + textLengthdir.x;
-  base.texts.logs.y = base.object.y + textLengthdir.y;
-  base.texts.logs.setText(lobby.teams[base.team].base.logs);
+  var textCreepProgressOffCenter = 22 * (Math.abs(pointDistance(game.camera.center(), base.creepSpawner.position))/100);
+  var textCreepProgressLengthdir = lengthDir(textCreepProgressOffCenter, (((pointDirection(game.camera.center(), base.creepSpawner.position) % 360) + 360) % 360) / 57);
+  base.texts.creepProgress.x = base.creepSpawner.x + textCreepProgressLengthdir.x;
+  base.texts.creepProgress.y = base.creepSpawner.y + textCreepProgressLengthdir.y;
+  base.texts.creepProgress.setText(lobby.teams[base.team].base.creepProgress);
 
+  var textSpearsAvailableOffCenter = 22 * (Math.abs(pointDistance(game.camera.center(), base.spearHolder.position))/100);
+  var textSpearsAvailableLengthdir = lengthDir(textSpearsAvailableOffCenter, (((pointDirection(game.camera.center(), base.spearHolder.position) % 360) + 360) % 360) / 57);
+  base.texts.spearsAvailable.x = base.spearHolder.x + textSpearsAvailableLengthdir.x;
+  base.texts.spearsAvailable.y = base.spearHolder.y + textSpearsAvailableLengthdir.y;
+  base.texts.spearsAvailable.setText(lobby.teams[base.team].base.spearsAvailable);
 }
 
 obj_base.processLog = function(base, log) {
@@ -44,7 +58,8 @@ obj_base.delete = function(baseID) {
     var base = bases[i];
     if (base.id == baseID) {
       base.object.destroy();
-      base.shadow.destroy();
+      base.spearHolder.destroy();
+      base.creepSpawner.destroy();
       bases.splice(i, 1);
       break;
     }

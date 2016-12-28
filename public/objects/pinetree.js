@@ -75,6 +75,13 @@ obj_pinetree.create = function(data) {
     tempPinetree.shadow.object.scale = 0
   }
 
+  tempPinetree.hpbar = {};
+  tempPinetree.hpbar.background = game.add.image(data.x, data.y, createBlock(30, 3,'black'));
+  tempPinetree.hpbar.health = game.add.image(data.x, data.y, createBlock(30, 3,'green'));
+  tempPinetree.hpbar.background.alpha = 0.7;
+  tempPinetree.hpbar.background.anchor.set(0.5, -8);
+  tempPinetree.hpbar.health.anchor.set(0.5, -8);
+  tempPinetree.hpbar.health.alpha = 0.7;
 
   
   if (debug) { //DEBUGGING ###############
@@ -118,8 +125,41 @@ obj_pinetree.update = function(pinetree) {
     pinetree.stumpTop.x = pinetree.stumpBot.x + stumpTopldirCenter.x;
     pinetree.stumpTop.y = pinetree.stumpBot.y + stumpTopldirCenter.y;
 
+    if (pinetree.shake){
+      //shake
+
+      if (pinetree.hitpoints) {
+        pinetree.hpbar.health.alpha = pinetree.hpbar.background.alpha = 0.7;
+        pinetree.hpbar.health.position = pinetree.hpbar.background.position = pinetree.shadow.object.position;
+        pinetree.hpbar.health.width = (pinetree.hpbar.background.width/pinetree.maxHP)*pinetree.hitpoints;
+      }
+
+      if (pinetree.shake < 1) {
+        //offset
+        pinetree.children.forEach(function(child){
+          child.object.angle += (0.2*child.object.depth)*delta;
+          if (pinetree.shake == 0.1) { //!child.object.shakeangle
+            child.object.shakeangle = Math.floor(Math.random() * 360) + 1/ 57;
+          }
+          child.object.shakeldir = lengthDir(child.object.depth/5 * pinetree.shake, child.object.shakeangle / 57);;
+        })
+      } else {
+        //return
+        pinetree.children.forEach(function(child){
+          child.object.angle -= (0.2*child.object.depth)*delta;
+          child.object.shakeldir = lengthDir((child.object.depth/5) / pinetree.shake, child.object.shakeangle / 57);;
+        })
+      }
+      pinetree.shake += 0.5*delta;
+      if (pinetree.shake > 2) {
+        pinetree.shake = false;
+      }
+    } else if (!pinetree.shake) {
+      pinetree.hpbar.health.alpha = pinetree.hpbar.background.alpha = 0;
+    }
     if (pinetree.topple) {
       //Fall animation
+
       if (pinetree.topple == 0.1) {
         pinetree.childVars = [];
       }
@@ -156,32 +196,6 @@ obj_pinetree.update = function(pinetree) {
 
 
     } else {
-
-      if (pinetree.shake){
-        //shake
-        if (pinetree.shake < 1) {
-          //offset
-          pinetree.children.forEach(function(child){
-            child.object.angle += (0.2*child.object.depth)*delta;
-            if (pinetree.shake == 0.1) { //!child.object.shakeangle
-              child.object.shakeangle = Math.floor(Math.random() * 360) + 1/ 57;
-            }
-            child.object.shakeldir = lengthDir(child.object.depth/5 * pinetree.shake, child.object.shakeangle / 57);;
-          })
-        } else {
-          //return
-          pinetree.children.forEach(function(child){
-            child.object.angle -= (0.2*child.object.depth)*delta;
-            child.object.shakeldir = lengthDir((child.object.depth/5) / pinetree.shake, child.object.shakeangle / 57);;
-          })
-        }
-        pinetree.shake += 0.5*delta;
-        if (pinetree.shake > 2) {
-          pinetree.shake = false;
-        }
-      }
-
-
       for (var i = 0; i < pinetree.children.length; i++) {
         var child = pinetree.children[i];
 
@@ -215,6 +229,14 @@ obj_pinetree.shake = function(pinetreeID) {
     if (pinetrees[i].id == pinetreeID) {
       if (pinetrees[i].topple) break;
       pinetrees[i].shake = 0.1;
+      lobby.mapData.trees.forEach(function(tree){
+        if (tree.id == pinetreeID) {
+          if (!pinetrees[i].hitpoints) {
+            pinetrees[i].maxHP = tree.hitpoints;
+          }
+          pinetrees[i].hitpoints = tree.hitpoints;
+        }
+      })
     }
   }
 }
