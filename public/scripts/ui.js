@@ -284,7 +284,10 @@
 
 
 //Dissalow Phaser stealing keypresses on certain elements(inputEls)
-document.addEventListener('focus',function(e){
+document.addEventListener("click", function(e){
+
+  document.getElementById('spetsad-canvas').style.cursor = 'none';
+
   if (game) {
     var disable = false;
     var inputEls = [
@@ -292,8 +295,9 @@ document.addEventListener('focus',function(e){
     ];
 
     inputEls.forEach(function(el){
-      if (e.target == el) {
+      if (e.target == el || e.target.parentNode == el) {
         disable = true;
+        document.getElementById('spetsad-canvas').style.cursor = 'default';
       }
     })
 

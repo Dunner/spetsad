@@ -13,13 +13,22 @@ obj_base.create = function(data) {
   base.object.depth = 0;
   var scaleTo200 = 300/base.object.width;
   base.object.scale.setTo(scaleTo200,scaleTo200)
-  if (data.team == 'blue') {base.object.tint = RGBtoHEX(35,105,219);}
-  if (data.team == 'red') {base.object.tint = RGBtoHEX(232,46,36);}
+  if (data.team == 'blue') {
+    base.object.tint = RGBtoHEX(35,105,219);
+    base.creepSpawner = game.add.image(base.object.x+30,base.object.y-50, createBlock(30, 30,'#ff0000'));
+    base.spearHolder = game.add.image(base.object.x-70,base.object.y-80, createBlock(100, 60,'#00ff00'));
+  }
+  if (data.team == 'red') {
+    base.object.tint = RGBtoHEX(232,46,36);
+    base.creepSpawner = game.add.image(base.object.x+30,base.object.y+20, createBlock(30, 30,'#ff0000'));
+    base.spearHolder = game.add.image(base.object.x-70,base.object.y+20, createBlock(100, 60,'#00ff00'));
+  }
+
+  if (true) {}
+
+
   groups.bases.add(base.object);
   groups.allObjects.add(base.object);
-
-  base.creepSpawner = game.add.image(base.object.x+30,base.object.y-50, createBlock(30, 30,'#ff0000'));
-  base.spearHolder = game.add.image(base.object.x-70,base.object.y-80, createBlock(100, 60,'#00ff00'));
 
   base.texts.creepProgress = game.add.text(0, 0, '0', { font: "22px Arial", fill: "#FFF", align: "left" });
   base.texts.creepProgress.alpha = 0.5;
