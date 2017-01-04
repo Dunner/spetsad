@@ -51,7 +51,7 @@ function startGame(data) {
     game.stage.backgroundColor = '#192504';
     game.world.setBounds(0, 0, 900, 1920);
     
-    ['allObjects', 'players', 'spears', 'obstacles', 'logs', 'bases'].forEach(function(group) {
+    ['allObjects', 'players', 'creeps', 'spears', 'obstacles', 'logs', 'bases'].forEach(function(group) {
       groups[group] = game.add.group();
       groups[group].setAll('checkWorldBounds', true);
       //groups[group].setAll('outOfBoundsKill', true);
@@ -124,7 +124,10 @@ function startGame(data) {
 
     players.forEach(function(player) {
        obj_player.update(player);
-      // player.updateFunction();
+    }, this);
+
+    creeps.forEach(function(creep) {
+       obj_creep.update(creep);
     }, this);
 
     obj_camera.update();

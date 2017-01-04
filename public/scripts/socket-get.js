@@ -64,6 +64,21 @@
       }
     }
   });
+
+  socket.on('creepSpawn', function (data) {
+    if (!findCreep(data.id)) {
+      console.log('creep create', data);
+      // obj_creep.create(data);
+    }
+  });
+
+  socket.on('creepAction', function (data) {
+    if (findCreep(data.id)) {
+      console.log('creep action');
+    }
+  });
+
+
   
   socket.on('fire', function (data) {
     var player = findPlayer(data.id);

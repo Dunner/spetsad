@@ -268,10 +268,10 @@ obj_player.update = function(player) {
     player.frontCollision.object.y = player.shadow.object.y + tempFrontCollisionLengthdir.y;
 
   } else { //not me
-      player.texts.nameplate.position = player.shadow.object.position;
-      player.texts.nameplate.setText(player.name);
-      // player.texts.healthtext.position = player.shadow.object.position;
-      // player.texts.healthtext.setText(Math.round(player.playerinfo.health));
+    player.texts.nameplate.position = player.shadow.object.position;
+    player.texts.nameplate.setText(player.name);
+    // player.texts.healthtext.position = player.shadow.object.position;
+    // player.texts.healthtext.setText(Math.round(player.playerinfo.health));
 
     walk();
 

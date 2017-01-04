@@ -21,6 +21,7 @@ var maps = {};
         "y": 1720,
       }
     ],
+    creeps: {red: [], blue:[]},
     towers: [
       {
         "id": 0,

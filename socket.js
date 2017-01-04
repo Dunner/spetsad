@@ -39,6 +39,7 @@ module.exports = function(io) {
         players: [],
         hostid: null,
         playing: false,
+        secondsPlayed: 0,
         mapName: 'deep-forrest',
         mapData: {},
         teams:{

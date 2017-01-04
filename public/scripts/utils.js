@@ -36,6 +36,15 @@
     }
     return false;
   }
+
+  function findCreep(id) {
+    for (var i = 0; i < creeps.length; i++) {
+      if (creeps[i].id == id) {
+        return creeps[i];
+      }
+    }
+    return false;
+  }
   
   function createBlock(x, y, color) {
     var name = x + '_' + color;
