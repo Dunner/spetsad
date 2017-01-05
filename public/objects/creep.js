@@ -19,7 +19,7 @@ obj_creep.create = function(creepData) {
   groups.creeps.add(creep.object);
   groups.allObjects.add(creep.object);
 
-  creep.object.depth = 2;
+  creep.object.depth = 4;
   creeps.push(creep);
 
   creep.hpbar = {};
