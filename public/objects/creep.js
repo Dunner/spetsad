@@ -45,17 +45,35 @@ obj_creep.update = function(creep) {
   creep.hpbar.health.position = creep.hpbar.background.position = creep.shadow.position;
 
   if (creep.action == 'moveDown') {
-    creep.shadow.y += 5 * delta;
+    creep.shadow.y += 3.5 * delta;
   }
-  if (creep.action == 'moveUp') {
-    creep.shadow.y -= 5 * delta;
+  if (creep.action == 'moveDownLeft') {
+    creep.shadow.y += 3.5 * delta;
+    creep.shadow.x -= 3.5 * delta;
   }
 
   if (creep.action == 'moveLeft') {
-    creep.shadow.x -= 5 * delta;
+    creep.shadow.x -= 3.5 * delta;
   }
+  if (creep.action == 'moveUpLeft') {
+    creep.shadow.x -= 3.5 * delta;
+    creep.shadow.y -= 3.5 * delta;
+  }
+
+  if (creep.action == 'moveUp') {
+    creep.shadow.y -= 3.5 * delta;
+  }
+  if (creep.action == 'moveUpRight') {
+    creep.shadow.y -= 3.5 * delta;
+    creep.shadow.x += 3.5 * delta;
+  }
+
   if (creep.action == 'moveRight') {
-    creep.shadow.x += 5 * delta;
+    creep.shadow.x += 3.5 * delta;
+  }
+  if (creep.action == 'moveDownRight') {
+    creep.shadow.x += 3.5 * delta;
+    creep.shadow.y += 3.5 * delta;
   }
 
 }

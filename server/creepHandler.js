@@ -42,26 +42,49 @@ var creepHandler = function(io, lobby, creep){
   var creepAction;
   var moveDirection;
 
-  if (directionToTarget > 0 && directionToTarget < 90) { creepAction = 'moveDown'}
-  if (directionToTarget > 90 && directionToTarget < 180) { creepAction = 'moveLeft'}
-  if (directionToTarget > 180 && directionToTarget < 270) { creepAction = 'moveUp'}
-  if (directionToTarget > 270 && directionToTarget < 360) { creepAction = 'moveRight'}
+
+
+  if ((directionToTarget > 0 && directionToTarget < 22.5) 
+    || (directionToTarget < 337.5) && directionToTarget < 0) { creepAction = 'moveRight'}
+  if (directionToTarget > 22.5 && directionToTarget < 67.5) { creepAction = 'moveDownRight'}
+  if (directionToTarget > 67.5 && directionToTarget < 112.5) { creepAction = 'moveDown'}
+  if (directionToTarget > 112.5 && directionToTarget < 157.5) { creepAction = 'moveDownLeft'}
+  if (directionToTarget > 157.5 && directionToTarget < 202.5) { creepAction = 'moveLeft'}
+  if (directionToTarget > 202.5 && directionToTarget < 247.5) { creepAction = 'moveUpLeft'}
+  if (directionToTarget > 247.5 && directionToTarget < 292.5) { creepAction = 'moveUp'}
+  if (directionToTarget > 292.5 && directionToTarget < 337.5) { creepAction = 'moveUpRight'}
 
   if (creep.nextX) {creep.x = creep.nextX}
   if (creep.nextY) {creep.y = creep.nextY}
 
   if (creepAction) {
     if (creepAction == 'moveDown') {
-      creep.nextY = creep.y+50;
+      creep.nextY = creep.y+35;
     }
+    if (creepAction == 'moveDownLeft') {
+      creep.nextY = creep.y+35;
+      creep.nextX = creep.x-35;
+    }
+
     if (creepAction == 'moveLeft') {
-      creep.nextX = creep.x-50;
+      creep.nextX = creep.x-35;
     }
+    if (creepAction == 'moveUpLeft') {
+      creep.nextX = creep.x-35;
+      creep.nextY = creep.y-35;
+    }
+
     if (creepAction == 'moveUp') {
-      creep.nextY = creep.y-50;
+      creep.nextY = creep.y-35;
     }
-    if (creepAction == 'moveRight') {
-      creep.nextX = creep.x+50;
+    if (creepAction == 'moveUpRight') {
+      creep.nextY = creep.y-35;
+      creep.nextX = creep.x+35;
+    }
+
+    if (creepAction == 'moveDownRight') {
+      creep.nextX = creep.x+35;
+      creep.nextY = creep.y+35;
     }
   }
 
