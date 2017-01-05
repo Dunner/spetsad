@@ -21,5 +21,5 @@ listener = http.listen(port, function () {
 });
 
 // socket messages ===============================================
-require('./socket')(io);
-require('./update')(io);
+require('./server/socket')(io);
+require('./server/update')(io);

@@ -19,6 +19,17 @@ var utils = {
 
     return !(a.right < b.x || a.bottom < b.y || a.x > b.right || a.y > b.bottom);
 
+  },
+  
+  pointDirection: function(object1, object2) {
+    // Returns angle between two vectors
+    return Math.atan2(object2.y - object1.y, object2.x - object1.x) * 180 / Math.PI;
+  },
+  
+  pointDistance: function(pointA, pointB) {
+    //Returns Distance between two points
+    //pythagoras squareRoot(a*a + b*b = c*c) = c
+    return Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2)); 
   }
 };
 
