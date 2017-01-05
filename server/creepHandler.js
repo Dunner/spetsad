@@ -2,56 +2,41 @@ var async = require('async');
 var dataService = require('./dataService');
 var utils = require('./utils');
 
-var creepHandler = function(lobby){
+var creepHandler = function(io, lobby, creep){
 
-  //Spawn creeps ##########
-
-  if (lobby.secondsPlayed % 10 == 0 ) { //every 30th second
-
-    var creepsToSpawn = {red:[], blue: []};
-
-    for (var x = 0; x < 3; x++) {
-      var blueCreep = {
-        type: 'standard',
-        id: utils.randomID('creep'),
-        team: 'blue',
-        x: 450-62.5+(x*40),
-        y: 200,
-        maxHealth: 300,
-        health: 300
-      };
-      creepsToSpawn['blue'].push(blueCreep);
-      lobby.mapData.creeps['blue'].push(blueCreep);
-      var redCreep = {
-        type: 'standard',
-        id: utils.randomID('creep'),
-        team: 'red',
-        x: 450-62.5+(x*40),
-        y: 1720,
-        maxHealth: 300,
-        health: 300
-      };
-      creepsToSpawn['red'].push(redCreep);
-      lobby.mapData.creeps['red'].push(redCreep);
-    }
-    lobby.players.forEach(function (tempSocketID) {
-      io.to(tempSocketID).emit('creepSpawn', creepsToSpawn);
-    });
+  var enemyTeam = 'blue'
+  if (creep.team == 'blue') {
+    enemyTeam = 'red';
   }
 
-  //Update creeps ##########
-  (lobby.mapData.creeps).forEach(function(creep){
+  var distanceToTarget,
+      directionToTarget;
 
-    if (pointDistance({
-      x: creep.x,
-      y: creep.y
-    }, {
-      x: lobby.mapData.towers[creep.team].x,
-      y: lobby.mapData.towers[creep.team].x
-    }) > 200) {
+  var distanceToEnemyTower = utils.pointDistance(
+   {x: creep.x,y: creep.y },
+   {x: lobby.mapData.towers[enemyTeam][0].x,y: lobby.mapData.towers[enemyTeam][0].y});
 
-    }
-  });
+  var directionToEnemyTower = utils.pointDirection(
+    {x: creep.x, y: creep.y}, 
+    {x: lobby.mapData.towers[enemyTeam][0].x,y: lobby.mapData.towers[enemyTeam][0].y});
+  directionToEnemyTower = ((directionToEnemyTower % 360) + 360) % 360;
+
+  if (distanceToEnemyTower < 200) {
+    distanceToTarget = distanceToEnemyTower;
+    directionToTarget = directionToEnemyTower;
+  } else {
+    
+  }
+
+  var moveDirection;
+
+  if (directionToTarget > 0 && directionToTarget < 90) { moveDirection = 'down'}
+  if (directionToTarget > 90 && directionToTarget < 180) { moveDirection = 'left'}
+  if (directionToTarget > 180 && directionToTarget < 270) { moveDirection = 'up'}
+  if (directionToTarget > 270 && directionToTarget < 360) { moveDirection = 'right'}
+
+  console.log(creep.id, creep.team, moveDirection);
+
 }
 
 module.exports = creepHandler;

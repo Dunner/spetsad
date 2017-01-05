@@ -1,6 +1,7 @@
 var async = require('async');
 var dataService = require('./dataService');
 var creepHandler = require('./creepHandler');
+var towerHandler = require('./towerHandler');
 var utils = require('./utils');
 
 
@@ -65,50 +66,64 @@ module.exports = function(io){
 
 
         //Creeps #######################################
-        creepHandler(lobby);
+
+          //Update creeps ##########
+
+          for(var team in lobby.mapData.creeps) {
+
+            if (lobby.mapData.creeps[team].length) {
+              (lobby.mapData.creeps[team]).forEach(function(creep){
+                creepHandler(io, lobby, creep);
+              });
+            }
+          }
+
+          //Spawn creeps ################################
+
+        if (lobby.secondsPlayed % 10 == 0 ) { //every 30th second
+
+          var creepsToSpawn = {red:[], blue: []};
+
+          for (var x = 0; x < 3; x++) {
+            var blueCreep = {
+              type: 'standard',
+              id: utils.randomID('creep'),
+              team: 'blue',
+              x: 450-62.5+(x*40),
+              y: 200,
+              maxHealth: 300,
+              health: 300
+            };
+            creepsToSpawn['blue'].push(blueCreep);
+            lobby.mapData.creeps['blue'].push(blueCreep);
+            var redCreep = {
+              type: 'standard',
+              id: utils.randomID('creep'),
+              team: 'red',
+              x: 450-62.5+(x*40),
+              y: 1720,
+              maxHealth: 300,
+              health: 300
+            };
+            creepsToSpawn['red'].push(redCreep);
+            lobby.mapData.creeps['red'].push(redCreep);
+          }
+          lobby.players.forEach(function (tempSocketID) {
+            io.to(tempSocketID).emit('creepSpawn', creepsToSpawn);
+          });
+        }
         
 
         //towers #######################################
-
         
-        var teams = ['red', 'blue'];
-        lobby.mapData.towers.forEach(function (tower) {
-          tower.targets = [];
-          tower.target = {distance:999};
-          var targetsTeamName = 'blue'
-          if (tower.team == 'blue') {
-            targetsTeamName = 'red';
-          }
+        for(var team in lobby.mapData.creeps) {
+          lobby.mapData.towers[team].forEach(function (tower) {
 
-          lobby.teams[targetsTeamName].players.forEach(function (socketID) {
-            dataService.sockets.forEach(function (tempSocket) {
-              if (tempSocket.id == socketID) {
-                if (!tempSocket.playerinfo) {return;}
-                var distToTarget = Math.abs(tempSocket.playerinfo.y - tower.y);
-                if (distToTarget < 200 && tempSocket.playerinfo.health > 0){
-                  tower.targets.push({type:'player', id: socketID, distance: distToTarget});
-                }
-              }
-            });
+            towerHandler(io, lobby, tower);
+
           });
+        };
 
-          tower.targets.forEach(function (target) {
-            if (target.distance < tower.target.distance) {
-              tower.target = target;
-            }
-          });
-
-          if (tower.target.type == 'player') {
-            lobby.players.forEach(function (tempSocketID) {
-              io.to(tempSocketID).emit('towerAttack', {
-                spearID: utils.randomID('spear'),
-                tower: tower.team,
-                targetID: tower.target.id
-              });
-            });
-          }
-
-        });
       }
     }
 

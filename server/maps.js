@@ -22,22 +22,26 @@ var maps = {};
       }
     ],
     creeps: {red: [], blue:[]},
-    towers: [
-      {
-        "id": 0,
-        "team": "blue",
-        "angle": 206,
-        "x": 350,
-        "y": 700,
-      },
-      {
-        "id": 1,
-        "team": "red",
-        "angle": 206,
-        "x": 550,
-        "y": 1220,
-      }
-    ],
+    towers: {
+      blue: [
+        {
+          "id": 0,
+          "team": "blue",
+          "angle": 206,
+          "x": 350,
+          "y": 700,
+        }
+      ], 
+      red: [
+        {
+          "id": 1,
+          "team": "red",
+          "angle": 206,
+          "x": 550,
+          "y": 1220,
+        }
+      ]
+    },
     trees2: [
       {
         "id": 0,

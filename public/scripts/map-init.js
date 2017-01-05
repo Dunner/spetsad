@@ -23,13 +23,14 @@ var mapInit = function(mapData) {
     });
   }
   //Towers create
-  for (var i = 0; i < mapData.towers.length; i++) {
-    var tower = mapData.towers[i];
-    obj_tower.create({
-      id: tower.id,
-      team: tower.team,
-      x: tower.x,
-      y: tower.y,
+  for(var team in mapData.towers) {
+    mapData.towers[team].forEach(function(tower){
+      obj_tower.create({
+        id: tower.id,
+        team: tower.team,
+        x: tower.x,
+        y: tower.y,
+      });
     });
   }
 
