@@ -76,8 +76,15 @@
   });
 
   socket.on('creepAction', function (data) {
-    if (findCreep(data.id)) {
-      console.log('creep action');
+    var creep = findCreep(data.id);
+    if (creep) {
+      creep.x = data.x;
+      creep.y = data.y;
+
+      creep.shadow.x = creep.x;
+      creep.shadow.y = creep.y;
+    
+      creep.action = data.action;
     }
   });
 

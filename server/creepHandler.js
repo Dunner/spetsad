@@ -39,14 +39,43 @@ var creepHandler = function(io, lobby, creep){
 
   }
 
+  var creepAction;
   var moveDirection;
 
-  if (directionToTarget > 0 && directionToTarget < 90) { moveDirection = 'down'}
-  if (directionToTarget > 90 && directionToTarget < 180) { moveDirection = 'left'}
-  if (directionToTarget > 180 && directionToTarget < 270) { moveDirection = 'up'}
-  if (directionToTarget > 270 && directionToTarget < 360) { moveDirection = 'right'}
+  if (directionToTarget > 0 && directionToTarget < 90) { creepAction = 'moveDown'}
+  if (directionToTarget > 90 && directionToTarget < 180) { creepAction = 'moveLeft'}
+  if (directionToTarget > 180 && directionToTarget < 270) { creepAction = 'moveUp'}
+  if (directionToTarget > 270 && directionToTarget < 360) { creepAction = 'moveRight'}
 
-  console.log(creep.id, creep.team, moveDirection);
+  if (creep.nextX) {creep.x = creep.nextX}
+  if (creep.nextY) {creep.y = creep.nextY}
+
+  if (creepAction) {
+    if (creepAction == 'moveDown') {
+      creep.nextY = creep.y+50;
+    }
+    if (creepAction == 'moveLeft') {
+      creep.nextX = creep.x-50;
+    }
+    if (creepAction == 'moveUp') {
+      creep.nextY = creep.y-50;
+    }
+    if (creepAction == 'moveRight') {
+      creep.nextX = creep.x+50;
+    }
+  }
+
+
+  lobby.players.forEach(function (tempSocketID) {
+    io.to(tempSocketID).emit('creepAction', {
+      id:creep.id,
+      x:creep.x,
+      y:creep.y,
+      action: creepAction
+    });
+  });
+
+  creep.lastAction = creepAction;
 
 }
 

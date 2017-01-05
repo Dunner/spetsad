@@ -80,7 +80,7 @@ module.exports = function(io){
 
           //Spawn creeps ################################
 
-        if (lobby.secondsPlayed % 10 == 0 ) { //every 30th second
+        if (lobby.secondsPlayed % 60 == 0 || lobby.secondsPlayed == 3) { //every 30th second && 3rd second
 
           var creepsToSpawn = {red:[], blue: []};
 
@@ -92,7 +92,8 @@ module.exports = function(io){
               x: 450-62.5+(x*40),
               y: 200,
               maxHealth: 300,
-              health: 300
+              health: 300,
+              action: undefined
             };
             creepsToSpawn['blue'].push(blueCreep);
             lobby.mapData.creeps['blue'].push(blueCreep);
@@ -103,7 +104,8 @@ module.exports = function(io){
               x: 450-62.5+(x*40),
               y: 1720,
               maxHealth: 300,
-              health: 300
+              health: 300,
+              actions: []
             };
             creepsToSpawn['red'].push(redCreep);
             lobby.mapData.creeps['red'].push(redCreep);
