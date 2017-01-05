@@ -5,13 +5,11 @@ obj_creep.create = function(creepData) {
   console.log(creepData);
   var creep = creepData;
 
-  creep.shadow = game.add.image(creepData.x,creepData.y, createBlock(30, 30,'black'));
+  creep.shadow = game.add.image(creepData.x,creepData.y, createBlock(28, 28,'black'));
   creep.shadow.anchor.setTo(0.5, 0.5);
-  creep.shadow.angle = pointDirection({x:creepData.x, y:creepData.y}, {x:creepData.x,y:creepData.y});
-  creep.shadow.alpha = 0.3
+  creep.shadow.alpha = 0.3;
   groups.creeps.add(creep.shadow);
   groups.allObjects.add(creep.shadow);
-
 
   creep.object = game.add.image(creepData.x,creepData.y, createBlock(30, 30,creep.team));
   creep.object.anchor.setTo(0.5, 0.5);
