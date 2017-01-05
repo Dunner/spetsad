@@ -25,7 +25,18 @@ var creepHandler = function(io, lobby, creep){
     distanceToTarget = distanceToEnemyTower;
     directionToTarget = directionToEnemyTower;
   } else {
-    
+    var distanceToEnemyBase = utils.pointDistance(
+     {x: creep.x,y: creep.y },
+     {x: lobby.mapData.bases[enemyTeam].x,y: lobby.mapData.bases[enemyTeam].y});
+    if (distanceToEnemyBase > 50) {
+      var directionToEnemyBase = utils.pointDirection(
+        {x: creep.x, y: creep.y}, 
+        {x: lobby.mapData.bases[enemyTeam].x,y: lobby.mapData.bases[enemyTeam].y});
+      directionToEnemyBase = ((directionToEnemyBase % 360) + 360) % 360;
+      distanceToTarget = distanceToEnemyBase;
+      directionToTarget = directionToEnemyBase;
+    }
+
   }
 
   var moveDirection;

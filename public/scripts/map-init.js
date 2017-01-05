@@ -3,8 +3,8 @@
 var mapInit = function(mapData) {
   
   //Bases create
-  for (var i = 0; i < mapData.bases.length; i++) {
-    var base = mapData.bases[i];
+  for(var team in mapData.bases) {
+    var base = mapData.bases[team];
     obj_base.create({
       id: base.id,
       team: base.team,

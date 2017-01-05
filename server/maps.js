@@ -7,20 +7,20 @@ var maps = {};
     width: 900,
     logs: [
     ],
-    bases: [
-      {
+    bases: {
+      blue: {
         "id": 0,
         "team": "blue",
         "x": 450,
         "y": 200,
       },
-      {
+      red: {
         "id": 1,
         "team": "red",
         "x": 450,
         "y": 1720,
       }
-    ],
+    },
     creeps: {red: [], blue:[]},
     towers: {
       blue: [
