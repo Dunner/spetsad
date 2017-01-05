@@ -2,25 +2,32 @@ var obj_creep = {},
     creeps = [];
 
 obj_creep.create = function(creepData) {
-  var creep = {};
+  console.log(creepData);
+  var creep = creepData;
 
-  creep.shadow = game.add.image(creepData.x,creepData.y, createBlock(30, 30,'black'));
+  creep.shadow = game.add.image(creepData.x,creepData.y, createBlock(30, 30,'blue'));
   creep.shadow.anchor.setTo(0.5, 0.5);
   creep.shadow.angle = pointDirection({x:creepData.x, y:creepData.y}, {x:creepData.x,y:creepData.y});
   creep.shadow.alpha = 0.3
   groups.creeps.add(creep.shadow);
   groups.allObjects.add(creep.shadow);
 
-  creep.object = game.add.image(creepData.x,creepData.y, createBlock(30, 30,'green'));
+  creep.object = game.add.image(creepData.x,creepData.y, createBlock(30, 30,'white'));
   creep.object.anchor.setTo(0.5, 0.5);
   creep.object.angle = creep.shadow.angle
   groups.creeps.add(creep.object);
   groups.allObjects.add(creep.object);
 
-  creep.id = creepData.id;
-  creep.team = creepData.team
   creep.object.depth = 2;
   creeps.push(creep);
+
+  creep.hpbar = {};
+  creep.hpbar.background = game.add.image(creepData.x, creepData.y, createBlock(30, 3,'black'));
+  creep.hpbar.health = game.add.image(creepData.x, creepData.y, createBlock(10, 3,'green'));
+  creep.hpbar.background.alpha = 0.3;
+  creep.hpbar.background.anchor.set(0.5, 8);
+  creep.hpbar.health.anchor.set(0.5, 8);
+  creep.hpbar.health.alpha = 0.3;
 }
 
 obj_creep.update = function(creep) {
@@ -34,6 +41,22 @@ obj_creep.update = function(creep) {
   creep.object.x = creep.shadow.x + creepLengthdir.x;
   creep.object.y = creep.shadow.y + creepLengthdir.y;
 
+
+  creep.hpbar.health.position = creep.hpbar.background.position = creep.shadow.position;
+
+  // if (creep.actions.indexOf('moveDown') != -1) {
+  //   creep.shadow.y += 5 * delta;
+  // }
+  // if (creep.actions.indexOf('moveUp') != -1) {
+  //   creep.shadow.y -= 5 * delta;
+  // }
+
+  // if (creep.actions.indexOf('moveLeft') != -1) {
+  //   creep.shadow.y -= 5 * delta;
+  // }
+  // if (creep.actions.indexOf('moveRight') != -1) {
+  //   creep.shadow.y += 5 * delta;
+  // }
 
 }
 

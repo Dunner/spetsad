@@ -66,9 +66,12 @@
   });
 
   socket.on('creepSpawn', function (data) {
-    if (!findCreep(data.id)) {
-      console.log('creep create', data);
-      // obj_creep.create(data);
+    for(var key in data) { //key is team e.x. 'red' && 'blue'
+      data[key].forEach(function(creep){
+        if (!findCreep(creep.id)) {
+          obj_creep.create(creep);
+        }
+      });
     }
   });
 
