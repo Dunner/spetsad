@@ -101,16 +101,8 @@
   });
 
   socket.on('spearHit', function (data) {
-    for (var i =0; i < spears.length; i++) {
-      var spear = spears[i];
-      if (spear.id === data.spearId) {
-        spears.splice(i,1);
-        findPlayer(data.id).playerinfo = data.playerinfo;
-        spear.object.destroy();
-        spear.shadow.destroy();
-        break;
-      }
-    }
+    findPlayer(data.id).playerinfo = data.playerinfo;
+    obj_spear.delete(data.spearID);
   });
 
   socket.on('towerAttack', function (data) {
@@ -122,6 +114,15 @@
     obj_tower_spear.delete(data.spearID)
   });
   
+  socket.on('towerDamage', function (data) {
+
+    for (var i = 0; i < towers.length; i++) {
+      if (towers[i].id == data.towerID) {
+        towers[i].health = data.health;
+        console.log(towers[i])
+      }
+    };
+  });
 
   socket.on('baseUpdate', function (data) {
     if (!lobby) return;

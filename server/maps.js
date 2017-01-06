@@ -27,6 +27,9 @@ var maps = {};
         {
           "id": 0,
           "team": "blue",
+          "healthMax": 1000,
+          "health": 1000,
+          "lastHealth": 1000,
           "angle": 206,
           "x": 350,
           "y": 700,
@@ -36,6 +39,9 @@ var maps = {};
         {
           "id": 1,
           "team": "red",
+          "healthMax": 1000,
+          "health": 1000,
+          "lastHealth": 1000,
           "angle": 206,
           "x": 550,
           "y": 1220,

@@ -28,6 +28,8 @@ var mapInit = function(mapData) {
       obj_tower.create({
         id: tower.id,
         team: tower.team,
+        healthMax: tower.healthMax,
+        health: tower.health,
         x: tower.x,
         y: tower.y,
       });

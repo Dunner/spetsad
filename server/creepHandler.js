@@ -8,9 +8,11 @@ var creepHandler = function(io, lobby, creep){
   if (creep.team == 'blue') {
     enemyTeam = 'red';
   }
-
-  var distanceToTarget,
-      directionToTarget;
+  var creepAction;
+  var moveDirection;
+  var attackTarget;
+  var distanceToTarget;
+  var directionToTarget;
 
   var distanceToEnemyTower = utils.pointDistance(
    {x: creep.x,y: creep.y },
@@ -21,8 +23,8 @@ var creepHandler = function(io, lobby, creep){
     {x: lobby.mapData.towers[enemyTeam][0].x,y: lobby.mapData.towers[enemyTeam][0].y});
   directionToEnemyTower = ((directionToEnemyTower % 360) + 360) % 360;
 
-  if (distanceToEnemyTower < 200) {
-    if (distanceToEnemyTower > 50) {
+  if (distanceToEnemyTower < 200 && lobby.mapData.towers[enemyTeam][0].health > 0) {
+    if (distanceToEnemyTower > 100) {
       distanceToTarget = distanceToEnemyTower;
       directionToTarget = directionToEnemyTower;
     } else {
@@ -44,10 +46,6 @@ var creepHandler = function(io, lobby, creep){
     }
 
   }
-
-  var creepAction;
-  var moveDirection;
-  var attackTarget;
 
 
 
@@ -100,6 +98,9 @@ var creepHandler = function(io, lobby, creep){
     }
   }
 
+  if (attackTarget) {
+    attackTarget.health -= 10;
+  }
 
   lobby.players.forEach(function (tempSocketID) {
     io.to(tempSocketID).emit('creepAction', {
@@ -109,6 +110,7 @@ var creepHandler = function(io, lobby, creep){
       action: creepAction
     });
   });
+
 
   creep.lastAction = creepAction;
 

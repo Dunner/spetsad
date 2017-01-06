@@ -362,7 +362,7 @@ module.exports = function(io) {
         broadcastLobby(socket.lobbyID,
           'spearHit', {
             id: socket.id,
-            spearId: data.spearId,
+            spearID: data.spearId,
             playerinfo: socket.playerinfo
           });
         
