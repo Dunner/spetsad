@@ -2,18 +2,17 @@ var obj_creep = {},
     creeps = [];
 
 obj_creep.create = function(creepData) {
-  console.log(creepData);
   var creep = creepData;
 
-  creep.shadow = game.add.image(creepData.x,creepData.y, createBlock(28, 28,'black'));
-  creep.shadow.anchor.setTo(0.5, 0.5);
-  creep.shadow.alpha = 0.3;
-  groups.creeps.add(creep.shadow);
-  groups.allObjects.add(creep.shadow);
+  creep.shadow = {object: game.add.image(creepData.x,creepData.y, createBlock(28, 28,'black'))};
+  creep.shadow.object.anchor.setTo(0.5, 0.5);
+  creep.shadow.object.alpha = 0.3;
+  groups.creeps.add(creep.shadow.object);
+  groups.allObjects.add(creep.shadow.object);
 
   creep.object = game.add.image(creepData.x,creepData.y, createBlock(30, 30,creep.team));
   creep.object.anchor.setTo(0.5, 0.5);
-  creep.object.angle = creep.shadow.angle
+  creep.object.angle = creep.shadow.object.angle
   groups.creeps.add(creep.object);
   groups.allObjects.add(creep.object);
 
@@ -37,41 +36,41 @@ obj_creep.update = function(creep) {
   var creepOffCenter = creep.object.depth * (Math.abs(pointDistance(game.camera.center(), creep.object.position))/100);
   var creepLengthdir = lengthDir(creepOffCenter, pointDir / 57);
 
-  creep.object.x = creep.shadow.x + creepLengthdir.x;
-  creep.object.y = creep.shadow.y + creepLengthdir.y;
+  creep.object.x = creep.shadow.object.x + creepLengthdir.x;
+  creep.object.y = creep.shadow.object.y + creepLengthdir.y;
 
-  creep.hpbar.health.position = creep.hpbar.background.position = creep.shadow.position;
+  creep.hpbar.health.position = creep.hpbar.background.position = creep.shadow.object.position;
 
   if (creep.action == 'moveDown') {
-    creep.shadow.y += 3.5 * delta;
+    creep.shadow.object.y += 3.5 * delta;
   }
   if (creep.action == 'moveDownLeft') {
-    creep.shadow.y += 3.5 * delta;
-    creep.shadow.x -= 3.5 * delta;
+    creep.shadow.object.y += 3.5 * delta;
+    creep.shadow.object.x -= 3.5 * delta;
   }
 
   if (creep.action == 'moveLeft') {
-    creep.shadow.x -= 3.5 * delta;
+    creep.shadow.object.x -= 3.5 * delta;
   }
   if (creep.action == 'moveUpLeft') {
-    creep.shadow.x -= 3.5 * delta;
-    creep.shadow.y -= 3.5 * delta;
+    creep.shadow.object.x -= 3.5 * delta;
+    creep.shadow.object.y -= 3.5 * delta;
   }
 
   if (creep.action == 'moveUp') {
-    creep.shadow.y -= 3.5 * delta;
+    creep.shadow.object.y -= 3.5 * delta;
   }
   if (creep.action == 'moveUpRight') {
-    creep.shadow.y -= 3.5 * delta;
-    creep.shadow.x += 3.5 * delta;
+    creep.shadow.object.y -= 3.5 * delta;
+    creep.shadow.object.x += 3.5 * delta;
   }
 
   if (creep.action == 'moveRight') {
-    creep.shadow.x += 3.5 * delta;
+    creep.shadow.object.x += 3.5 * delta;
   }
   if (creep.action == 'moveDownRight') {
-    creep.shadow.x += 3.5 * delta;
-    creep.shadow.y += 3.5 * delta;
+    creep.shadow.object.x += 3.5 * delta;
+    creep.shadow.object.y += 3.5 * delta;
   }
 
 }
@@ -81,8 +80,7 @@ obj_creep.delete = function(creepID) {
     var creep = creeps[i];
     if (creep.id == creepID) {
       creep.object.destroy();
-      creep.shadow.destroy();
-      creep.bounds.destroy();
+      creep.shadow.object.destroy();
       creeps.splice(i, 1);
       break;
     }

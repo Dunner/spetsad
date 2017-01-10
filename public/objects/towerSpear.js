@@ -2,7 +2,8 @@ var obj_tower_spear = {},
     towerSpears = [];
 
 obj_tower_spear.create = function(data) {
-  var spear = {};
+  var spear = {},
+      target = {};
 
   towers.forEach(function(tower){
     if (tower.team == data.tower) {
@@ -13,11 +14,21 @@ obj_tower_spear.create = function(data) {
     }
   });
 
-  var target = findPlayer(data.targetID);
-  spear.toPos = {
-    x: target.shadow.object.x,
-    y: target.shadow.object.y
+  if (data.targetType == 'player') {
+    target = findPlayer(data.targetID);
+    spear.toPos = {
+      x: target.shadow.object.x,
+      y: target.shadow.object.y
+    }
   }
+  if (data.targetType == 'creep') {
+    target = findCreep(data.targetID);
+    spear.toPos = {
+      x: target.shadow.x,
+      y: target.shadow.y
+    }
+  }
+
 
   spear.shadow = game.add.image(spear.fromPos.x,spear.fromPos.y, createBlock(45, 3,'black'));
   spear.shadow.anchor.setTo(0.5, 1);
@@ -39,6 +50,7 @@ obj_tower_spear.create = function(data) {
 
   spear.id = data.spearID;
   spear.targetID = data.targetID;
+  spear.targetType = data.targetType;
   spear.object.depth = 8;
   spear.distanceTraveled = 0;
   towerSpears.push(spear);
@@ -47,7 +59,8 @@ obj_tower_spear.create = function(data) {
 obj_tower_spear.update = function(spear) {
   if (!spear) {return;}
 
-  var target = findPlayer(spear.targetID);
+  if (spear.targetType == 'player') {target = findPlayer(spear.targetID);}
+  if (spear.targetType == 'creep') {target = findCreep(spear.targetID);}
   spear.toPos = {
     x: target.shadow.object.x,
     y: target.shadow.object.y
@@ -71,10 +84,13 @@ obj_tower_spear.update = function(spear) {
     spear.bounds.x = spear.object.x = spear.shadow.x + tempShaftLengthdir.x;
     spear.bounds.y = spear.object.y = spear.shadow.y + tempShaftLengthdir.y;
 
-    if (checkOverlap(me.shadow.object, spear.bounds) && me.playerinfo.health > 0) {
-      socket.emit('towerSpearHit', {spearID: spear.id, targetID: spear.targetID});
-      me.playerinfo.health -= 20;
+
+    if (checkOverlap(target.shadow.object, spear.bounds)) {
       obj_tower_spear.delete(spear.id);
+      if (target == me) {
+        console.log('me');
+        socket.emit('towerSpearHit', {spearID: spear.id, targetID: spear.targetID, targetType: spear.targetType});
+      }
     }
     
     if (spear.shadow && debug) {game.debug.spriteBounds(spear.bounds);}

@@ -119,7 +119,6 @@
     for (var i = 0; i < towers.length; i++) {
       if (towers[i].id == data.towerID) {
         towers[i].health = data.health;
-        console.log(towers[i])
       }
     };
   });

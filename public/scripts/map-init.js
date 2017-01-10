@@ -9,7 +9,7 @@ var mapInit = function(mapData) {
       id: base.id,
       team: base.team,
       x: base.x,
-      y: base.y,
+      y: base.y
     });
   }
   //Trees create
@@ -19,7 +19,7 @@ var mapInit = function(mapData) {
       id: tree.id,
       x: tree.x,
       y: tree.y,
-      sections: tree.sections,
+      sections: tree.sections
     });
   }
   //Towers create
@@ -31,7 +31,7 @@ var mapInit = function(mapData) {
         healthMax: tower.healthMax,
         health: tower.health,
         x: tower.x,
-        y: tower.y,
+        y: tower.y
       });
     });
   }

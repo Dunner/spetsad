@@ -63,7 +63,6 @@ obj_tower.update = function(tower) {
   // ###### Towers 
   var pointDir = pointDirection(game.camera.center(), tower.foot1.object.position);
   if  (pointDir < 0) {pointDir += 360};
-  console.log(tower)
   tower.hpbar.health.position = tower.hpbar.background.position = tower.foot1.object.position;
   tower.hpbar.health.width = (tower.hpbar.background.width/tower.healthMax)*tower.health;
   ['foot2', 'foot3', 'roof1', 'roof2'].forEach(function(part){
