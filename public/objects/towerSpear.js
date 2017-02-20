@@ -44,7 +44,7 @@ obj_tower_spear.create = function(data) {
   groups.allObjects.add(spear.object);
 
   spear.bounds = game.add.image(spear.fromPos.x,spear.fromPos.y, createBlock(25, 3,'red'));
-  spear.bounds.alpha = 1;
+  spear.bounds.alpha = 0.0;
   spear.bounds.anchor.setTo(0, 1);
   spear.bounds.angle = pointDirection(spear.fromPos, spear.toPos);
 

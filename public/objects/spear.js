@@ -20,7 +20,7 @@ obj_spear.create = function(owner, fromPos, toPos, id, distance) {
   groups.allObjects.add(spear.object);
 
   spear.bounds = game.add.image(fromPos.x,fromPos.y, createBlock(25, 3,'red'));
-  spear.bounds.alpha = 0.7;
+  spear.bounds.alpha = 0.0;
   spear.bounds.anchor.setTo(0, 1);
   spear.bounds.angle = pointDirection(fromPos, toPos);
 

@@ -24,7 +24,6 @@ obj_base.create = function(data) {
     base.spearHolder = game.add.image(base.object.x-70,base.object.y+20, createBlock(100, 60,'#00ff00'));
   }
 
-  if (true) {}
 
 
   groups.bases.add(base.object);
@@ -41,6 +40,8 @@ obj_base.create = function(data) {
 
   bases.push(base);
 
+  base.creepSpawner.alpha = 0;
+  base.spearHolder.alpha = 0;
 
 }
 
